@@ -1,0 +1,19 @@
+:global(body), :global(body) {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.widget {
+  border: 1px solid black;
+  margin: 5px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
