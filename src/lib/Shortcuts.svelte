@@ -1,11 +1,14 @@
 <script>
     import {slide} from 'svelte/transition';
 
+    let {backgroundColor} = $props();
+
+
     let links = $state([
         {"url": "http://google.com", "name": "Google"},
         {"url": "http://google.com", "name": "Youtube"},
     ]);
-    $inspect(links);
+    $inspect(backgroundColor);
 
     let shortcut_name = $state("");
     let shortcut_url = $state("");
@@ -28,10 +31,10 @@
 </script>
 
 
-<div class="shortcuts">
+<div class="shortcuts" style:--bg="{backgroundColor}">
     {#each links as link}
         <div class="shortcuts-block">
-            <a href="{link.url}"> {link.name}</a>
+            <a class="prevent-select" href="{link.url}"> {link.name}</a>
         </div>
     {/each}
 
@@ -63,10 +66,13 @@
     .shortcuts {
         display: flex;
         flex-direction: column;
-        max-width: 300px;
         border: 1px solid #ddd;
         padding: 12px;
-    }
+        background-color: var(--bg);
+        color: var(--bg);
+        height: 100%;
+        box-sizing: border-box;
+        }
 
     .shortcuts-block {
         border: 1px solid #ddd;
