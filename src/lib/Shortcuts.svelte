@@ -72,9 +72,10 @@
     .shortcuts {
         display: flex;
         flex-direction: column;
-        border: 1px solid #ddd;
+        /*border: 1px solid #ddd;*/
+        border-radius: 12px;
         padding: 12px;
-        background-color: var(--bg);
+        background-color: #191A1C;
         color: var(--bg);
         height: auto;
         min-height: 100%;
@@ -82,7 +83,7 @@
         }
 
     .shortcuts-block {
-        border: 1px solid #ddd;
+        /*border: 1px solid #ddd;*/
         padding: 10px;
     }
 

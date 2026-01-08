@@ -1,94 +1,25 @@
 <script>
-    import Clock from "./lib/Clock.svelte";
-    import Calculator from "./lib/Calculator.svelte";
-    import Shortcuts from "./lib/Shortcuts.svelte";
-    import Grid from 'svelte-grid';
-    import gridHelp from "svelte-grid/src/utils/helper.js";
-
-    const id = () => "_" + Math.random().toString(36).substr(2, 9);
-
-    let items = [
-        {
-            6: gridHelp.item({
-                x: 0,
-                y: 0,
-                w: 2,
-                h: 2,
-            }),
-            data: { color: "#fa0"},
-            id: id(),
-        },
-
-        {
-            6: gridHelp.item({
-                x: 3,
-                y: 0,
-                w: 2,
-                h: 2,
-            }),
-            data: { color: "#faf"},
-            id: id(),
-        },
-
-        {
-            6: gridHelp.item({
-                x: 0,
-                y: 2,
-                w: 2,
-                h: 2,
-            }),
-            data: { color: "#faf"},
-            id: id(),
-        },
-    ];
-
-    const cols = [
-        [1100, 6],
-    ];
-
-    const onSizeChanged = (id, size) => {
-        console.log(size);
-        const pixelHeight = size;
-        const rowHeight = 100; // Must match the Grid's rowHeight prop
-        const margin = 10; // Default svelte-grid margin is usually 10px
-
-        // Calculate new grid height units (h)
-        // Formula: pixels / (rowHeight + margin)
-        const newH = Math.ceil((pixelHeight + margin) / (rowHeight + margin));
-
-        const index = items.findIndex(i => i.id === id);
-
-        // Update the item's height
-        items[index][6].h = newH;
-        items = [...items]; // Trigger reactivity
-        // alert(size)
-    }
-
-
+    import Widgets from "./lib/Widgets.svelte";
+    import Sidebar from "./lib/Sidebar.svelte";
 </script>
 
-<div id="app">
+<div class="app">
 
-    <div class=demo-container>
-        <Grid bind:items={items} rowHeight={100} let:item let:dataItem {cols}>
-            <Shortcuts backgroundColor="{dataItem.data.color}" onSizeChanged={(size) => onSizeChanged(item.id, size)} />
-        </Grid>
-    </div>
-
+    <Sidebar/>
+    <Widgets/>
 
 </div>
 
 <style>
-    :global(.svlt-grid-shadow) {
-        /* Back shadow */
-        background: pink;
+    html {
+        box-sizing: border-box;
     }
-    :global(.svlt-grid-container) {
-        /* Container color */
-        background: #eee;
+    .app {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 100vh;
+
     }
-    :global(.svlt-grid-resizer::after) {
-        /* Resizer color */
-        border-color: red !important;
-    }
+
 </style>

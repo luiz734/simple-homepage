@@ -7,6 +7,18 @@
   background-color: #ffffff;
 }
 
+body, html {
+  margin: 0;
+  padding: 0;
+  color: #FEFEFE;
+  font-family: helvetica, arial, sans-serif;
+}
+
+a {
+  color: #FEFEFE;
+  text-decoration: none;
+}
+
 .widget {
   border: 1px solid black;
   margin: 5px;
@@ -23,3 +35,4 @@
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+
