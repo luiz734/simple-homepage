@@ -3,42 +3,7 @@
     import gridHelp from "svelte-grid/src/utils/helper.js";
     import Shortcuts from "./Shortcuts.svelte";
 
-    const id = () => "_" + Math.random().toString(36).substr(2, 9);
-
-    let items = [
-        {
-            6: gridHelp.item({
-                x: 0,
-                y: 0,
-                w: 2,
-                h: 2,
-            }),
-            data: { color: "#fa0"},
-            id: id(),
-        },
-
-        {
-            6: gridHelp.item({
-                x: 3,
-                y: 0,
-                w: 2,
-                h: 2,
-            }),
-            data: { color: "#faf"},
-            id: id(),
-        },
-
-        {
-            6: gridHelp.item({
-                x: 0,
-                y: 2,
-                w: 2,
-                h: 2,
-            }),
-            data: { color: "#faf"},
-            id: id(),
-        },
-    ];
+    let {locked, items = $bindable()} = $props();
 
     const cols = [
         [1100, 6],
@@ -68,7 +33,7 @@
 
 <div class=demo-container>
     <Grid bind:items={items} rowHeight={100} let:item let:dataItem {cols}>
-        <Shortcuts backgroundColor="{dataItem.data.color}" onSizeChanged={(size) => onSizeChanged(item.id, size)} />
+        <Shortcuts backgroundColor="{dataItem.data.color}" onSizeChanged={(size) => onSizeChanged(item.id, size)}/>
     </Grid>
 </div>
 
@@ -78,10 +43,12 @@
         background: pink;
         border-radius: 12px;
     }
+
     :global(.svlt-grid-container) {
         /* Container color */
         background: #26282B;
     }
+
     :global(.svlt-grid-resizer::after) {
         /* Resizer color */
         border-color: #514D4B !important;

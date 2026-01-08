@@ -16,9 +16,9 @@
     let inputsVisible = $state(false);
     let container = $state();
 
-    onMount(() => {
-        onSizeChanged(container.clientHeight);
-    });
+    // onMount(() => {
+    //     onSizeChanged(container.clientHeight);
+    // });
 
     const addLink = () => {
         // if (shortcut_name === "" || shortcut_name === "") {
@@ -58,13 +58,13 @@
                 </div>
             </div>
 
-            <button class="confirm" onclick={addLink} type="button">Add</button>
+            <button class="confirm prevent-select" onclick={addLink} type="button">Add</button>
         </div>
 
 
     {/if}
 
-    <button id="showHide" onclick={toggleInputsVisible}> {inputsVisible ? "hide" : "show"} </button>
+    <button id="showHide" class="prevent-select" onclick={toggleInputsVisible}> {inputsVisible ? "hide" : "show"} </button>
 
 </div>
 
