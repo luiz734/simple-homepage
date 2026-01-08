@@ -1,26 +1,32 @@
 <script>
     import {slide} from 'svelte/transition';
+    import { onMount } from 'svelte';
 
-    let {backgroundColor} = $props();
+    let {backgroundColor, onSizeChanged} = $props();
 
 
     let links = $state([
         {"url": "http://google.com", "name": "Google"},
         {"url": "http://google.com", "name": "Youtube"},
     ]);
-    $inspect(backgroundColor);
 
     let shortcut_name = $state("");
     let shortcut_url = $state("");
 
     let inputsVisible = $state(false);
+    let container = $state();
+
+    onMount(() => {
+        onSizeChanged(container.clientHeight);
+    });
 
     const addLink = () => {
-        if (shortcut_name === "" || shortcut_name === "") {
-            return;
-        }
+        // if (shortcut_name === "" || shortcut_name === "") {
+        //     return;
+        // }
         links.push({"url": shortcut_url, "name": shortcut_name});
         shortcut_name = shortcut_url = "";
+        onSizeChanged(container.clientHeight);
     };
 
     const toggleInputsVisible = () => {
@@ -31,7 +37,7 @@
 </script>
 
 
-<div class="shortcuts" style:--bg="{backgroundColor}">
+<div class="shortcuts" bind:this={container} style:--bg="{backgroundColor}">
     {#each links as link}
         <div class="shortcuts-block">
             <a class="prevent-select" href="{link.url}"> {link.name}</a>
@@ -70,7 +76,8 @@
         padding: 12px;
         background-color: var(--bg);
         color: var(--bg);
-        height: 100%;
+        height: auto;
+        min-height: 100%;
         box-sizing: border-box;
         }
 
