@@ -109,7 +109,7 @@
         font-weight: bold;
         font-size: 24px;
         margin: 10px 0 20px;
-        text-align: center;
+        text-align: left;
     }
 
     .inputs {

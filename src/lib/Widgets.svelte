@@ -36,7 +36,6 @@
 
 <div class=demo-container>
     <Grid bind:items={items} rowHeight={100} let:item let:dataItem {cols} let:resizePointerDown let:movePointerDown>
-
         <div class="sections">
             {#if !editLocked}
                 <div class=dragger transition:slide onpointerdown={movePointerDown}>
@@ -55,9 +54,6 @@
                 </div>
             {/if}
         </div>
-
-
-
     </Grid>
 </div>
 
@@ -86,10 +82,11 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: auto;
-        min-height: 100%;
+        overflow: hidden;
+        height: 100%;
         box-sizing: border-box;
         justify-content: space-between;
+
     }
 
     .demo-container {
@@ -113,6 +110,7 @@
     .widget {
         /*margin: 18px 0;*/
         border: none;
+        flex: 1;
         /*box-sizing: border-box;*/
     }
 
