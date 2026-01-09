@@ -25,7 +25,7 @@
     .sidebar {
         margin: 0;
         width: 48px;
-        background-color: #26282B;
+        background-color: #0D0D0D;
         color: #FEFEFE;
         /*position: fixed;*/
         /*height: 100%;*/

@@ -1,6 +1,8 @@
 <script>
     import {slide} from 'svelte/transition';
-    import { onMount } from 'svelte';
+    import {onMount} from 'svelte';
+    import {Grip, GripHorizontalIcon} from "lucide-svelte";
+    import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
 
     let {backgroundColor, onSizeChanged} = $props();
 
@@ -60,11 +62,10 @@
 
             <button class="confirm prevent-select" onclick={addLink} type="button">Add</button>
         </div>
-
-
     {/if}
 
-    <button id="showHide" class="prevent-select" onclick={toggleInputsVisible}> {inputsVisible ? "hide" : "show"} </button>
+    <button id="showHide" class="prevent-select"
+            onclick={toggleInputsVisible}> {inputsVisible ? "hide" : "show"} </button>
 
 </div>
 
@@ -72,15 +73,14 @@
     .shortcuts {
         display: flex;
         flex-direction: column;
-        /*border: 1px solid #ddd;*/
-        border-radius: 12px;
-        padding: 12px;
-        background-color: #191A1C;
-        color: var(--bg);
-        height: auto;
-        min-height: 100%;
-        box-sizing: border-box;
-        }
+
+
+        /*color: var(--bg);*/
+        width: 100%;
+        /*height: auto;*/
+        /*min-height: 100%;*/
+        /*box-sizing: border-box;*/
+    }
 
     .shortcuts-block {
         /*border: 1px solid #ddd;*/
@@ -103,13 +103,17 @@
     button {
         width: 100%;
     }
+
     #showHide {
         margin-top: 16px;
     }
+
     .confirm {
         background-color: darkolivegreen;
         color: white;
         font-size: 1em;
         padding: 10px;
     }
+
+
 </style>

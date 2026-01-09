@@ -4,6 +4,13 @@
     import gridHelp from "svelte-grid/src/utils/helper.js";
 
 
+    const itemProps = {
+        customResizer: true,
+        customDragger: true,
+        fixed: false,
+        resizable: false,
+        draggable: false,
+    }
     const id = () => "_" + Math.random().toString(36).substr(2, 9);
     const getItems = () => {
         return  [
@@ -16,6 +23,7 @@
                     // fixed: Boolean,
                     // resizable: Boolean,
                     // draggable: Boolean,
+                    ...itemProps
                 }),
                 data: {color: "#fa0"},
                 id: id(),
@@ -26,6 +34,7 @@
                     y: 0,
                     w: 2,
                     h: 2,
+                    ...itemProps
                 }),
                 data: {color: "#faf"},
                 id: id(),
@@ -36,6 +45,7 @@
                     y: 2,
                     w: 2,
                     h: 2,
+                    ...itemProps
                 }),
                 data: {color: "#faf"},
                 id: id(),
@@ -43,7 +53,7 @@
         ];
     }
 
-    let locked = $state(false);
+    let locked = $state(true);
     let items = $state(getItems());
     $inspect(items);
 
