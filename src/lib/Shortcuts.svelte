@@ -1,10 +1,10 @@
 <script>
     import {slide} from 'svelte/transition';
     import {onMount} from 'svelte';
-    import {Grip, GripHorizontalIcon} from "lucide-svelte";
+    import {Grip, GripHorizontalIcon, PencilIcon} from "lucide-svelte";
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
 
-    let {backgroundColor, onSizeChanged} = $props();
+    let {backgroundColor, onSizeChanged, editLocked} = $props();
 
 
     let links = $state([
@@ -40,6 +40,11 @@
 
 
 <div class="shortcuts" bind:this={container} style:--bg="{backgroundColor}">
+
+    <div class="title">
+        Category
+    </div>
+
     {#each links as link}
         <div class="shortcuts-block">
             <a class="prevent-select" href="{link.url}"> {link.name}</a>
@@ -64,8 +69,15 @@
         </div>
     {/if}
 
-    <button id="showHide" class="prevent-select"
-            onclick={toggleInputsVisible}> {inputsVisible ? "hide" : "show"} </button>
+    {#if !editLocked}
+        <div class="edit-button">
+            <PencilIcon size="16px"/>
+            <button class="prevent-select"
+                    onclick={toggleInputsVisible}> Edit... </button>
+        </div>
+
+    {/if}
+
 
 </div>
 
@@ -80,16 +92,24 @@
         /*height: auto;*/
         /*min-height: 100%;*/
         /*box-sizing: border-box;*/
+        padding: 4px;
     }
 
     .shortcuts-block {
         /*border: 1px solid #ddd;*/
-        padding: 10px;
+        margin: 8px 0;
     }
 
     input {
         width: 100%;
         box-sizing: border-box;
+    }
+
+    .title {
+        font-weight: bold;
+        font-size: 24px;
+        margin: 10px 0 20px;
+        text-align: center;
     }
 
     .inputs {
@@ -100,13 +120,29 @@
         margin: 10px 0;
     }
 
-    button {
-        width: 100%;
+    .edit-button {
+        display: flex;
+        /*align-items: center;*/
+        justify-content: center;
+        flex-direction: row;
+        margin: 20px 0 0px;
+        color: #366ACF;
+    }
+    button:hover {
+        background: #2A2C2F;
     }
 
-    #showHide {
-        margin-top: 16px;
+    button {
+        border: none;
+        color: #366ACF;
+        cursor: pointer;
+        background-color: inherit;
+        font-size: 16px;
+        display: inline-block;
     }
+
+
+
 
     .confirm {
         background-color: darkolivegreen;

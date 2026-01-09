@@ -6,7 +6,7 @@
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import {slide} from 'svelte/transition';
 
-    let {locked, items = $bindable()} = $props();
+    let {locked: editLocked, items = $bindable()} = $props();
 
     const cols = [
         [1100, 6],
@@ -38,18 +38,18 @@
     <Grid bind:items={items} rowHeight={100} let:item let:dataItem {cols} let:resizePointerDown let:movePointerDown>
 
         <div class="sections">
-            {#if !locked}
+            {#if !editLocked}
                 <div class=dragger transition:slide onpointerdown={movePointerDown}>
                     <GripHorizontalIcon size="18px"/>
                 </div>
             {/if}
 
             <div class="widget">
-                <Shortcuts backgroundColor="{dataItem.data.color}" onSizeChanged={(size) => onSizeChanged(item.id, size)} />
+                <Shortcuts backgroundColor="{dataItem.data.color}" onSizeChanged={(size) => onSizeChanged(item.id, size)} {editLocked} />
             </div>
 
 
-            {#if !locked}
+            {#if !editLocked}
                 <div class=resizer transition:slide onpointerdown={resizePointerDown}>
                     <MoveDiagonal_2 size="18px"/>
                 </div>
@@ -111,7 +111,7 @@
     }
 
     .widget {
-        margin: 18px 0;
+        /*margin: 18px 0;*/
         border: none;
         /*box-sizing: border-box;*/
     }

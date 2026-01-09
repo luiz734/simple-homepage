@@ -10,6 +10,7 @@
         fixed: false,
         resizable: false,
         draggable: false,
+        min: { w: 2, h: 3 },
     }
     const id = () => "_" + Math.random().toString(36).substr(2, 9);
     const getItems = () => {
