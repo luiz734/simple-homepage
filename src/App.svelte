@@ -1,92 +1,49 @@
 <script>
     import Widgets from "./lib/Widgets.svelte";
     import Sidebar from "./lib/Sidebar.svelte";
-    import gridHelp from "svelte-grid/src/utils/helper.js";
-    import ShortcutsConfig from "./lib/ShortcutsConfig.svelte";
+    import {ApplicationState, APPLICATION_KEY, defaultData} from "./lib/storage/database.svelte.js";
+    import {setContext, getContext} from "svelte";
 
 
-    const itemProps = {
-        customResizer: true,
-        customDragger: true,
-        fixed: false,
-        resizable: false,
-        draggable: false,
-        min: { w: 1, h: 1 },
-    }
-    const id = () => "_" + Math.random().toString(36).substr(2, 9);
-    const getItems = () => {
-        return  [
-            {
-                6: gridHelp.item({
-                    x: 0,
-                    y: 0,
-                    w: 2,
-                    h: 2,
-                    // fixed: Boolean,
-                    // resizable: Boolean,
-                    // draggable: Boolean,
-                    ...itemProps
-                }),
-                data: {color: "#fa0"},
-                id: id(),
-            },
-            {
-                6: gridHelp.item({
-                    x: 3,
-                    y: 0,
-                    w: 2,
-                    h: 2,
-                    ...itemProps
-                }),
-                data: {color: "#faf"},
-                id: id(),
-            },
-            {
-                6: gridHelp.item({
-                    x: 0,
-                    y: 2,
-                    w: 2,
-                    h: 2,
-                    ...itemProps
-                }),
-                data: {color: "#faf"},
-                id: id(),
-            },
-        ];
-    }
+    const widgetsData = defaultData.widgets;
+    const applicationState = new ApplicationState(widgetsData);
+    setContext(APPLICATION_KEY, applicationState);
+
+    const context = getContext(APPLICATION_KEY);
+    // let widgets = $derived(context.widgets);
 
     let locked = $state(true);
-    let items = $state(getItems());
-
 
     const toggleLayoutLock = () => {
         locked = !locked;
-        items = items.map(item => {
-            const config = item[6];
+        context.updateWidgets(context.widgets.map((widget) => {
             return {
-                ...item,
-                [6]: {
-                    ...config,
-                    fixed: locked,       // Lock position
-                    resizable: !locked,  // Disable resize
-                    draggable: !locked   // Disable drag
+                ...widget,
+                columnLayout: {
+                    ...widget.columnLayout,
+                    6: {
+                        fixed: locked,
+                        resizable: !locked,
+                        draggable: !locked
+                    }
                 }
-            };
-        });
+            }
+        }));
     };
 
 </script>
 
 <div class="app">
-    <Sidebar {locked} onToggle={toggleLayoutLock} />
-    <Widgets {locked} bind:items={items}/>
-<!--    <ShortcutsConfig/>-->
+    <Sidebar {locked} onToggle={toggleLayoutLock}/>
+    <Widgets {locked} bind:items={context.widgets}/>
+    <!--    <ShortcutsConfig/>-->
 </div>
 
 <style>
     html {
         box-sizing: border-box;
     }
+
     .app {
         display: flex;
         flex-direction: row;

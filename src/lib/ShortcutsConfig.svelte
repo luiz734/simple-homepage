@@ -1,19 +1,14 @@
 <script>
-    import { Pencil, Check, Plus } from 'lucide-svelte'; // Added Plus icon
-    import { tick } from 'svelte';
+    import {Pencil, Check, Plus} from 'lucide-svelte'; // Added Plus icon
+    import {tick} from 'svelte';
     import {slide} from 'svelte/transition';
 
-    export let onClose;
+    let {onCancel, onSubmit, widgetData} = $props();
+    let links = $derived(widgetData.links);
 
     let title = "Edit Shortcuts";
     let isEditingTitle = false;
     let titleInput;
-
-    let data = [
-        { name: "Google", url: "https://www.google.com" },
-        { name: "Bing", url: "https://www.bing.com" },
-        { name: "DuckDuckGo", url: "https://duckduckgo.com" },
-    ];
 
     async function enableTitleEdit() {
         isEditingTitle = true;
@@ -21,7 +16,8 @@
         titleInput?.focus();
     }
 
-    function saveTitle() {
+    function saveTitle(event) {
+        event.preventDefault();
         isEditingTitle = false;
     }
 
@@ -30,23 +26,35 @@
     }
 
     function removeRow(index) {
-        data = data.filter((_, i) => i !== index);
+        console.log("before", $state.snapshot(widgetData));
+        links = links.filter((_, i) => i !== index);
+        console.log("after", $state.snapshot(widgetData));
     }
 
     // New function to add a row
     function addRow() {
-        data = [...data, { name: "", url: "" }];
+        const last = links[links.length - 1];
+        if (last.name === "" || last.url === "") {
+            return;
+        }
+        links = [...links, {name: "", url: ""}];
     }
 
-    function handleSubmit() {
-        console.log("Title:", title);
-        console.log("Saved data:", data);
-        onClose();
+    const sendForm = (event) => {
+        event.preventDefault();
+
+        const payload = {
+            ...widgetData,
+            links: links
+        };
+
+        onSubmit(payload);
     }
+
 </script>
 
 <div class="ring-dialog">
-    <form on:submit|preventDefault={handleSubmit} class="form-container">
+    <form onsubmit={sendForm} class="form-container">
 
         <div class="title-row">
             {#if isEditingTitle}
@@ -54,41 +62,46 @@
                         bind:this={titleInput}
                         bind:value={title}
                         class="title-input"
-                        on:keydown={handleTitleKeydown}
-                        on:blur={saveTitle}
+                        onkeydown={handleTitleKeydown}
+                        onblur={saveTitle}
                 />
-                <button type="button" class="ring-btn-icon title-icon" on:mousedown|preventDefault={saveTitle}>
-                    <Check size={18} />
+                <button type="button" class="ring-btn-icon title-icon" onmousedown={saveTitle}>
+                    <Check size={18}/>
                 </button>
             {:else}
-                <h1 class="dialog-title" on:click={enableTitleEdit}>{title}</h1>
-                <button type="button" class="ring-btn-icon title-icon" on:click={enableTitleEdit}>
-                    <Pencil size={18} />
+                <h1 class="dialog-title" onclick={enableTitleEdit}>{title}</h1>
+                <button type="button" class="ring-btn-icon title-icon" onclick={enableTitleEdit}>
+                    <Pencil size={18}/>
                 </button>
             {/if}
         </div>
 
-        <div class="grid-container">
+        <div class="grid-row mb-2 prevent-select">
             <div class="header">Name</div>
             <div class="header">URL</div>
             <div class="header"></div>
+        </div>
 
-            {#each data as row, i}
-                <input type="text" class="ring-input" bind:value={row.name} placeholder="Name" />
-                <input type="url" class="ring-input" bind:value={row.url} placeholder="https://example.com" />
-                <button type="button" class="ring-btn ring-btn-icon" on:click={() => removeRow(i)} title="Remove">
-                    ✕
-                </button>
+        <div class="dataOverflow">
+            {#each links as row, i (row)}
+                <div class="grid-row mb-2" transition:slide|local>
+                    <input type="text" class="ring-input" bind:value={row.name} placeholder="Name"/>
+                    <input type="url" class="ring-input" bind:value={row.url} placeholder="https://example.com"/>
+                    <button type="button" class="ring-btn ring-btn-icon" onclick={() => removeRow(i)} title="Remove">
+                        <span class="prevent-select"> ✕ </span>
+                    </button>
+                </div>
             {/each}
         </div>
 
-        <button type="button" class="ring-link-btn" on:click={addRow}>
-            <Plus size={16} /> Add Shortcut
+        <button type="button" class="ring-link-btn prevent-select" onclick={addRow}>
+            <Plus size={16}/>
+            Add Shortcut
         </button>
 
-        <div class="footer-buttons">
-            <button type="submit" class="ring-btn ring-btn-primary">Save</button>
-            <button type="button" class="ring-btn" on:click={onClose}>Cancel</button>
+        <div class="footer-buttons prevent-select">
+            <button type="submit" class="ring-btn ring-btn-primary" >Save</button>
+            <button type="button" class="ring-btn" onclick={onCancel}>Cancel</button>
         </div>
     </form>
 </div>
@@ -115,8 +128,35 @@
         padding: 24px;
         border-radius: 4px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-        max-width: 600px;
+
+        width: 600px;
         margin: 20px auto;
+    }
+
+    .dataOverflow {
+        max-height: 300px; /* Adjust this value to your preferred max height */
+        overflow-y: auto; /* Enables vertical scrolling */
+        overflow-x: hidden; /* Hides horizontal scrollbar */
+        padding-right: 4px; /* Adds space for the scrollbar to avoid overlap */
+        margin-bottom: 16px; /* Spacing between the list and the 'Add' button */
+    }
+
+    /* Optional: Style the scrollbar to match the dark theme */
+    .dataOverflow::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .dataOverflow::-webkit-scrollbar-track {
+        background: #23272b;
+    }
+
+    .dataOverflow::-webkit-scrollbar-thumb {
+        background-color: #474747;
+        border-radius: 4px;
+    }
+
+    .dataOverflow::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
     }
 
     /* Title Styles */
@@ -164,12 +204,20 @@
     }
 
     /* Grid Styles */
-    .grid-container {
+    .grid-row {
         display: grid;
         grid-template-columns: 1fr 2fr 32px;
         gap: 8px;
-        margin-bottom: 16px; /* Reduced bottom margin to fit Add button closer */
         align-items: center;
+    }
+
+    .mb-2 {
+        margin-bottom: 8px;
+    }
+
+
+    .ring-btn-icon {
+        height: 32px;
     }
 
     .header {

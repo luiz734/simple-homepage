@@ -2,13 +2,17 @@
     import Grid from 'svelte-grid';
     import gridHelp from "svelte-grid/src/utils/helper.js";
     import Shortcuts from "./Shortcuts.svelte";
-    import {Grip, GripHorizontalIcon, Plus} from 'lucide-svelte';
+    import {BoltIcon, Grip, GripHorizontalIcon, Plus, Settings2} from 'lucide-svelte';
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import {slide} from 'svelte/transition';
     import ShortcutsConfig from "./ShortcutsConfig.svelte";
 
     let {locked: editLocked, items = $bindable()} = $props();
 
+    let selectedId = $state(null);
+    let selectedWidget = $derived(
+        selectedId ? items.find(i => i.id === selectedId) : null
+    );
     let configOpen = $state(false);
 
     const cols = [
@@ -20,23 +24,19 @@
         const pixelHeight = size;
         const rowHeight = 100; // Must match the Grid's rowHeight prop
         const margin = 10; // Default svelte-grid margin is usually 10px
-
-        // Calculate new grid height units (h)
-        // Formula: pixels / (rowHeight + margin)
         const newH = Math.ceil((pixelHeight + margin) / (rowHeight + margin));
-
         const index = items.findIndex(i => i.id === id);
-
-        // Update the item's height
         items[index][6].h = newH;
         items = [...items]; // Trigger reactivity
-        // alert(size)
     }
 
     const toggleConfig = () => {
-        configOpen = !configOpen;
+
     };
 
+    const onCancel = () => {
+        configOpen = !configOpen;
+    };
 
 </script>
 
@@ -49,15 +49,22 @@
                     <GripHorizontalIcon size="18px"/>
                 </div>
 
-                <div class="configButton"  transition:slide={{axis: "x"}}>
-                    <button type="button" class="ring-link-btn" onclick={toggleConfig}>
-                        <Plus size={16} /> Add Shortcut
+                <div class="configButton" transition:slide={{axis: "x"}}>
+                    <button type="button" class="ring-link-btn"
+                            onclick={() => {
+                                selectedId = dataItem.id;
+                                configOpen = true;
+                            }
+                    }>
+                        <Settings2 size={24}/>
                     </button>
                 </div>
             {/if}
 
             <div class="widget">
-                <Shortcuts backgroundColor="{dataItem.data.color}" onSizeChanged={(size) => onSizeChanged(item.id, size)} {editLocked} />
+                <Shortcuts backgroundColor="{dataItem.data.color}"
+                           onSizeChanged={(size) => onSizeChanged(item.id, size)} {editLocked}
+                           links={dataItem.data.links}/>
             </div>
 
 
@@ -67,13 +74,27 @@
                 </div>
             {/if}
         </div>
+
     </Grid>
 
-    {#if configOpen}
+    {#if configOpen && selectedWidget}
         <div class="backdrop">
-            <ShortcutsConfig onClose={() => configOpen = false} />
+            <ShortcutsConfig {onCancel} onSubmit={(newData) => {
+                // items.map((i) => {console.log($state.snapshot(i))});
+                const index = items.findIndex(i => i.id === selectedId);
+                if (index !== -1) {
+                    items[index].data = newData;
+                    items = [...items];
+                    console.log("updated");
+                }
+                // items = items;
+                configOpen = false;
+                selectedId = null;
+            }} widgetData={selectedWidget.data}/>
         </div>
     {/if}
+
+
 </div>
 
 <style>
@@ -113,6 +134,7 @@
         background: #0D0D0D;
         align-items: center;
     }
+
     .dragger {
         border-radius: 18px 18px 0 0;
         background: #26282B;
@@ -130,9 +152,9 @@
         position: absolute;
         right: 8px;
         top: 32px;
-        color: #358cf6 !important;
+        /*color: #358cf6 !important;*/
         white-space: nowrap; /* Prevents text wrapping during width animation */
-        overflow: hidden;    /* Ensures content is clipped, not wrapped */
+        overflow: hidden; /* Ensures content is clipped, not wrapped */
     }
 
     .widget {

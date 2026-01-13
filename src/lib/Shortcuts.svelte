@@ -5,13 +5,10 @@
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import ShortcutsConfig from "./ShortcutsConfig.svelte";
 
-    let {backgroundColor, onSizeChanged, editLocked} = $props();
+    let {backgroundColor, onSizeChanged, editLocked, links} = $props();
 
 
-    let links = $state([
-        {"url": "http://google.com", "name": "Google"},
-        {"url": "http://google.com", "name": "Youtube"},
-    ]);
+
 
     let shortcut_name = $state("");
     let shortcut_url = $state("");
@@ -59,14 +56,6 @@
         </div>
     {/if}
 
-    {#if !editLocked}
-        <div class="edit-button">
-            <PencilIcon size="16px"/>
-            <button class="prevent-select"
-                    onclick={toggleInputsVisible}> Edit... </button>
-        </div>
-
-    {/if}
 
 
 </div>
