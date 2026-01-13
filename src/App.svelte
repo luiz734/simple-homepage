@@ -2,6 +2,7 @@
     import Widgets from "./lib/Widgets.svelte";
     import Sidebar from "./lib/Sidebar.svelte";
     import gridHelp from "svelte-grid/src/utils/helper.js";
+    import ShortcutsConfig from "./lib/ShortcutsConfig.svelte";
 
 
     const itemProps = {
@@ -77,8 +78,9 @@
 </script>
 
 <div class="app">
-    <Sidebar {locked} onToggle={toggleLayoutLock} />
-    <Widgets {locked} bind:items={items}/>
+<!--    <Sidebar {locked} onToggle={toggleLayoutLock} />-->
+<!--    <Widgets {locked} bind:items={items}/>-->
+    <ShortcutsConfig/>
 </div>
 
 <style>
