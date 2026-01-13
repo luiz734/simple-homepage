@@ -1,12 +1,13 @@
 <script>
-    import { Pencil, Check } from 'lucide-svelte';
+    import { Pencil, Check, Plus } from 'lucide-svelte'; // Added Plus icon
     import { tick } from 'svelte';
+    import {slide} from 'svelte/transition';
 
     export let onClose;
 
     let title = "Edit Shortcuts";
     let isEditingTitle = false;
-    let titleInput; // Reference to the DOM element
+    let titleInput;
 
     let data = [
         { name: "Google", url: "https://www.google.com" },
@@ -16,7 +17,7 @@
 
     async function enableTitleEdit() {
         isEditingTitle = true;
-        await tick(); // Wait for DOM update so input exists
+        await tick();
         titleInput?.focus();
     }
 
@@ -25,13 +26,16 @@
     }
 
     function handleTitleKeydown(e) {
-        if (e.key === 'Enter') {
-            saveTitle();
-        }
+        if (e.key === 'Enter') saveTitle();
     }
 
     function removeRow(index) {
         data = data.filter((_, i) => i !== index);
+    }
+
+    // New function to add a row
+    function addRow() {
+        data = [...data, { name: "", url: "" }];
     }
 
     function handleSubmit() {
@@ -78,6 +82,10 @@
             {/each}
         </div>
 
+        <button type="button" class="ring-link-btn" on:click={addRow}>
+            <Plus size={16} /> Add Shortcut
+        </button>
+
         <div class="footer-buttons">
             <button type="submit" class="ring-btn ring-btn-primary">Save</button>
             <button type="button" class="ring-btn" on:click={onClose}>Cancel</button>
@@ -117,7 +125,7 @@
         align-items: center;
         gap: 8px;
         margin-bottom: 16px;
-        height: 32px; /* Fixed height to prevent jumping */
+        height: 32px;
     }
 
     .dialog-title {
@@ -152,15 +160,15 @@
     .title-icon:hover {
         opacity: 1;
         color: var(--ring-primary);
-        background-color: transparent; /* Override delete button red bg */
+        background-color: transparent;
     }
 
-    /* Existing Grid Styles */
+    /* Grid Styles */
     .grid-container {
         display: grid;
         grid-template-columns: 1fr 2fr 32px;
         gap: 8px;
-        margin-bottom: 24px;
+        margin-bottom: 16px; /* Reduced bottom margin to fit Add button closer */
         align-items: center;
     }
 
@@ -190,7 +198,26 @@
         border-color: var(--ring-primary);
     }
 
-    /* Buttons */
+    /* Add Row Button Style */
+    .ring-link-btn {
+        background: none;
+        border: none;
+        color: var(--ring-primary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        padding: 0;
+        margin-bottom: 24px;
+    }
+
+    .ring-link-btn:hover {
+        color: var(--ring-primary-hover);
+        text-decoration: underline;
+    }
+
+    /* Footer Buttons */
     .footer-buttons {
         display: flex;
         gap: 12px;
@@ -238,7 +265,6 @@
         cursor: pointer;
     }
 
-    /* Specific override for the delete button in grid */
     .grid-container .ring-btn-icon:hover {
         color: var(--ring-error);
         background-color: rgba(194, 39, 49, 0.1);

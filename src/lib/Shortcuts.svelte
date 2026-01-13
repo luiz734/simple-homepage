@@ -3,6 +3,7 @@
     import {onMount} from 'svelte';
     import {Grip, GripHorizontalIcon, PencilIcon} from "lucide-svelte";
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
+    import ShortcutsConfig from "./ShortcutsConfig.svelte";
 
     let {backgroundColor, onSizeChanged, editLocked} = $props();
 
@@ -54,18 +55,7 @@
 
     {#if inputsVisible}
         <div transition:slide>
-            <div class="inputs">
-                <div>
-                    <label for="shortcutName"> Name </label>
-                    <input id="shortcutName" type="text" bind:value={shortcut_name}/>
-                </div>
-                <div>
-                    <label for="shortcutURL"> Url </label>
-                    <input id="shortcutURL" type="text" bind:value={shortcut_url}/>
-                </div>
-            </div>
-
-            <button class="confirm prevent-select" onclick={addLink} type="button">Add</button>
+            <ShortcutsConfig onClose={()=>{}}/>
         </div>
     {/if}
 

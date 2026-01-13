@@ -2,11 +2,14 @@
     import Grid from 'svelte-grid';
     import gridHelp from "svelte-grid/src/utils/helper.js";
     import Shortcuts from "./Shortcuts.svelte";
-    import {Grip, GripHorizontalIcon} from 'lucide-svelte';
+    import {Grip, GripHorizontalIcon, Plus} from 'lucide-svelte';
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import {slide} from 'svelte/transition';
+    import ShortcutsConfig from "./ShortcutsConfig.svelte";
 
     let {locked: editLocked, items = $bindable()} = $props();
+
+    let configOpen = $state(false);
 
     const cols = [
         [1100, 6],
@@ -30,6 +33,10 @@
         // alert(size)
     }
 
+    const toggleConfig = () => {
+        configOpen = !configOpen;
+    };
+
 
 </script>
 
@@ -40,6 +47,12 @@
             {#if !editLocked}
                 <div class=dragger transition:slide onpointerdown={movePointerDown}>
                     <GripHorizontalIcon size="18px"/>
+                </div>
+
+                <div class="configButton"  transition:slide={{axis: "x"}}>
+                    <button type="button" class="ring-link-btn" onclick={toggleConfig}>
+                        <Plus size={16} /> Add Shortcut
+                    </button>
                 </div>
             {/if}
 
@@ -55,6 +68,12 @@
             {/if}
         </div>
     </Grid>
+
+    {#if configOpen}
+        <div class="backdrop">
+            <ShortcutsConfig onClose={() => configOpen = false} />
+        </div>
+    {/if}
 </div>
 
 <style>
@@ -104,7 +123,16 @@
         box-sizing: border-box;
         left: 0;
         top: 0;
-        height: 20px;
+        height: 24px;
+    }
+
+    .configButton {
+        position: absolute;
+        right: 8px;
+        top: 32px;
+        color: #358cf6 !important;
+        white-space: nowrap; /* Prevents text wrapping during width animation */
+        overflow: hidden;    /* Ensures content is clipped, not wrapped */
     }
 
     .widget {
@@ -125,5 +153,17 @@
         position: absolute;
     }
 
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
 
 </style>

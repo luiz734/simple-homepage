@@ -78,9 +78,9 @@
 </script>
 
 <div class="app">
-<!--    <Sidebar {locked} onToggle={toggleLayoutLock} />-->
-<!--    <Widgets {locked} bind:items={items}/>-->
-    <ShortcutsConfig/>
+    <Sidebar {locked} onToggle={toggleLayoutLock} />
+    <Widgets {locked} bind:items={items}/>
+<!--    <ShortcutsConfig/>-->
 </div>
 
 <style>

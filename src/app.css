@@ -38,3 +38,20 @@ a {
   user-select: none; /* Standard syntax */
 }
 
+.ring-link-btn {
+  background: none;
+  border: none;
+  color: var(--ring-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 0;
+  margin-bottom: 24px;
+}
+
+.ring-link-btn:hover {
+  color: var(--ring-primary-hover);
+  text-decoration: underline;
+}
