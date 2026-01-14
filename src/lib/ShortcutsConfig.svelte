@@ -4,10 +4,13 @@
     import {slide} from 'svelte/transition';
 
     let {onCancel, onSubmit, widgetData} = $props();
-    let links = $derived(widgetData.links);
 
-    let title = "Edit Shortcuts";
-    let isEditingTitle = false;
+    // We want copies
+    // Values will be changed in the submit callback
+    let links = $state(structuredClone($state.snapshot(widgetData.links)));
+    let title = $state(widgetData.title);
+
+    let isEditingTitle = $state(false);
     let titleInput;
 
     async function enableTitleEdit() {
@@ -16,22 +19,21 @@
         titleInput?.focus();
     }
 
-    function saveTitle(event) {
-        event.preventDefault();
+    function saveTitle() {
         isEditingTitle = false;
+        document.activeElement.blur();
     }
 
     function handleTitleKeydown(e) {
-        if (e.key === 'Enter') saveTitle();
+        if (e.key === 'Enter') {
+            saveTitle();
+        }
     }
 
     function removeRow(index) {
-        console.log("before", $state.snapshot(widgetData));
         links = links.filter((_, i) => i !== index);
-        console.log("after", $state.snapshot(widgetData));
     }
 
-    // New function to add a row
     function addRow() {
         const last = links[links.length - 1];
         if (last.name === "" || last.url === "") {
@@ -45,7 +47,8 @@
 
         const payload = {
             ...widgetData,
-            links: links
+            title: title,
+            links: links,
         };
 
         onSubmit(payload);
@@ -69,7 +72,7 @@
                     <Check size={18}/>
                 </button>
             {:else}
-                <h1 class="dialog-title" onclick={enableTitleEdit}>{title}</h1>
+                <h1 class="dialog-title prevent-select" onclick={enableTitleEdit}>{title}</h1>
                 <button type="button" class="ring-btn-icon title-icon" onclick={enableTitleEdit}>
                     <Pencil size={18}/>
                 </button>
