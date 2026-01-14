@@ -10,9 +10,9 @@
 <div class="sidebar">
     <button onclick={onToggle}>
         {#if locked}
-            <Unlock/>
-        {:else}
             <Lock/>
+        {:else}
+            <Unlock/>
         {/if}
     </button>
 
