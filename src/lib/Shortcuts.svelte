@@ -5,7 +5,7 @@
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import ShortcutsConfig from "./ShortcutsConfig.svelte";
 
-    let {backgroundColor, onSizeChanged, editLocked, links} = $props();
+    let {backgroundColor, onSizeChanged, editLocked, links, title} = $props();
 
 
 
@@ -40,7 +40,7 @@
 <div class="shortcuts" bind:this={container} style:--bg="{backgroundColor}">
 
     <div class="title">
-        Category
+        {title}
     </div>
 
     {#each links as link}

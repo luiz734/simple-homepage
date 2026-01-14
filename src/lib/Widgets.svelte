@@ -64,7 +64,8 @@
             <div class="widget">
                 <Shortcuts backgroundColor="{dataItem.data.color}"
                            onSizeChanged={(size) => onSizeChanged(item.id, size)} {editLocked}
-                           links={dataItem.data.links}/>
+                           links={dataItem.data.links}
+                           title={dataItem.data.title}/>
             </div>
 
 
