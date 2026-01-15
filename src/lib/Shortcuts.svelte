@@ -5,7 +5,8 @@
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import ShortcutsConfig from "./ShortcutsConfig.svelte";
 
-    let {backgroundColor, onSizeChanged, editLocked, links, title} = $props();
+    let {backgroundColor, onSizeChanged, editLocked, data} = $props();
+    let {links, title} = data;
 
 
 

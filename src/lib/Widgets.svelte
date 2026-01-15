@@ -6,6 +6,8 @@
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import {slide} from 'svelte/transition';
     import ShortcutsConfig from "./ShortcutsConfig.svelte";
+    import Clock from "./Clock.svelte";
+    import Calculator from "./Calculator.svelte";
 
     let {locked: editLocked, items = $bindable()} = $props();
 
@@ -38,8 +40,17 @@
         configOpen = !configOpen;
     };
 
+    const widgetsMap = {
+        "shortcuts": Shortcuts,
+        "clock": Clock,
+        "calculator": Calculator,
+    };
+    let MyComponent = $state(Calculator);
+
 </script>
 
+<!--<MyComponent></MyComponent>-->
+<!--<button onclick={() => {MyComponent = Clock}}> click</button>-->
 
 <div class=demo-container>
     <Grid bind:items={items} rowHeight={100} let:item let:dataItem {cols} let:resizePointerDown let:movePointerDown>
@@ -62,10 +73,16 @@
             {/if}
 
             <div class="widget">
-                <Shortcuts backgroundColor="{dataItem.data.color}"
-                           onSizeChanged={(size) => onSizeChanged(item.id, size)} {editLocked}
-                           links={dataItem.data.links}
-                           title={dataItem.data.title}/>
+                {#if widgetsMap[dataItem.type]}
+                    {@const Widget = widgetsMap[dataItem.type]}
+
+                    <Widget backgroundColor="{dataItem.data.color}"
+                            {editLocked}
+                            onSizeChanged={(size) => onSizeChanged(item.id, size)}
+                            data={dataItem.data}/>
+                {:else}
+                    <p>Widget type "{dataItem.type}" not found.</p>
+                {/if}
             </div>
 
 

@@ -1,24 +1,23 @@
 <script>
-    import { onMount, onDestroy } from 'svelte';
+    import {onMount, onDestroy} from 'svelte';
 
-    let currentTime = new Date();
-    let timer;
+    let {data} = $props();
 
-    onMount(() => {
-        timer = setInterval(() => {
+    let currentTime = $state(new Date());
+    $effect(() => {
+        const interval = setInterval(() => {
             currentTime = new Date();
         }, 1000);
-    });
 
-    onDestroy(() => {
-        if (timer) clearInterval(timer);
-    });
+        return () => clearInterval(interval);
+    })
 
-    $: formattedTime = currentTime.toLocaleTimeString([], {
+    let formattedTime = $derived(currentTime.toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit'
-    });
+    }));
+
 </script>
 
 <div class="clock-container">
@@ -30,13 +29,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 1rem;
+        /*padding: 1rem;*/
         font-family: sans-serif;
     }
 
     .time-display {
         font-size: 2rem;
         font-weight: bold;
-        color: #333;
+        color: #999;
     }
 </style>

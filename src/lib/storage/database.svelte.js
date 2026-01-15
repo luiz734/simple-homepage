@@ -76,18 +76,18 @@ export let defaultData = {
         },
         {
             id: 5,
-            type: "shortcuts",
+            type: "calculator",
             6: gridHelp.item({x: 4, y: 2, w: 2, h: 5, ...itemProps}),
             data: {
-                title: "Reference & Tools",
-                color: "#c2410c", // orange-700
-                links: [
-                    {name: "Wikipedia", url: "https://wikipedia.org"},
-                    {name: "WolframAlpha", url: "https://wolframalpha.com"},
-                    {name: "Google Translate", url: "https://translate.google.com"},
-                    {name: "Figma", url: "https://figma.com"},
-                    {name: "ChatGPT", url: "https://chat.openai.com"},
-                ]
+                // title: "Reference & Tools",
+                // color: "#c2410c", // orange-700
+                // links: [
+                //     {name: "Wikipedia", url: "https://wikipedia.org"},
+                //     {name: "WolframAlpha", url: "https://wolframalpha.com"},
+                //     {name: "Google Translate", url: "https://translate.google.com"},
+                //     {name: "Figma", url: "https://figma.com"},
+                //     {name: "ChatGPT", url: "https://chat.openai.com"},
+                // ]
             }
         },
 
@@ -116,6 +116,13 @@ export let defaultData = {
                     {name: "Amazon", url: "https://amazon.com"},
                     {name: "eBay", url: "https://ebay.com"},
                 ]
+            }
+        },
+        {
+            id: 8,
+            type: "clock",
+            6: gridHelp.item({x: 4, y: 7, w: 2, h: 1, ...itemProps}),
+            data: {
             }
         }
     ]
