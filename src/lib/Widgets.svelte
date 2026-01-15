@@ -4,7 +4,7 @@
     import Shortcuts from "./Shortcuts.svelte";
     import {BoltIcon, Grip, GripHorizontalIcon, Plus, Settings2} from 'lucide-svelte';
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
-    import {slide} from 'svelte/transition';
+    import {slide, fade} from 'svelte/transition';
     import ShortcutsConfig from "./ShortcutsConfig.svelte";
     import Clock from "./Clock.svelte";
     import Calculator from "./Calculator.svelte";
@@ -53,7 +53,8 @@
 
 <div class=demo-container>
     <Grid bind:items={items} rowHeight={100} let:item let:dataItem {cols} let:resizePointerDown let:movePointerDown>
-        <div class="sections">
+        <div class="sections" class:editing={!editLocked}>
+
             {#if !editLocked}
                 <div class=dragger transition:slide onpointerdown={movePointerDown}>
                     <GripHorizontalIcon size="18px"/>
@@ -156,7 +157,15 @@
         box-sizing: border-box;
         justify-content: space-between;
 
+        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
+    .sections.editing {
+        border: 2px dashed #52525b;
+        transform: scale(0.96);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        background-color: #1c1c1e;
+    }
+
 
     .demo-container {
         flex-grow: 1;
