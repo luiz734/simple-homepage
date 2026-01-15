@@ -41,11 +41,10 @@
     };
 
     const widgetsMap = {
-        "shortcuts": Shortcuts,
-        "clock": Clock,
-        "calculator": Calculator,
+        "shortcuts": {component: Shortcuts, config: ShortcutsConfig},
+        "clock": {component: Clock, config: null},
+        "calculator": {component: Calculator, config: null},
     };
-    let MyComponent = $state(Calculator);
 
 </script>
 
@@ -60,23 +59,26 @@
                     <GripHorizontalIcon size="18px"/>
                 </div>
 
-                <div class="configButton" transition:slide={{axis: "x"}}>
-                    <button type="button" class="ring-link-btn"
-                            onclick={() => {
+<!--                Some widgets don't have configuration options-->
+                {#if widgetsMap[dataItem.type]?.config}
+                    <div class="configButton" transition:slide={{axis: "x"}}>
+                        <button type="button" class="ring-link-btn"
+                                onclick={() => {
                                 selectedId = dataItem.id;
                                 configOpen = true;
                             }
                     }>
-                        <Settings2 size={24}/>
-                    </button>
-                </div>
+                            <Settings2 size={24}/>
+                        </button>
+                    </div>
+                {/if}
             {/if}
 
             <div class="widget">
                 {#if widgetsMap[dataItem.type]}
-                    {@const Widget = widgetsMap[dataItem.type]}
+                    {@const WidgetComponent = widgetsMap[dataItem.type].component}
 
-                    <Widget backgroundColor="{dataItem.data.color}"
+                    <WidgetComponent backgroundColor="{dataItem.data.color}"
                             {editLocked}
                             onSizeChanged={(size) => onSizeChanged(item.id, size)}
                             data={dataItem.data}/>
@@ -96,20 +98,29 @@
     </Grid>
 
     {#if configOpen && selectedWidget}
-        <div class="backdrop">
-            <ShortcutsConfig {onCancel} onSubmit={(newData) => {
-                // items.map((i) => {console.log($state.snapshot(i))});
-                const index = items.findIndex(i => i.id === selectedId);
-                if (index !== -1) {
-                    items[index].data = newData;
-                    items = [...items];
-                    console.log("updated");
-                }
-                // items = items;
-                configOpen = false;
-                selectedId = null;
-            }} widgetData={selectedWidget.data}/>
-        </div>
+        {@const widgetDef = widgetsMap[selectedWidget.type]}
+
+        {#if widgetDef?.config}
+            {@const ConfigComponent = widgetDef.config}
+            <div class="backdrop">
+                <ConfigComponent
+                        widgetData={selectedWidget.data}
+                        {onCancel}
+                        onSubmit={(newData) => {
+                        // items.map((i) => {console.log($state.snapshot(i))});
+                        const index = items.findIndex(i => i.id === selectedId);
+                        if (index !== -1) {
+                            items[index].data = newData;
+                            items = [...items];
+                            console.log("updated");
+                        }
+                        // items = items;
+                        configOpen = false;
+                        selectedId = null;
+                    }}
+                />
+            </div>
+        {/if}
     {/if}
 
 
