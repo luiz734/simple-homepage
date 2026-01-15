@@ -1,3 +1,24 @@
+:root {
+  /* Ring UI Palette */
+  --ring-dark-bg: #23272b;       /* Card/Dialog Background */
+  --ring-content-bg: #191919;    /* Main Body/Grid Background */
+  --ring-border: #474747;        /* Borders */
+  --ring-border-hover: #707070;
+
+  --ring-text: #dfdfdf;
+  --ring-text-secondary: #808080;
+
+  --ring-primary: #358cf6;
+  --ring-primary-hover: #307ecc;
+
+  --ring-radius: 4px;            /* Ring UI uses distinct sharp corners */
+  --ring-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+
+  /* Font */
+  --ring-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+
 :global(body), :global(body) {
   margin: 0;
   padding: 0;
@@ -10,13 +31,16 @@
 body, html {
   margin: 0;
   padding: 0;
-  color: #FEFEFE;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 20px;
-  background: #0D0D0D;
+
+  background-color: var(--ring-content-bg);
+  color: var(--ring-text);
+  font-family: var(--ring-font);
+
+
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+
 }
 
 a {

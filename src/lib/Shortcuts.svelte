@@ -60,76 +60,110 @@
 
 
 </div>
-
 <style>
     .shortcuts {
         display: flex;
         flex-direction: column;
-
-
-        /*color: var(--bg);*/
         width: 100%;
-        /*height: auto;*/
-        /*min-height: 100%;*/
-        /*box-sizing: border-box;*/
-        padding: 4px;
-    }
-
-    .shortcuts-block {
-        /*border: 1px solid #ddd;*/
-        margin: 8px 0;
-    }
-
-    input {
-        width: 100%;
+        height: 100%; /* Ensure it fills the card */
         box-sizing: border-box;
+        padding: 0 8px; /* Match parent padding logic */
+        overflow-y: auto; /* Allow scrolling if list is long */
+    }
+
+    /* Scrollbar styling for Ring UI look */
+    .shortcuts::-webkit-scrollbar {
+        width: 8px;
+    }
+    .shortcuts::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .shortcuts::-webkit-scrollbar-thumb {
+        background-color: var(--ring-border);
+        border-radius: 4px;
     }
 
     .title {
-        font-weight: bold;
-        font-size: 24px;
-        margin: 10px 0 20px;
-        text-align: left;
+        font-size: 14px; /* Ring UI headers are usually smaller and tighter */
+        font-weight: 700;
+        color: var(--ring-text);
+        margin: 8px 0 12px 0;
+        text-transform: uppercase; /* Optional: distinctive header style */
+        letter-spacing: 0.5px;
+    }
+
+    /* If you have a list of links, they likely go here */
+    .shortcuts-block {
+        margin: 4px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    /* Standard Input Styling */
+    input {
+        width: 100%;
+        box-sizing: border-box;
+        background-color: var(--ring-input-bg, #191919);
+        border: 1px solid var(--ring-border);
+        color: var(--ring-text);
+        padding: 6px 8px;
+        border-radius: 2px;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    input:focus {
+        border-color: var(--ring-primary);
     }
 
     .inputs {
-        margin-top: 18px;
+        margin-top: 16px;
     }
 
     .inputs > div {
-        margin: 10px 0;
+        margin: 8px 0;
     }
 
+    /* Button Styling */
     .edit-button {
         display: flex;
-        /*align-items: center;*/
-        justify-content: center;
+        justify-content: flex-start; /* Ring UI usually aligns left */
         flex-direction: row;
-        margin: 20px 0 0px;
-        color: #366ACF;
-    }
-    button:hover {
-        background: #2A2C2F;
+        margin-top: auto; /* Push to bottom if flex container */
+        padding-top: 12px;
     }
 
     button {
         border: none;
-        color: #366ACF;
+        background-color: transparent;
+        color: var(--ring-primary); /* #358cf6 */
         cursor: pointer;
-        background-color: inherit;
-        font-size: 16px;
-        display: inline-block;
+        font-size: 13px; /* Standard Ring UI size */
+        padding: 4px 8px;
+        border-radius: 2px;
+        transition: color 0.2s, background-color 0.2s;
+        text-align: left;
     }
 
+    button:hover {
+        color: var(--ring-primary-hover);
+        background-color: rgba(53, 140, 246, 0.1); /* Subtle blue tint on hover */
+        text-decoration: none;
+    }
 
-
-
+    /* Primary/Confirm Button Variant */
     .confirm {
-        background-color: darkolivegreen;
+        background-color: var(--ring-primary);
         color: white;
-        font-size: 1em;
-        padding: 10px;
+        font-weight: 500;
+        padding: 6px 16px;
+        border-radius: 4px; /* Ring UI buttons are usually 4px radius */
     }
 
-
+    .confirm:hover {
+        background-color: var(--ring-primary-hover);
+        color: white; /* Ensure text stays white */
+    }
 </style>

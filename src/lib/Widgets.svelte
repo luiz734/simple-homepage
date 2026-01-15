@@ -126,91 +126,134 @@
 
 
 </div>
-
 <style>
+    /* 1. Grid Library Overrides */
     :global(.svlt-grid-shadow) {
-        /* Back shadow */
-        background: pink;
-        border-radius: 12px;
+        background: var(--ring-primary);
+        opacity: 0.2;
+        border-radius: var(--ring-radius);
     }
 
     :global(.svlt-grid-container) {
-        /* Container color */
-        background: #0D0D0D;
+        background: var(--ring-content-bg);
     }
 
     :global(.svlt-grid-resizer::after) {
-        /* Resizer color */
-        border-color: #514D4B !important;
+        border-color: var(--ring-text-secondary) !important;
     }
 
+    /* 2. Main Container */
+    .demo-container {
+        flex-grow: 1;
+        background: var(--ring-content-bg);
+        align-items: center;
+        /* Ensure font inherits correctly if this is a standalone container */
+        font-family: var(--ring-font);
+        color: var(--ring-text);
+    }
+
+    /* 3. The Widget Card (.sections) */
     .sections {
-        border: 1px solid #26282B;
-        background-color: #151516;
-        border-radius: 18px;
-        padding: 12px;
+        background-color: var(--ring-dark-bg);
+        border: 1px solid var(--ring-border);
+        border-radius: var(--ring-radius);
+        color: var(--ring-text);
+
+        /* Layout */
+        padding: 8px; /* Slightly tighter padding for Ring UI look */
         display: flex;
         flex-direction: column;
         width: 100%;
-        overflow: hidden;
         height: 100%;
+        overflow: hidden;
         box-sizing: border-box;
         justify-content: space-between;
 
+        /* Transitions */
         transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
+
+    /* Editing State */
     .sections.editing {
-        border: 2px dashed #52525b;
-        transform: scale(0.96);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-        background-color: #1c1c1e;
+        border: 1px dashed var(--ring-text-secondary); /* Thinner, grey dashed border */
+        transform: scale(0.98); /* Subtle scale */
+        box-shadow: var(--ring-shadow);
+        background-color: #2b3036; /* Slightly lighter to indicate "lifted" state */
     }
 
-
-    .demo-container {
-        flex-grow: 1;
-        background: #0D0D0D;
-        align-items: center;
-    }
-
+    /* 4. Controls */
     .dragger {
-        border-radius: 18px 18px 0 0;
-        background: #26282B;
+        /* Remove distinct background to match Ring UI "clean" look */
+        background: transparent;
+        color: var(--ring-text-secondary);
+
+        /* Position */
         position: absolute;
-        /*color: #2A2C2F;*/
-        width: 100%;
-        text-align: center;
-        box-sizing: border-box;
-        left: 0;
         top: 0;
+        left: 0;
+        width: 100%;
         height: 24px;
+
+        /* Centering the icon */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: grab;
+        z-index: 20;
+    }
+
+    .dragger:hover {
+        color: var(--ring-text); /* Highlight on hover */
     }
 
     .configButton {
         position: absolute;
-        right: 8px;
-        top: 32px;
-        /*color: #358cf6 !important;*/
-        white-space: nowrap; /* Prevents text wrapping during width animation */
-        overflow: hidden; /* Ensures content is clipped, not wrapped */
+        right: 4px;
+        top: 4px; /* Move into the corner */
+        z-index: 21;
+    }
+
+    /* Style the actual button inside configButton to match Ring UI Icon Buttons */
+    .configButton button {
+        background: transparent;
+        border: none;
+        color: var(--ring-text-secondary);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 2px;
+        transition: color 0.2s, background-color 0.2s;
+    }
+
+    .configButton button:hover {
+        color: var(--ring-primary);
+        background-color: rgba(53, 140, 246, 0.1);
     }
 
     .widget {
-        /*margin: 18px 0;*/
         border: none;
         flex: 1;
-        /*box-sizing: border-box;*/
+        position: relative;
+        /* Add margin top if dragger is visible to prevent overlap,
+           or keep it 0 if widget handles its own spacing */
+        margin-top: 12px;
     }
 
     .resizer {
-        border-radius: 0 0 18px 18px;
-        color: #9DA0A8;
-        text-align: center;
-        box-sizing: border-box;
-        right: 4px;
-        bottom: 4px;
-        height: 20px;
         position: absolute;
+        right: 2px;
+        bottom: 2px;
+        width: 16px;
+        height: 16px;
+        color: var(--ring-text-secondary);
+        cursor: se-resize;
+        z-index: 20;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+    }
+
+    .resizer:hover {
+        opacity: 1;
+        color: var(--ring-primary);
     }
 
     .backdrop {
@@ -219,11 +262,11 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.6); /* Slightly darker backdrop */
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 1000;
+        backdrop-filter: blur(2px); /* Optional: adds a modern touch */
     }
-
 </style>
