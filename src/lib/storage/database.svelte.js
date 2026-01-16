@@ -165,6 +165,16 @@ export class ApplicationState {
             this.widgets[index].data = {...this.widgets[index].data, ...shortcutData};
         }
     }
+
+    importState(importedData) {
+        if (importedData && Array.isArray(importedData.widgets)) {
+            // Update the state with the imported widgets
+            this.widgets = importedData.widgets;
+            console.log('State successfully updated from import.');
+        } else {
+            console.error('Invalid import data: missing "widgets" array.');
+        }
+    }
 }
 
 export const APPLICATION_KEY = Symbol('APPLICATION_KEY');

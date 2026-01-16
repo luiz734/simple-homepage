@@ -1,7 +1,12 @@
 <script>
-    import {Lock, Unlock, User} from "lucide-svelte";
+    import {Lock, Settings, Unlock, User} from "lucide-svelte";
+    import AddonSettings from "./settings/AddonSettings.svelte";
 
     let {locked, onToggle} = $props();
+
+
+    let settingsOpen = $state(false);
+
 </script>
 
 <div class="sidebar">
@@ -16,7 +21,22 @@
     <button title="User Profile">
         <User size={20} />
     </button>
+
+    <button title="Settings" class:active={!locked} onclick={() => {
+        settingsOpen = !settingsOpen;
+    }}>
+        <Settings size={20} />
+    </button>
 </div>
+
+{#if settingsOpen}
+    <div >
+        <AddonSettings
+                onCancel={() => { settingsOpen = false;}}
+                onSubmit={() => { settingsOpen = false;}}
+        />
+    </div>
+{/if}
 
 <style>
     .sidebar {
