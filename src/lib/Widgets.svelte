@@ -5,9 +5,11 @@
     import {BoltIcon, CirclePlusIcon, Grip, GripHorizontalIcon, Plus, PlusIcon, Settings2} from 'lucide-svelte';
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import {slide, fade} from 'svelte/transition';
-    import ShortcutsConfig from "./ShortcutsConfig.svelte";
+    import ShortcutsConfig from "./widget_config/ShortcutsConfig.svelte";
     import Clock from "./Clock.svelte";
     import Calculator from "./Calculator.svelte";
+    import WidgetConfig from "./templates/WidgetConfig.svelte";
+    import EmptyConfig from "./widget_config/EmptyConfig.svelte";
 
     let {locked: editLocked, items = $bindable(), addWidget, restoreWidgets} = $props();
 
@@ -42,8 +44,8 @@
 
     const widgetsMap = {
         "shortcuts": {component: Shortcuts, config: ShortcutsConfig},
-        "clock": {component: Clock, config: null},
-        "calculator": {component: Calculator, config: null},
+        "clock": {component: Clock, config: EmptyConfig},
+        "calculator": {component: Calculator, config: EmptyConfig},
     };
 
 </script>

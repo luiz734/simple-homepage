@@ -3,7 +3,7 @@
     import {onMount} from 'svelte';
     import {Grip, GripHorizontalIcon, PencilIcon} from "lucide-svelte";
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
-    import ShortcutsConfig from "./ShortcutsConfig.svelte";
+    import ShortcutsConfig from "./widget_config/ShortcutsConfig.svelte";
 
     let {backgroundColor, onSizeChanged, editLocked, data} = $props();
 

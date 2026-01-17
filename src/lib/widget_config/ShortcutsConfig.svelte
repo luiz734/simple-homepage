@@ -2,6 +2,7 @@
     import {Pencil, Check, Plus} from 'lucide-svelte'; // Added Plus icon
     import {tick} from 'svelte';
     import {slide} from 'svelte/transition';
+    import WidgetConfig from "../templates/WidgetConfig.svelte";
 
     let {onCancel, onSubmit, onDelete, widgetData} = $props();
 
@@ -9,7 +10,6 @@
     // Values will be changed in the submit callback
     let links = $state(structuredClone($state.snapshot(widgetData.links)));
     let title = $state(widgetData.title);
-
     let isEditingTitle = $state(false);
     let titleInput;
 
@@ -56,87 +56,67 @@
 
 </script>
 
-<div class="ring-dialog">
-    <form onsubmit={sendForm} class="form-container">
+<WidgetConfig
+        {onCancel}
+        {onDelete}
+        {onSubmit}
+        widgetData={{
+        ...widgetData,
+        title,
+        links
+    }}>
 
-        <div class="title-row">
-            {#if isEditingTitle}
-                <input
-                        bind:this={titleInput}
-                        bind:value={title}
-                        class="title-input"
-                        onkeydown={handleTitleKeydown}
-                        onblur={saveTitle}
-                />
-                <button type="button" class="ring-btn-icon title-icon" onmousedown={saveTitle}>
-                    <Check size={18}/>
+    <div class="title-row">
+        {#if isEditingTitle}
+            <input
+                    bind:this={titleInput}
+                    bind:value={title}
+                    class="title-input"
+                    onkeydown={handleTitleKeydown}
+                    onblur={saveTitle}
+            />
+            <button type="button" class="ring-btn-icon title-icon" onmousedown={saveTitle}>
+                <Check size={18}/>
+            </button>
+        {:else}
+            <h1 class="dialog-title prevent-select" onclick={enableTitleEdit}>{title}</h1>
+            <button type="button" class="ring-btn-icon title-icon" onclick={enableTitleEdit}>
+                <Pencil size={18}/>
+            </button>
+        {/if}
+    </div>
+
+    <div class="grid-row mb-2 prevent-select">
+        <div class="header">Name</div>
+        <div class="header">URL</div>
+        <div class="header"></div>
+    </div>
+
+    <div class="dataOverflow">
+        {#each links as row, i (row)}
+            <div class="grid-row mb-2" transition:slide|local>
+                <input type="text" class="ring-input" bind:value={row.name} placeholder="Name"/>
+                <input type="url" class="ring-input" bind:value={row.url} placeholder="https://example.com"/>
+                <button type="button" class="ring-btn ring-btn-icon" onclick={() => removeRow(i)} title="Remove">
+                    <span class="prevent-select"> ✕ </span>
                 </button>
-            {:else}
-                <h1 class="dialog-title prevent-select" onclick={enableTitleEdit}>{title}</h1>
-                <button type="button" class="ring-btn-icon title-icon" onclick={enableTitleEdit}>
-                    <Pencil size={18}/>
-                </button>
-            {/if}
-        </div>
+            </div>
+        {/each}
+    </div>
 
-        <div class="grid-row mb-2 prevent-select">
-            <div class="header">Name</div>
-            <div class="header">URL</div>
-            <div class="header"></div>
-        </div>
+    <button type="button" class="ring-link-btn prevent-select" onclick={addRow}>
+        <Plus size={16}/>
+        Add Shortcut
+    </button>
 
-        <div class="dataOverflow">
-            {#each links as row, i (row)}
-                <div class="grid-row mb-2" transition:slide|local>
-                    <input type="text" class="ring-input" bind:value={row.name} placeholder="Name"/>
-                    <input type="url" class="ring-input" bind:value={row.url} placeholder="https://example.com"/>
-                    <button type="button" class="ring-btn ring-btn-icon" onclick={() => removeRow(i)} title="Remove">
-                        <span class="prevent-select"> ✕ </span>
-                    </button>
-                </div>
-            {/each}
-        </div>
+</WidgetConfig>
 
-        <button type="button" class="ring-link-btn prevent-select" onclick={addRow}>
-            <Plus size={16}/>
-            Add Shortcut
-        </button>
-
-        <div class="footer-buttons prevent-select">
-
-            <button type="submit" class="ring-btn ring-btn-primary" >Save</button>
-            <button type="button" class="ring-btn" onclick={onCancel}>Cancel</button>
-            <div style="flex-grow: 1"></div>
-            <button type="button" class="ring-btn ring-btn-destroy" onclick={onDelete}> Delete Widget </button>
-        </div>
-    </form>
-</div>
 
 <style>
     :global(body) {
         background-color: #191919;
         color: #dfdfdf;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    .ring-dialog {
-        --ring-dark-bg: #23272b;
-        --ring-border: #474747;
-        --ring-input-bg: #191919;
-        --ring-text: #dfdfdf;
-        --ring-text-secondary: #808080;
-        --ring-primary: #358cf6;
-        --ring-primary-hover: #307ecc;
-        --ring-error: #c22731;
-
-        background-color: var(--ring-dark-bg);
-        color: var(--ring-text);
-        padding: 24px;
-        border-radius: 4px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-
-        width: 600px;
-        margin: 20px auto;
     }
 
     .dataOverflow {
@@ -271,11 +251,6 @@
         text-decoration: underline;
     }
 
-    /* Footer Buttons */
-    .footer-buttons {
-        display: flex;
-        gap: 12px;
-    }
 
     .ring-btn {
         background-color: transparent;
@@ -294,32 +269,6 @@
         border-color: #707070;
     }
 
-    .ring-btn-primary {
-        background-color: var(--ring-primary);
-        border-color: var(--ring-primary);
-        color: #fff;
-        font-weight: 500;
-    }
-
-    .ring-btn-primary:hover {
-        background-color: var(--ring-primary-hover);
-        border-color: var(--ring-primary-hover);
-    }
-
-    .ring-btn-destroy {
-        background-color: var(--ring-destroy);
-        border-color: var(--ring-destroy);
-        color: #fff;
-        font-weight: 500;
-    }
-
-    .ring-btn-destroy:hover {
-        background-color: var(--ring-destroy-hover);
-        border-color: var(--ring-destroy-hover);
-    }
-
-
-
     .ring-btn-icon {
         padding: 0;
         width: 28px;
@@ -333,7 +282,7 @@
         cursor: pointer;
     }
 
-    .grid-container .ring-btn-icon:hover {
+    .ring-btn-icon:hover {
         color: var(--ring-error);
         background-color: rgba(194, 39, 49, 0.1);
     }
