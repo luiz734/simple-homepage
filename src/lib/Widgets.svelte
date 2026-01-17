@@ -80,9 +80,9 @@
                     {@const WidgetComponent = widgetsMap[dataItem.type].component}
 
                     <WidgetComponent backgroundColor="{dataItem.data.color}"
-                            {editLocked}
-                            onSizeChanged={(size) => onSizeChanged(item.id, size)}
-                            data={dataItem.data}/>
+                                     {editLocked}
+                                     onSizeChanged={(size) => onSizeChanged(item.id, size)}
+                                     data={dataItem.data}/>
                 {:else}
                     <p>Widget type "{dataItem.type}" not found.</p>
                 {/if}
@@ -108,14 +108,12 @@
                         widgetData={selectedWidget.data}
                         {onCancel}
                         onSubmit={(newData) => {
-                        // items.map((i) => {console.log($state.snapshot(i))});
                         const index = items.findIndex(i => i.id === selectedId);
                         if (index !== -1) {
                             items[index].data = newData;
                             items = [...items];
-                            console.log("updated");
+                            // console.log("updated", $state.snapshot(items));
                         }
-                        // items = items;
                         configOpen = false;
                         selectedId = null;
                     }}
@@ -123,9 +121,8 @@
             </div>
         {/if}
     {/if}
-
-
 </div>
+
 <style>
     /* 1. Grid Library Overrides */
     :global(.svlt-grid-shadow) {
