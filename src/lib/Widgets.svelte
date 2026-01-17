@@ -60,19 +60,18 @@
                     <GripHorizontalIcon size="18px"/>
                 </div>
 
-                <!--                Some widgets don't have configuration options-->
-                {#if widgetsMap[dataItem.type]?.config}
-                    <div class="configButton" transition:slide={{axis: "x"}}>
-                        <button type="button" class="ring-link-btn"
-                                onclick={() => {
+                <!--{#if widgetsMap[dataItem.type]?.config}-->
+                <div class="configButton" transition:slide={{axis: "x"}}>
+                    <button type="button" class="ring-link-btn"
+                            onclick={() => {
                                 selectedId = dataItem.id;
                                 configOpen = true;
                             }
                     }>
-                            <Settings2 size={24}/>
-                        </button>
-                    </div>
-                {/if}
+                        <Settings2 size={18}/>
+                    </button>
+                </div>
+                <!--{/if}-->
             {/if}
 
             <div class="widget">
