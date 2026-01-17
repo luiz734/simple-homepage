@@ -129,6 +129,45 @@ const defaultData = {
 
 const createId = () => "_" + Math.random().toString(36).substr(2, 9);
 
+
+/**
+ * Storage Adapter
+ * Automatically detects environment (Extension vs Browser) and normalizes the API.
+ */
+const storage = {
+    async get(keys) {
+        // Check for Chrome Extension environment
+        if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+            return await chrome.storage.local.get(keys);
+        }
+
+        // Fallback to LocalStorage (Web/Debug)
+        const result = {};
+        for (const key of keys) {
+            const value = localStorage.getItem(key);
+            if (value) {
+                try {
+                    result[key] = JSON.parse(value);
+                } catch (e) {
+                    console.error(`Error parsing ${key} from localStorage`, e);
+                }
+            }
+        }
+        return result; // Returns object { key: value } just like chrome.storage
+    },
+
+    async set(items) {
+        if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+            return await chrome.storage.local.set(items);
+        }
+
+        // Fallback to LocalStorage
+        for (const [key, value] of Object.entries(items)) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+    }
+};
+
 export class ApplicationState {
     widgets = $state([]);
     isLoaded = $state(false); // 1. Add loading state
@@ -138,14 +177,15 @@ export class ApplicationState {
             if (!this.isLoaded) return;
 
             const plainWidgets = $state.snapshot(this.widgets);
-            chrome.storage.local.set({ widgets: plainWidgets }).then(() => {
+            // Use the agnostic storage adapter
+            storage.set({ widgets: plainWidgets }).then(() => {
                 console.log("Storage updated");
             });
         });
     }
 
     async loadStorageOrDefault() {
-        const result = await chrome.storage.local.get(["widgets"]);
+        const result = await storage.get(["widgets"]);
 
         // Batch updates to ensure consistency
         if (result && result.widgets && Array.isArray(result.widgets)) {
