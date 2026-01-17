@@ -6,10 +6,9 @@
     import ShortcutsConfig from "./ShortcutsConfig.svelte";
 
     let {backgroundColor, onSizeChanged, editLocked, data} = $props();
-    let {links, title} = data;
 
-
-
+    let links = $derived(data.links);
+    let title = $derived(data.title);
 
     let shortcut_name = $state("");
     let shortcut_url = $state("");
