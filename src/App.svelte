@@ -41,7 +41,7 @@
 
 <div class="app">
     <Sidebar {locked} onToggle={toggleLayoutLock}/>
-    <Widgets {locked} bind:items={context.widgets}/>
+    <Widgets {locked} bind:items={context.widgets} addWidget={() => {context.addWidget("shortcuts")}}/>
     <!--    <ShortcutsConfig/>-->
 </div>
 

@@ -2,14 +2,14 @@
     import Grid from 'svelte-grid';
     import gridHelp from "svelte-grid/src/utils/helper.js";
     import Shortcuts from "./Shortcuts.svelte";
-    import {BoltIcon, Grip, GripHorizontalIcon, Plus, Settings2} from 'lucide-svelte';
+    import {BoltIcon, CirclePlusIcon, Grip, GripHorizontalIcon, Plus, PlusIcon, Settings2} from 'lucide-svelte';
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import {slide, fade} from 'svelte/transition';
     import ShortcutsConfig from "./ShortcutsConfig.svelte";
     import Clock from "./Clock.svelte";
     import Calculator from "./Calculator.svelte";
 
-    let {locked: editLocked, items = $bindable()} = $props();
+    let {locked: editLocked, items = $bindable(), addWidget} = $props();
 
     let selectedId = $state(null);
     let selectedWidget = $derived(
@@ -60,7 +60,7 @@
                     <GripHorizontalIcon size="18px"/>
                 </div>
 
-<!--                Some widgets don't have configuration options-->
+                <!--                Some widgets don't have configuration options-->
                 {#if widgetsMap[dataItem.type]?.config}
                     <div class="configButton" transition:slide={{axis: "x"}}>
                         <button type="button" class="ring-link-btn"
@@ -121,6 +121,19 @@
             </div>
         {/if}
     {/if}
+
+    {#if !editLocked}
+        <div class="footer-container" transition:slide>
+            <div class="footer-buttons-container">
+                <button onclick={addWidget} class="footer-buttons footer-buttons-primary"> Add Widget</button>
+                <button class="footer-buttons"> Revert Changes</button>
+                <!--            <button class="footer-buttons"> Foo </button>-->
+                <!--            <button class="footer-buttons"> Bar </button>-->
+            </div>
+        </div>
+    {/if}
+
+
 </div>
 
 <style>
@@ -252,6 +265,62 @@
         opacity: 1;
         color: var(--ring-primary);
     }
+
+    .footer-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        bottom: 8px;
+        left: 0;
+        width: 100%;
+        position: fixed;
+        z-index: 20;
+    }
+
+    .footer-buttons-container {
+        border: 1px solid var(--ring-border);
+        border-radius: var(--ring-radius);
+        color: var(--ring-text);
+        background: #2F3339;
+        height: 32px;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+    }
+
+    .footer-buttons {
+        cursor: pointer;
+        background-color: var(--ring-input-bg);
+        border: 1px solid var(--ring-border);
+        color: var(--ring-text);
+        padding: 6px 10px;
+        border-radius: 2px;
+        font-size: 14px;
+        line-height: 20px;
+        /*width: 100%;*/
+        box-sizing: border-box;
+        transition: border-color 0.15s ease-in-out;
+    }
+
+    .footer-buttons:hover {
+        outline: none;
+        border-color: var(--ring-primary);
+    }
+
+    .footer-buttons-primary {
+        background-color: var(--ring-primary);
+        border-color: var(--ring-primary);
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .footer-buttons-primary:hover {
+        background-color: var(--ring-primary-hover);
+        border-color: var(--ring-primary-hover);
+    }
+
 
     .backdrop {
         position: fixed;

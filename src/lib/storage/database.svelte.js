@@ -217,20 +217,36 @@ export class ApplicationState {
         this.isLoaded = true;
     }
 
-    addWidget(type, initialData) {
+    addWidget(type) {
         // Correct structure for svelte-grid: layout keys at root
-        this.widgets.push({
-            id: createId(),
+        const id = createId()
+        let newWidget = {
+            id: id,
             type,
             6: gridHelp.item({
                 x: 0,
                 y: 0, // Grid library usually auto-places if overlaps exist, or you calculate next free spot
-                w: 2,
+                w: 1,
                 h: 2,
                 ...itemProps
             }),
-            data: initialData
-        });
+            data: {
+                title: "Widget " + id,
+                color: "#1d4ed8", // blue-700
+                links: [],
+            }
+        };
+
+        let findOutPosition = gridHelp.findSpace(newWidget, this.widgets, 6);
+
+        newWidget = {
+            ...newWidget,
+            6: {
+                ...newWidget[6],
+                ...findOutPosition
+            }
+        }
+        this.widgets.push(newWidget);
     }
 
     updateWidgets(widgets) {
