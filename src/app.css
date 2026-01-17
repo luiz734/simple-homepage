@@ -11,6 +11,9 @@
   --ring-primary: #358cf6;
   --ring-primary-hover: #307ecc;
 
+  --ring-destroy: #f63535;
+  --ring-destroy-hover: #cc3035;
+
   --ring-radius: 4px;            /* Ring UI uses distinct sharp corners */
   --ring-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 

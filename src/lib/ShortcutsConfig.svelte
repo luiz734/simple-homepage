@@ -3,7 +3,7 @@
     import {tick} from 'svelte';
     import {slide} from 'svelte/transition';
 
-    let {onCancel, onSubmit, widgetData} = $props();
+    let {onCancel, onSubmit, onDelete, widgetData} = $props();
 
     // We want copies
     // Values will be changed in the submit callback
@@ -103,8 +103,11 @@
         </button>
 
         <div class="footer-buttons prevent-select">
+
             <button type="submit" class="ring-btn ring-btn-primary" >Save</button>
             <button type="button" class="ring-btn" onclick={onCancel}>Cancel</button>
+            <div style="flex-grow: 1"></div>
+            <button type="button" class="ring-btn ring-btn-destroy" onclick={onDelete}> Delete Widget </button>
         </div>
     </form>
 </div>
@@ -302,6 +305,20 @@
         background-color: var(--ring-primary-hover);
         border-color: var(--ring-primary-hover);
     }
+
+    .ring-btn-destroy {
+        background-color: var(--ring-destroy);
+        border-color: var(--ring-destroy);
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .ring-btn-destroy:hover {
+        background-color: var(--ring-destroy-hover);
+        border-color: var(--ring-destroy-hover);
+    }
+
+
 
     .ring-btn-icon {
         padding: 0;

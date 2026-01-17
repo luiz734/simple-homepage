@@ -108,15 +108,23 @@
                         widgetData={selectedWidget.data}
                         {onCancel}
                         onSubmit={(newData) => {
-                        const index = items.findIndex(i => i.id === selectedId);
-                        if (index !== -1) {
-                            items[index].data = newData;
-                            items = [...items];
-                            // console.log("updated", $state.snapshot(items));
-                        }
-                        configOpen = false;
-                        selectedId = null;
-                    }}
+                            const index = items.findIndex(i => i.id === selectedId);
+                            if (index !== -1) {
+                                items[index].data = newData;
+                                items = [...items];
+                                // console.log("updated", $state.snapshot(items));
+                            }
+                            configOpen = false;
+                            selectedId = null;
+                        }}
+                        onDelete={() => {
+                            const index = items.findIndex(i => i.id === selectedId);
+                             if (index !== -1) {
+                                 items.splice(index, 1);
+                             }
+                             configOpen = false;
+                             selectedId = null;
+                        }}
                 />
             </div>
         {/if}
