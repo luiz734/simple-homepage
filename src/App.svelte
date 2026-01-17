@@ -1,20 +1,26 @@
 <script>
     import Widgets from "./lib/Widgets.svelte";
     import Sidebar from "./lib/Sidebar.svelte";
-    import {ApplicationState, APPLICATION_KEY, defaultData} from "./lib/storage/database.svelte.js";
+    import {ApplicationState, APPLICATION_KEY} from "./lib/storage/database.svelte.js";
     import {setContext, getContext} from "svelte";
 
+    const applicationState = new ApplicationState();
 
-    const widgetsData = defaultData.widgets;
-    const applicationState = new ApplicationState(widgetsData);
+    $effect(() => {
+        // We create a self-executing async function to use await
+        (async () => {
+            await applicationState.loadStorageOrDefault();
+        })();
+    });
+
     setContext(APPLICATION_KEY, applicationState);
-
     const context = getContext(APPLICATION_KEY);
-    // let widgets = $derived(context.widgets);
 
     let locked = $state(true);
 
     const toggleLayoutLock = () => {
+        if (!context.widgets) return;
+
         locked = !locked;
         context.updateWidgets(context.widgets.map((widget) => {
             return {

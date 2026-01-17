@@ -9,7 +9,7 @@ const itemProps = {
     min: {w: 1, h: 1},
 };
 
-export let defaultData = {
+const defaultData = {
     widgets: [
         // ROW 1: 3 widgets of equal size (2x2)
         {
@@ -122,8 +122,7 @@ export let defaultData = {
             id: 8,
             type: "clock",
             6: gridHelp.item({x: 4, y: 7, w: 2, h: 1, ...itemProps}),
-            data: {
-            }
+            data: {}
         }
     ]
 };
@@ -131,11 +130,32 @@ export let defaultData = {
 const createId = () => "_" + Math.random().toString(36).substr(2, 9);
 
 export class ApplicationState {
-    // Svelte 5 state initialization
     widgets = $state([]);
+    isLoaded = $state(false); // 1. Add loading state
 
-    constructor(initialWidgets = []) {
-        this.widgets = initialWidgets;
+    constructor() {
+        $effect(() => {
+            if (!this.isLoaded) return;
+
+            const plainWidgets = $state.snapshot(this.widgets);
+            chrome.storage.local.set({ widgets: plainWidgets }).then(() => {
+                console.log("Storage updated");
+            });
+        });
+    }
+
+    async loadStorageOrDefault() {
+        const result = await chrome.storage.local.get(["widgets"]);
+
+        // Batch updates to ensure consistency
+        if (result && result.widgets && Array.isArray(result.widgets)) {
+            this.widgets = result.widgets;
+        } else {
+            this.widgets = defaultData.widgets;
+        }
+
+        // Enable the effect only after data is set
+        this.isLoaded = true;
     }
 
     addWidget(type, initialData) {
@@ -161,19 +181,25 @@ export class ApplicationState {
     updateShortcut(widgetId, shortcutData) {
         const index = this.widgets.findIndex(w => w.id === widgetId);
         if (index !== -1) {
-            // In Svelte 5, deep mutation of state proxies works automatically
             this.widgets[index].data = {...this.widgets[index].data, ...shortcutData};
         }
     }
 
     importState(importedData) {
         if (importedData && Array.isArray(importedData.widgets)) {
-            // Update the state with the imported widgets
             this.widgets = importedData.widgets;
             console.log('State successfully updated from import.');
         } else {
             console.error('Invalid import data: missing "widgets" array.');
         }
+    }
+
+    exportJsonBlob() {
+        const jsonString = JSON.stringify({
+                widgets: this.widgets
+            }
+            , null, 2);
+        return new Blob([jsonString], {type: 'application/json'});
     }
 }
 

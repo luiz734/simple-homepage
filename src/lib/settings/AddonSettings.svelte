@@ -29,7 +29,7 @@
         reader.onloadend = (e) => {
             try {
                 const content = e.target.result;
-                const jsonSettings = JSON.parse(content);
+                const jsonSettings = JSON.parse(content.toString());
                 context.importState(jsonSettings);
                 console.log('Imported Settings:', jsonSettings);
             } catch (error) {
@@ -37,24 +37,18 @@
             }
         }
         reader.readAsText(file);
-
-        // JSON to object here
-        let userSettings = {}
     };
 
     const handleFileExport = () => {
-        console.log($state.snapshot(context))
-        const jsonString = JSON.stringify({
-                widgets: context.widgets
-            }
-            , null, 2);
-        const blob = new Blob([jsonString], {type: 'application/json'});
+        const blob = context.exportJsonBlob();
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
+
         link.href = url;
         link.download = 'settings.json';
         document.body.appendChild(link);
         link.click();
+
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
     };
@@ -157,9 +151,9 @@
         flex-direction: column;
     }
 
-    .settings-item {
+    /*.settings-item {*/
 
-    }
+    /*}*/
 
     .footer-buttons {
         margin-top: 10px;
