@@ -142,13 +142,11 @@
     {/if}
 
     {#if !editLocked}
-        <div class="footer-container" transition:slide>
-            <div class="footer-buttons-container">
-                <button onclick={addWidget} class="footer-buttons footer-buttons-primary"> Add Widget</button>
-                <button onclick={restoreWidgets} class="footer-buttons"> Revert Changes</button>
-                <!--            <button class="footer-buttons"> Foo </button>-->
-                <!--            <button class="footer-buttons"> Bar </button>-->
-            </div>
+        <div class="footer-buttons-container" transition:slide>
+            <button onclick={addWidget} class="footer-buttons footer-buttons-primary"> Add Widget</button>
+            <button onclick={restoreWidgets} class="footer-buttons"> Revert Changes</button>
+            <!--            <button class="footer-buttons"> Foo </button>-->
+            <!--            <button class="footer-buttons"> Bar </button>-->
         </div>
     {/if}
 
@@ -156,7 +154,7 @@
         <WidgetTypeSelector onWidgetSelected={(widgetString) => {
              context.addWidget(widgetString);
              widgetSelectorOpen = false;
-        }}> </WidgetTypeSelector>
+        }}></WidgetTypeSelector>
     {/if}
 
 
@@ -292,16 +290,6 @@
         color: var(--ring-primary);
     }
 
-    .footer-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        bottom: 8px;
-        left: 0;
-        width: 100%;
-        position: fixed;
-        z-index: 20;
-    }
 
     .footer-buttons-container {
         border: 1px solid var(--ring-border);
@@ -314,6 +302,12 @@
         align-items: center;
         justify-content: center;
         gap: 16px;
+
+        position: fixed;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
     }
 
     .footer-buttons {
