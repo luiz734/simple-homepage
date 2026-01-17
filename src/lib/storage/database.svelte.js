@@ -133,6 +133,7 @@ const createId = () => "_" + Math.random().toString(36).substr(2, 9);
 /**
  * Storage Adapter
  * Automatically detects environment (Extension vs Browser) and normalizes the API.
+ *
  */
 const storage = {
     async get(keys) {
@@ -172,17 +173,35 @@ export class ApplicationState {
     widgets = $state([]);
     isLoaded = $state(false); // 1. Add loading state
 
+    #saveTimeout = null;
+
     constructor() {
         $effect(() => {
             if (!this.isLoaded) return;
 
-            const plainWidgets = $state.snapshot(this.widgets);
-            // Use the agnostic storage adapter
-            storage.set({ widgets: plainWidgets }).then(() => {
-                console.log("Storage updated");
-            });
+            const _effectTrigger = this.widgets;
+            // We use a debouncing pattern to save changes after 1 second
+            // This ensures to minimize calls to the chrome storage API
+            this.scheduleSave();
         });
     }
+    scheduleSave() {
+        if (this.#saveTimeout) {
+            clearTimeout(this.#saveTimeout);
+        }
+        this.#saveTimeout = setTimeout(() => {
+            this.persistData();
+        }, 1000);
+    }
+
+    async persistData() {
+        // Snapshot only when actually saving
+        const plainWidgets = $state.snapshot(this.widgets);
+        await storage.set({ widgets: plainWidgets });
+        console.log("Storage updated (Debounced)");
+        this.#saveTimeout = null;
+    }
+
 
     async loadStorageOrDefault() {
         const result = await storage.get(["widgets"]);
