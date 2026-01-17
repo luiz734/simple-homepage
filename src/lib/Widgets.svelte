@@ -10,14 +10,20 @@
     import Calculator from "./Calculator.svelte";
     import WidgetConfig from "./templates/WidgetConfig.svelte";
     import EmptyConfig from "./widget_config/EmptyConfig.svelte";
+    import WidgetTypeSelector from "./WidgetTypeSelector.svelte";
+    import {getContext} from "svelte";
+    import {APPLICATION_KEY} from "./storage/database.svelte.js";
 
-    let {locked: editLocked, items = $bindable(), addWidget, restoreWidgets} = $props();
+    const context = getContext(APPLICATION_KEY);
+    let {locked: editLocked, items = $bindable(), restoreWidgets} = $props();
+
 
     let selectedId = $state(null);
     let selectedWidget = $derived(
         selectedId ? items.find(i => i.id === selectedId) : null
     );
     let configOpen = $state(false);
+    let widgetSelectorOpen = $state(false);
 
     const cols = [
         [1100, 6],
@@ -41,6 +47,10 @@
     const onCancel = () => {
         configOpen = !configOpen;
     };
+
+    const addWidget = () => {
+        widgetSelectorOpen = true;
+    }
 
     const widgetsMap = {
         "shortcuts": {component: Shortcuts, config: ShortcutsConfig},
@@ -140,6 +150,13 @@
                 <!--            <button class="footer-buttons"> Bar </button>-->
             </div>
         </div>
+    {/if}
+
+    {#if widgetSelectorOpen}
+        <WidgetTypeSelector onWidgetSelected={(widgetString) => {
+             context.addWidget(widgetString);
+             widgetSelectorOpen = false;
+        }}> </WidgetTypeSelector>
     {/if}
 
 
