@@ -21,6 +21,12 @@
     const toggleLayoutLock = () => {
         if (!context.widgets) return;
 
+        if (locked) {
+            context.saveSnapshot();
+        } else {
+            context.clearSnapshot()
+        }
+
         locked = !locked;
         context.updateWidgets(context.widgets.map((widget) => {
             return {
@@ -41,7 +47,10 @@
 
 <div class="app">
     <Sidebar {locked} onToggle={toggleLayoutLock}/>
-    <Widgets {locked} bind:items={context.widgets} addWidget={() => {context.addWidget("shortcuts")}}/>
+    <Widgets {locked} bind:items={context.widgets}
+             addWidget={() => {context.addWidget("shortcuts")}}
+             restoreWidgets={() => {context.restoreSnapshot()}}
+    />
     <!--    <ShortcutsConfig/>-->
 </div>
 

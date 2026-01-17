@@ -9,7 +9,7 @@
     import Clock from "./Clock.svelte";
     import Calculator from "./Calculator.svelte";
 
-    let {locked: editLocked, items = $bindable(), addWidget} = $props();
+    let {locked: editLocked, items = $bindable(), addWidget, restoreWidgets} = $props();
 
     let selectedId = $state(null);
     let selectedWidget = $derived(
@@ -126,7 +126,7 @@
         <div class="footer-container" transition:slide>
             <div class="footer-buttons-container">
                 <button onclick={addWidget} class="footer-buttons footer-buttons-primary"> Add Widget</button>
-                <button class="footer-buttons"> Revert Changes</button>
+                <button onclick={restoreWidgets} class="footer-buttons"> Revert Changes</button>
                 <!--            <button class="footer-buttons"> Foo </button>-->
                 <!--            <button class="footer-buttons"> Bar </button>-->
             </div>

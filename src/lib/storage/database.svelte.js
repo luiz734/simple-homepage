@@ -171,6 +171,7 @@ const storage = {
 
 export class ApplicationState {
     widgets = $state([]);
+    previousWidgets = $state([]);
     isLoaded = $state(false); // 1. Add loading state
 
     #saveTimeout = null;
@@ -275,6 +276,20 @@ export class ApplicationState {
             }
             , null, 2);
         return new Blob([jsonString], {type: 'application/json'});
+    }
+
+    saveSnapshot() {
+        this.previousWidgets =  structuredClone($state.snapshot(this.widgets));
+    }
+    restoreSnapshot() {
+        if (this.previousWidgets === null) {
+            console.error('No snapshot found');
+            return;
+        }
+        this.widgets = structuredClone($state.snapshot(this.previousWidgets))
+    }
+    clearSnapshot() {
+        this.previousWidgets = null;
     }
 }
 
