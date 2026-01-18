@@ -1,16 +1,16 @@
 <script>
     import Grid from "svelte-grid";
     import Shortcuts from "./Shortcuts.svelte";
-    import {GripHorizontalIcon, Settings2} from "lucide-svelte";
+    import { GripHorizontalIcon, Settings2 } from "lucide-svelte";
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
-    import {slide} from "svelte/transition";
+    import { slide } from "svelte/transition";
     import ShortcutsConfig from "./widget_config/ShortcutsConfig.svelte";
     import Clock from "./Clock.svelte";
     import Calculator from "./Calculator.svelte";
     import EmptyConfig from "./widget_config/EmptyConfig.svelte";
     import WidgetTypeSelector from "./WidgetTypeSelector.svelte";
-    import {getContext} from "svelte";
-    import {APPLICATION_KEY} from "./storage/database.svelte.js";
+    import { getContext } from "svelte";
+    import { APPLICATION_KEY } from "./storage/database.svelte.js";
 
     const context = getContext(APPLICATION_KEY);
     let { locked: editLocked, items = $bindable(), restoreWidgets } = $props();
@@ -99,7 +99,6 @@
             },
         };
     };
-
 </script>
 
 <!--<MyComponent></MyComponent>-->
@@ -116,7 +115,11 @@
         let:resizePointerDown
         rowHeight={100}
     >
-        <div class="sections" class:editing={!editLocked} use:shrinkEffect={!editLocked}>
+        <div
+            class="sections"
+            class:editing={!editLocked}
+            use:shrinkEffect={!editLocked}
+        >
             {#if !editLocked}
                 <div
                     class="dragger"
@@ -207,30 +210,25 @@
     {/if}
 
     {#if !editLocked}
-        <div class="footer-buttons-container" transition:slide>
-            <button
-                onclick={addWidget}
-                class="footer-buttons footer-buttons-primary"
-            >
+        <div
+            class="bg-base-200 fixed bottom-2 left-1/2 z-20 flex h-14 -translate-x-1/2 items-center justify-center gap-4 rounded-md p-3"
+            transition:slide
+        >
+            <button onclick={addWidget} class="btn btn-success">
                 Add Widget</button
             >
-            <button onclick={restoreWidgets} class="footer-buttons">
-                Revert Changes</button
+            <button onclick={restoreWidgets} class="btn btn-error">
+                Discard All Changes</button
             >
-            <!--            <button class="footer-buttons"> Foo </button>-->
-            <!--            <button class="footer-buttons"> Bar </button>-->
         </div>
     {/if}
 
-
-        <WidgetTypeSelector
-            bind:this={selector}
-            onWidgetSelected={(widgetString) => {
-                context.addWidget(widgetString);
-                widgetSelectorOpen = false;
-            }}
-        ></WidgetTypeSelector>
-
+    <WidgetTypeSelector
+        bind:this={selector}
+        onWidgetSelected={(widgetString) => {
+            context.addWidget(widgetString);
+        }}
+    ></WidgetTypeSelector>
 </div>
 
 <style>
@@ -249,7 +247,6 @@
         border-color: var(--ring-text-secondary) !important;
     }
 
-    /* 2. Main Container */
     .demo-container {
         flex-grow: 1;
         background: var(--ring-content-bg);
@@ -260,7 +257,6 @@
         padding: 4px;
     }
 
-    /* 3. The Widget Card (.sections) */
     .sections {
         background-color: var(--ring-dark-bg);
         border: 1px solid var(--ring-border);
@@ -367,56 +363,6 @@
     .resizer:hover {
         opacity: 1;
         color: var(--ring-primary);
-    }
-
-    .footer-buttons-container {
-        border: 1px solid var(--ring-border);
-        border-radius: var(--ring-radius);
-        color: var(--ring-text);
-        background: #2f3339;
-        height: 32px;
-        padding: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-
-        position: fixed;
-        bottom: 8px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 20;
-    }
-
-    .footer-buttons {
-        cursor: pointer;
-        background-color: var(--ring-input-bg);
-        border: 1px solid var(--ring-border);
-        color: var(--ring-text);
-        padding: 6px 10px;
-        border-radius: 2px;
-        font-size: 14px;
-        line-height: 20px;
-        /*width: 100%;*/
-        box-sizing: border-box;
-        transition: border-color 0.15s ease-in-out;
-    }
-
-    .footer-buttons:hover {
-        outline: none;
-        border-color: var(--ring-primary);
-    }
-
-    .footer-buttons-primary {
-        background-color: var(--ring-primary);
-        border-color: var(--ring-primary);
-        color: #fff;
-        font-weight: 500;
-    }
-
-    .footer-buttons-primary:hover {
-        background-color: var(--ring-primary-hover);
-        border-color: var(--ring-primary-hover);
     }
 
     .backdrop {

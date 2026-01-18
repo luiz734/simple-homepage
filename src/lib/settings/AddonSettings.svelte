@@ -1,26 +1,27 @@
 <script>
-    import {Pencil, Check, Plus, Download} from 'lucide-svelte'; // Added Plus icon
-    import {getContext, tick} from 'svelte';
-    import {slide} from 'svelte/transition';
-    import {APPLICATION_KEY} from "../storage/database.svelte.js";
+    import { getContext } from "svelte";
+    import { APPLICATION_KEY } from "../storage/database.svelte.js";
+    import { Download } from "lucide-svelte";
 
-    let {onCancel, onSubmit} = $props();
+    let { onCancel, onSubmit } = $props();
+    let dialog = $state();
+
+    export function show() {
+        dialog.showModal();
+    }
 
     const context = getContext(APPLICATION_KEY);
 
-
     const sendForm = (event) => {
         event.preventDefault();
-
         const payload = {};
-
         onSubmit(payload);
-    }
+    };
 
     const handleFileSelect = (event) => {
         const files = event.target.files;
         if (!files || files.length === 0) {
-            console.log('No files uploaded');
+            console.log("No files uploaded");
             return;
         }
 
@@ -31,146 +32,73 @@
                 const content = e.target.result;
                 const jsonSettings = JSON.parse(content.toString());
                 context.importState(jsonSettings);
-                console.log('Imported Settings:', jsonSettings);
+                console.log("Imported Settings:", jsonSettings);
             } catch (error) {
-                console.error('Error parsing JSON:', error);
+                console.error("Error parsing JSON:", error);
             }
-        }
+        };
         reader.readAsText(file);
     };
 
     const handleFileExport = () => {
         const blob = context.exportJsonBlob();
         const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
 
         link.href = url;
-        link.download = 'settings.json';
+        link.download = "settings.json";
         document.body.appendChild(link);
         link.click();
 
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
     };
-
 </script>
 
+<dialog bind:this={dialog} class="modal">
+    <div
+        class="modal-box bg-base-200 flex min-h-4/6 w-11/12 max-w-6xl max-h-11/12 flex-col gap-y-8"
+    >
+        <div class="flex grow flex-col gap-y-8">
 
-<div class="backdrop">
-    <div class="dialog">
-        <form onsubmit={sendForm} class="form-container">
-
-            <div class="form-row">
-                <h1> Settings </h1>
-            </div>
-
-            <div class="content-container">
-                <div class="vertical-tabs">
-                    <button class="settings-button"> foo</button>
-                    <button class="settings-button"> bar</button>
-                </div>
-
-                <div class="settings-container">
-
-                    <div class="settings-item">
-                        <label for="importFile"> Import settings </label>
+            <div class="flex flex-col p-8 card bg-base-100 shadow-sm">
+                <div class="flex">
+                    <fieldset class="fieldset grow">
+                        <legend class="fieldset-legend">Import Configuration</legend>
                         <input
-                                type="file"
-                                id="importFile"
-                                name="filename"
-                                accept="application/json"
-                                onchange={handleFileSelect}
-                        >
-                    </div>
+                            accept="application/json"
+                            class="file-input"
+                            id="importFile"
+                            name="filename"
+                            onchange={handleFileSelect}
+                            type="file"
+                        />
+                        <label class="label" for="importFile"></label>
+                    </fieldset>
 
-                    <div class="settings-item">
-                        <label for="exportFile"> Export settings </label>
-                        <button id="exportFile" onclick={handleFileExport}>
+                    <fieldset class="fieldset grow">
+                        <legend class="fieldset-legend">Export Configuration</legend>
+                        <button class="btn btn-success" id="exportFile" onclick={handleFileExport}>
                             <Download/>
                         </button>
-                    </div>
-
+                        <label class="label" for="importFile"></label>
+                    </fieldset>
                 </div>
             </div>
+        </div>
 
-            <div class="footer-buttons prevent-select">
-                <button type="submit">Save</button>
-                <button type="button" onclick={onCancel}>Cancel</button>
-            </div>
-        </form>
+        <div class="modal-action">
+            <form class="flex h-full w-full justify-end gap-4" method="dialog">
+                <button class="btn btn-ghost text-error hover:bg-error-content">
+                    Discard
+                </button>
+
+                <button class="btn btn-primary" autofocus> Save </button>
+            </form>
+        </div>
     </div>
-</div>
 
-<style>
-    div {
-        /*border: red 1px solid;*/
-        /*margin: 8px;*/
-        box-sizing: border-box;
-    }
-
-    .dialog {
-        background-color: #222;
-        padding: 20px;
-        width: 80%;
-        height: 80%;
-        max-width: 1000px;
-
-    }
-
-    .form-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-    }
-
-    .content-container {
-        display: flex;
-        flex-direction: row;
-        flex-grow: 1;
-    }
-
-    .vertical-tabs {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        max-width: 200px;
-        background-color: #3D3D41;
-        padding: 10px;
-        gap: 10px;
-    }
-
-    .settings-button {
-        height: 32px;
-    }
-
-    .settings-container {
-        flex-grow: 1;
-        padding: 0 10%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /*.settings-item {*/
-
-    /*}*/
-
-    .footer-buttons {
-        margin-top: 10px;
-    }
-
-    .backdrop {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6); /* Slightly darker backdrop */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        backdrop-filter: blur(2px); /* Optional: adds a modern touch */
-    }
-
-</style>
+    <form class="modal-backdrop" method="dialog">
+        <button>close</button>
+    </form>
+</dialog>

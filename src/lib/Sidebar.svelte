@@ -3,9 +3,7 @@
     import AddonSettings from "./settings/AddonSettings.svelte";
 
     let {locked, onToggle} = $props();
-
-
-    let settingsOpen = $state(false);
+    let settingsDialog = $state();
 
 </script>
 
@@ -22,21 +20,21 @@
         <User size={20} />
     </button>
 
-    <button title="Settings" class:active={!locked} onclick={() => {
-        settingsOpen = !settingsOpen;
+    <button title="Settings" onclick={() => {
+        settingsDialog.show();
     }}>
         <Settings size={20} />
     </button>
 </div>
 
-{#if settingsOpen}
-    <div >
-        <AddonSettings
-                onCancel={() => { settingsOpen = false;}}
-                onSubmit={() => { settingsOpen = false;}}
-        />
-    </div>
-{/if}
+
+
+<AddonSettings
+    bind:this={settingsDialog}
+    onCancel={() => { }}
+    onSubmit={() => { }}
+/>
+
 
 <style>
     .sidebar {
