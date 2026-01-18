@@ -20,7 +20,7 @@
         selectedId ? items.find((i) => i.id === selectedId) : null,
     );
     let configOpen = $state(false);
-    let widgetSelectorOpen = $state(false);
+    let selector = $state();
 
     const cols = [[1100, 6]];
 
@@ -42,7 +42,7 @@
     };
 
     const addWidget = () => {
-        widgetSelectorOpen = true;
+        selector.show();
     };
 
     const widgetsMap = {
@@ -222,14 +222,15 @@
         </div>
     {/if}
 
-    {#if widgetSelectorOpen}
+
         <WidgetTypeSelector
+            bind:this={selector}
             onWidgetSelected={(widgetString) => {
                 context.addWidget(widgetString);
                 widgetSelectorOpen = false;
             }}
         ></WidgetTypeSelector>
-    {/if}
+
 </div>
 
 <style>
