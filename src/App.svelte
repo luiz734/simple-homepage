@@ -3,6 +3,7 @@
     import Sidebar from "./lib/Sidebar.svelte";
     import {ApplicationState, APPLICATION_KEY} from "./lib/storage/database.svelte.js";
     import {setContext, getContext} from "svelte";
+    import "./app.css";
 
     const applicationState = new ApplicationState();
 

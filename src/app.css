@@ -1,3 +1,6 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
 :root {
   /* Ring UI Palette */
   --ring-dark-bg: #23272b;       /* Card/Dialog Background */
