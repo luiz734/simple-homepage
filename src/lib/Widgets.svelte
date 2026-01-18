@@ -1,18 +1,18 @@
 <script>
-  import Grid from "svelte-grid";
-  import Shortcuts from "./Shortcuts.svelte";
-  import {GripHorizontalIcon, Settings2} from "lucide-svelte";
-  import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
-  import {slide} from "svelte/transition";
-  import ShortcutsConfig from "./widget_config/ShortcutsConfig.svelte";
-  import Clock from "./Clock.svelte";
-  import Calculator from "./Calculator.svelte";
-  import EmptyConfig from "./widget_config/EmptyConfig.svelte";
-  import WidgetTypeSelector from "./WidgetTypeSelector.svelte";
-  import {getContext} from "svelte";
-  import {APPLICATION_KEY} from "./storage/database.svelte.js";
+    import Grid from "svelte-grid";
+    import Shortcuts from "./Shortcuts.svelte";
+    import {GripHorizontalIcon, Settings2} from "lucide-svelte";
+    import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
+    import {slide} from "svelte/transition";
+    import ShortcutsConfig from "./widget_config/ShortcutsConfig.svelte";
+    import Clock from "./Clock.svelte";
+    import Calculator from "./Calculator.svelte";
+    import EmptyConfig from "./widget_config/EmptyConfig.svelte";
+    import WidgetTypeSelector from "./WidgetTypeSelector.svelte";
+    import {getContext} from "svelte";
+    import {APPLICATION_KEY} from "./storage/database.svelte.js";
 
-  const context = getContext(APPLICATION_KEY);
+    const context = getContext(APPLICATION_KEY);
     let { locked: editLocked, items = $bindable(), restoreWidgets } = $props();
 
     let selectedId = $state(null);
@@ -50,6 +50,56 @@
         clock: { component: Clock, config: EmptyConfig },
         calculator: { component: Calculator, config: EmptyConfig },
     };
+
+    /* Svelte 5 Compatible Action */
+    const shrinkEffect = (node, enabled) => {
+        let resizeObserver;
+
+        function updateScale() {
+            // If editing is locked (enabled is false), clear transform
+            if (!enabled) {
+                node.style.transform = "";
+                return;
+            }
+
+            const { offsetWidth: width, offsetHeight: height } = node;
+            const shrinkTotal = 20; // 10px per side * 2
+
+            // Safety check to prevent negative scale
+            if (width <= shrinkTotal || height <= shrinkTotal) return;
+
+            const scaleX = (width - shrinkTotal) / width;
+            const scaleY = (height - shrinkTotal) / height;
+
+            node.style.transform = `scale(${scaleX}, ${scaleY})`;
+        }
+
+        // Initialize Observer
+        resizeObserver = new ResizeObserver(updateScale);
+
+        // Initial trigger
+        updateScale();
+        if (enabled) resizeObserver.observe(node);
+
+        return {
+            // This runs whenever the parameter (!editLocked) changes
+            update(newEnabled) {
+                enabled = newEnabled;
+                if (enabled) {
+                    resizeObserver.observe(node);
+                    updateScale();
+                } else {
+                    resizeObserver.disconnect();
+                    node.style.transform = "";
+                }
+            },
+            // This runs when the component/element is destroyed
+            destroy() {
+                resizeObserver.disconnect();
+            },
+        };
+    };
+
 </script>
 
 <!--<MyComponent></MyComponent>-->
@@ -66,7 +116,7 @@
         let:resizePointerDown
         rowHeight={100}
     >
-        <div class="sections" class:editing={!editLocked}>
+        <div class="sections" class:editing={!editLocked} use:shrinkEffect={!editLocked}>
             {#if !editLocked}
                 <div
                     class="dragger"
@@ -236,7 +286,7 @@
     /* Editing State */
     .sections.editing {
         border: 1px dashed var(--ring-text-secondary); /* Thinner, grey dashed border */
-        transform: scale(0.98); /* Subtle scale */
+        /*transform: scale(0.98); !* Subtle scale *!*/
         box-shadow: var(--ring-shadow);
         background-color: #2b3036; /* Slightly lighter to indicate "lifted" state */
     }
