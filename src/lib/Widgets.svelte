@@ -1,33 +1,28 @@
 <script>
-    import Grid from 'svelte-grid';
-    import gridHelp from "svelte-grid/src/utils/helper.js";
-    import Shortcuts from "./Shortcuts.svelte";
-    import {BoltIcon, CirclePlusIcon, Grip, GripHorizontalIcon, Plus, PlusIcon, Settings2} from 'lucide-svelte';
-    import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
-    import {slide, fade} from 'svelte/transition';
-    import ShortcutsConfig from "./widget_config/ShortcutsConfig.svelte";
-    import Clock from "./Clock.svelte";
-    import Calculator from "./Calculator.svelte";
-    import WidgetConfig from "./templates/WidgetConfig.svelte";
-    import EmptyConfig from "./widget_config/EmptyConfig.svelte";
-    import WidgetTypeSelector from "./WidgetTypeSelector.svelte";
-    import {getContext} from "svelte";
-    import {APPLICATION_KEY} from "./storage/database.svelte.js";
+  import Grid from "svelte-grid";
+  import Shortcuts from "./Shortcuts.svelte";
+  import {GripHorizontalIcon, Settings2} from "lucide-svelte";
+  import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
+  import {slide} from "svelte/transition";
+  import ShortcutsConfig from "./widget_config/ShortcutsConfig.svelte";
+  import Clock from "./Clock.svelte";
+  import Calculator from "./Calculator.svelte";
+  import EmptyConfig from "./widget_config/EmptyConfig.svelte";
+  import WidgetTypeSelector from "./WidgetTypeSelector.svelte";
+  import {getContext} from "svelte";
+  import {APPLICATION_KEY} from "./storage/database.svelte.js";
 
-    const context = getContext(APPLICATION_KEY);
-    let {locked: editLocked, items = $bindable(), restoreWidgets} = $props();
-
+  const context = getContext(APPLICATION_KEY);
+    let { locked: editLocked, items = $bindable(), restoreWidgets } = $props();
 
     let selectedId = $state(null);
     let selectedWidget = $derived(
-        selectedId ? items.find(i => i.id === selectedId) : null
+        selectedId ? items.find((i) => i.id === selectedId) : null,
     );
     let configOpen = $state(false);
     let widgetSelectorOpen = $state(false);
 
-    const cols = [
-        [1100, 6],
-    ];
+    const cols = [[1100, 6]];
 
     const onSizeChanged = (id, size) => {
         console.log(size);
@@ -35,14 +30,12 @@
         const rowHeight = 100; // Must match the Grid's rowHeight prop
         const margin = 10; // Default svelte-grid margin is usually 10px
         const newH = Math.ceil((pixelHeight + margin) / (rowHeight + margin));
-        const index = items.findIndex(i => i.id === id);
+        const index = items.findIndex((i) => i.id === id);
         items[index][6].h = newH;
         items = [...items]; // Trigger reactivity
-    }
-
-    const toggleConfig = () => {
-
     };
+
+    const toggleConfig = () => {};
 
     const onCancel = () => {
         configOpen = !configOpen;
@@ -50,37 +43,50 @@
 
     const addWidget = () => {
         widgetSelectorOpen = true;
-    }
-
-    const widgetsMap = {
-        "shortcuts": {component: Shortcuts, config: ShortcutsConfig},
-        "clock": {component: Clock, config: EmptyConfig},
-        "calculator": {component: Calculator, config: EmptyConfig},
     };
 
+    const widgetsMap = {
+        shortcuts: { component: Shortcuts, config: ShortcutsConfig },
+        clock: { component: Clock, config: EmptyConfig },
+        calculator: { component: Calculator, config: EmptyConfig },
+    };
 </script>
 
 <!--<MyComponent></MyComponent>-->
 <!--<button onclick={() => {MyComponent = Clock}}> click</button>-->
 
-<div class=demo-container>
-    <Grid bind:items={items} rowHeight={100} let:item let:dataItem {cols} let:resizePointerDown let:movePointerDown>
+<div class="demo-container">
+    <Grid
+        bind:items
+        {cols}
+        gap={[4, 4]}
+        let:dataItem
+        let:item
+        let:movePointerDown
+        let:resizePointerDown
+        rowHeight={100}
+    >
         <div class="sections" class:editing={!editLocked}>
-
             {#if !editLocked}
-                <div class=dragger transition:slide onpointerdown={movePointerDown}>
-                    <GripHorizontalIcon size="18px"/>
+                <div
+                    class="dragger"
+                    transition:slide
+                    onpointerdown={movePointerDown}
+                >
+                    <GripHorizontalIcon size="18px" />
                 </div>
 
                 <!--{#if widgetsMap[dataItem.type]?.config}-->
-                <div class="configButton" transition:slide={{axis: "x"}}>
-                    <button type="button" class="ring-link-btn"
-                            onclick={() => {
-                                selectedId = dataItem.id;
-                                configOpen = true;
-                            }
-                    }>
-                        <Settings2 size={18}/>
+                <div class="configButton" transition:slide={{ axis: "x" }}>
+                    <button
+                        type="button"
+                        class="ring-link-btn"
+                        onclick={() => {
+                            selectedId = dataItem.id;
+                            configOpen = true;
+                        }}
+                    >
+                        <Settings2 size={18} />
                     </button>
                 </div>
                 <!--{/if}-->
@@ -88,25 +94,30 @@
 
             <div class="widget">
                 {#if widgetsMap[dataItem.type]}
-                    {@const WidgetComponent = widgetsMap[dataItem.type].component}
+                    {@const WidgetComponent =
+                        widgetsMap[dataItem.type].component}
 
-                    <WidgetComponent backgroundColor="{dataItem.data.color}"
-                                     {editLocked}
-                                     onSizeChanged={(size) => onSizeChanged(item.id, size)}
-                                     data={dataItem.data}/>
+                    <WidgetComponent
+                        backgroundColor={dataItem.data.color}
+                        {editLocked}
+                        onSizeChanged={(size) => onSizeChanged(item.id, size)}
+                        data={dataItem.data}
+                    />
                 {:else}
                     <p>Widget type "{dataItem.type}" not found.</p>
                 {/if}
             </div>
 
-
             {#if !editLocked}
-                <div class=resizer transition:slide onpointerdown={resizePointerDown}>
-                    <MoveDiagonal_2 size="18px"/>
+                <div
+                    class="resizer"
+                    transition:slide
+                    onpointerdown={resizePointerDown}
+                >
+                    <MoveDiagonal_2 size="18px" />
                 </div>
             {/if}
         </div>
-
     </Grid>
 
     {#if configOpen && selectedWidget}
@@ -116,26 +127,30 @@
             {@const ConfigComponent = widgetDef.config}
             <div class="backdrop">
                 <ConfigComponent
-                        widgetData={selectedWidget.data}
-                        {onCancel}
-                        onSubmit={(newData) => {
-                            const index = items.findIndex(i => i.id === selectedId);
-                            if (index !== -1) {
-                                items[index].data = newData;
-                                items = [...items];
-                                // console.log("updated", $state.snapshot(items));
-                            }
-                            configOpen = false;
-                            selectedId = null;
-                        }}
-                        onDelete={() => {
-                            const index = items.findIndex(i => i.id === selectedId);
-                             if (index !== -1) {
-                                 items.splice(index, 1);
-                             }
-                             configOpen = false;
-                             selectedId = null;
-                        }}
+                    widgetData={selectedWidget.data}
+                    {onCancel}
+                    onSubmit={(newData) => {
+                        const index = items.findIndex(
+                            (i) => i.id === selectedId,
+                        );
+                        if (index !== -1) {
+                            items[index].data = newData;
+                            items = [...items];
+                            // console.log("updated", $state.snapshot(items));
+                        }
+                        configOpen = false;
+                        selectedId = null;
+                    }}
+                    onDelete={() => {
+                        const index = items.findIndex(
+                            (i) => i.id === selectedId,
+                        );
+                        if (index !== -1) {
+                            items.splice(index, 1);
+                        }
+                        configOpen = false;
+                        selectedId = null;
+                    }}
                 />
             </div>
         {/if}
@@ -143,21 +158,28 @@
 
     {#if !editLocked}
         <div class="footer-buttons-container" transition:slide>
-            <button onclick={addWidget} class="footer-buttons footer-buttons-primary"> Add Widget</button>
-            <button onclick={restoreWidgets} class="footer-buttons"> Revert Changes</button>
+            <button
+                onclick={addWidget}
+                class="footer-buttons footer-buttons-primary"
+            >
+                Add Widget</button
+            >
+            <button onclick={restoreWidgets} class="footer-buttons">
+                Revert Changes</button
+            >
             <!--            <button class="footer-buttons"> Foo </button>-->
             <!--            <button class="footer-buttons"> Bar </button>-->
         </div>
     {/if}
 
     {#if widgetSelectorOpen}
-        <WidgetTypeSelector onWidgetSelected={(widgetString) => {
-             context.addWidget(widgetString);
-             widgetSelectorOpen = false;
-        }}></WidgetTypeSelector>
+        <WidgetTypeSelector
+            onWidgetSelected={(widgetString) => {
+                context.addWidget(widgetString);
+                widgetSelectorOpen = false;
+            }}
+        ></WidgetTypeSelector>
     {/if}
-
-
 </div>
 
 <style>
@@ -184,6 +206,7 @@
         /* Ensure font inherits correctly if this is a standalone container */
         font-family: var(--ring-font);
         color: var(--ring-text);
+        padding: 4px;
     }
 
     /* 3. The Widget Card (.sections) */
@@ -204,7 +227,10 @@
         justify-content: space-between;
 
         /* Transitions */
-        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        transition:
+            transform 0.2s ease,
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
     }
 
     /* Editing State */
@@ -255,7 +281,9 @@
         cursor: pointer;
         padding: 4px;
         border-radius: 2px;
-        transition: color 0.2s, background-color 0.2s;
+        transition:
+            color 0.2s,
+            background-color 0.2s;
     }
 
     .configButton button:hover {
@@ -290,12 +318,11 @@
         color: var(--ring-primary);
     }
 
-
     .footer-buttons-container {
         border: 1px solid var(--ring-border);
         border-radius: var(--ring-radius);
         color: var(--ring-text);
-        background: #2F3339;
+        background: #2f3339;
         height: 32px;
         padding: 10px;
         display: flex;
@@ -340,7 +367,6 @@
         background-color: var(--ring-primary-hover);
         border-color: var(--ring-primary-hover);
     }
-
 
     .backdrop {
         position: fixed;
