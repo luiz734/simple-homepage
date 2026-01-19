@@ -13,10 +13,18 @@
     let settingsDialog = $state();
 </script>
 
+<svelte:window
+    onkeydown={(event) => {
+        if (!locked && event.key === "Escape") {
+            onToggle()
+        }
+    }}
+/>
+
 <div class="drawer drawer-open">
     <input class="drawer-toggle" id="drawer-toggle" type="checkbox" />
 
-    <div class="drawer-content overflow-scroll">
+    <div class="drawer-content overflow-auto">
         {@render children()}
     </div>
 
