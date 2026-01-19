@@ -21,7 +21,7 @@
     };
 </script>
 
-<dialog bind:this={dialog} class="modal">
+<dialog bind:this={dialog} class="modal" onclose={onCancel}>
     <div class="modal-box bg-base-200 max-h-7/12 min-h-4/6 w-11/12 max-w-6xl p-8 flex flex-col overflow-hidden">
         <form
             class="flex grow flex-col justify-between gap-y-2 overflow-hidden"
