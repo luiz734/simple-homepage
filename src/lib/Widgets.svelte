@@ -101,10 +101,7 @@
     };
 </script>
 
-<!--<MyComponent></MyComponent>-->
-<!--<button onclick={() => {MyComponent = Clock}}> click</button>-->
-
-<div class="demo-container">
+<div class="demo-container p-1">
     <Grid
         bind:items
         {cols}
@@ -116,36 +113,23 @@
         rowHeight={100}
     >
         <div
-            class="sections"
-            class:editing={!editLocked}
+            class={["card h-full w-full overflow-clip p-6 transition-all duration-200 ease-out bg-base-100",
+            !editLocked && "border border-dashed"]}
+
             use:shrinkEffect={!editLocked}
         >
             {#if !editLocked}
-                <div
-                    class="dragger"
-                    transition:slide
-                    onpointerdown={movePointerDown}
-                >
-                    <GripHorizontalIcon size="18px" />
-                </div>
-
-                <!--{#if widgetsMap[dataItem.type]?.config}-->
-                <div class="configButton" transition:slide={{ axis: "x" }}>
-                    <button
-                        type="button"
-                        class="ring-link-btn"
-                        onclick={() => {
-                            selectedId = dataItem.id;
-                            configOpen = true;
-                        }}
-                    >
-                        <Settings2 size={18} />
-                    </button>
-                </div>
-                <!--{/if}-->
+                {@render widget_buttons(
+                    movePointerDown,
+                    () => {
+                        selectedId = dataItem.id;
+                        configOpen = true;
+                    },
+                    resizePointerDown,
+                )}
             {/if}
 
-            <div class="widget">
+            <div class="flex-1">
                 {#if widgetsMap[dataItem.type]}
                     {@const WidgetComponent =
                         widgetsMap[dataItem.type].component}
@@ -160,67 +144,15 @@
                     <p>Widget type "{dataItem.type}" not found.</p>
                 {/if}
             </div>
-
-            {#if !editLocked}
-                <div
-                    class="resizer"
-                    transition:slide
-                    onpointerdown={resizePointerDown}
-                >
-                    <MoveDiagonal_2 size="18px" />
-                </div>
-            {/if}
         </div>
     </Grid>
 
-    {#if configOpen && selectedWidget}
-        {@const widgetDef = widgetsMap[selectedWidget.type]}
-
-        {#if widgetDef?.config}
-            {@const ConfigComponent = widgetDef.config}
-            <div class="backdrop">
-                <ConfigComponent
-                    widgetData={selectedWidget.data}
-                    {onCancel}
-                    onSubmit={(newData) => {
-                        const index = items.findIndex(
-                            (i) => i.id === selectedId,
-                        );
-                        if (index !== -1) {
-                            items[index].data = newData;
-                            items = [...items];
-                            // console.log("updated", $state.snapshot(items));
-                        }
-                        configOpen = false;
-                        selectedId = null;
-                    }}
-                    onDelete={() => {
-                        const index = items.findIndex(
-                            (i) => i.id === selectedId,
-                        );
-                        if (index !== -1) {
-                            items.splice(index, 1);
-                        }
-                        configOpen = false;
-                        selectedId = null;
-                    }}
-                />
-            </div>
-        {/if}
+    {#if !editLocked}
+        {@render floating_buttons(addWidget, restoreWidgets)}
     {/if}
 
-    {#if !editLocked}
-        <div
-            class="bg-base-200 fixed bottom-2 left-1/2 z-20 flex h-14 -translate-x-1/2 items-center justify-center gap-4 rounded-md p-3"
-            transition:slide
-        >
-            <button onclick={addWidget} class="btn btn-success">
-                Add Widget</button
-            >
-            <button onclick={restoreWidgets} class="btn btn-error">
-                Discard All Changes</button
-            >
-        </div>
+    {#if configOpen && selectedWidget}
+        {@render config_popup()}
     {/if}
 
     <WidgetTypeSelector
@@ -231,140 +163,79 @@
     ></WidgetTypeSelector>
 </div>
 
+{#snippet widget_buttons(movePointerDown, onClickConfig, resizePointerDown)}
+    <button
+        class="dragger btn btn-link text-neutral absolute top-0 left-1/2 z-20 flex w-full -translate-x-1/2 cursor-grab items-center justify-center"
+        onpointerdown={movePointerDown}
+        transition:slide
+    >
+        <GripHorizontalIcon size="18px" />
+    </button>
+
+    <div class="absolute top-0 right-0 z-20" transition:slide={{ axis: "x" }}>
+        <button
+            type="button"
+            class="btn btn-link text-neutral"
+            onclick={onClickConfig}
+        >
+            <Settings2 size={18} />
+        </button>
+    </div>
+
+    <div
+        class="resizer btn btn-link text-neutral absolute right-0 bottom-0 cursor-se-resize items-center justify-center"
+        transition:slide
+        onpointerdown={resizePointerDown}
+    >
+        <MoveDiagonal_2 size="18px" />
+    </div>
+{/snippet}
+
+{#snippet floating_buttons(addWidget, restoreWidgets)}
+    <div
+        class="bg-base-200 fixed bottom-2 left-1/2 z-20 flex h-14 -translate-x-1/2 items-center justify-center gap-4 rounded-md p-3"
+        transition:slide
+    >
+        <button class="btn btn-success" onclick={addWidget}> Add Widget</button>
+        <button class="btn btn-error" onclick={restoreWidgets}>
+            Discard All Changes</button
+        >
+    </div>
+{/snippet}
+
+{#snippet config_popup()}
+    {@const widgetDef = widgetsMap[selectedWidget.type]}
+
+    {#if widgetDef?.config}
+        {@const ConfigComponent = widgetDef.config}
+        <div class="backdrop">
+            <ConfigComponent
+                widgetData={selectedWidget.data}
+                {onCancel}
+                onSubmit={(newData) => {
+                    const index = items.findIndex((i) => i.id === selectedId);
+                    if (index !== -1) {
+                        items[index].data = newData;
+                        items = [...items];
+                        // console.log("updated", $state.snapshot(items));
+                    }
+                    configOpen = false;
+                    selectedId = null;
+                }}
+                onDelete={() => {
+                    const index = items.findIndex((i) => i.id === selectedId);
+                    if (index !== -1) {
+                        items.splice(index, 1);
+                    }
+                    configOpen = false;
+                    selectedId = null;
+                }}
+            />
+        </div>
+    {/if}
+{/snippet}
+
 <style>
-    /* 1. Grid Library Overrides */
-    :global(.svlt-grid-shadow) {
-        background: var(--ring-primary);
-        opacity: 0.2;
-        border-radius: var(--ring-radius);
-    }
-
-    :global(.svlt-grid-container) {
-        background: var(--ring-content-bg);
-    }
-
-    :global(.svlt-grid-resizer::after) {
-        border-color: var(--ring-text-secondary) !important;
-    }
-
-    .demo-container {
-        flex-grow: 1;
-        background: var(--ring-content-bg);
-        align-items: center;
-        /* Ensure font inherits correctly if this is a standalone container */
-        font-family: var(--ring-font);
-        color: var(--ring-text);
-        padding: 4px;
-    }
-
-    .sections {
-        background-color: var(--ring-dark-bg);
-        border: 1px solid var(--ring-border);
-        border-radius: var(--ring-radius);
-        color: var(--ring-text);
-
-        /* Layout */
-        padding: 8px; /* Slightly tighter padding for Ring UI look */
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        box-sizing: border-box;
-        justify-content: space-between;
-
-        /* Transitions */
-        transition:
-            transform 0.2s ease,
-            border-color 0.2s ease,
-            box-shadow 0.2s ease;
-    }
-
-    /* Editing State */
-    .sections.editing {
-        border: 1px dashed var(--ring-text-secondary); /* Thinner, grey dashed border */
-        /*transform: scale(0.98); !* Subtle scale *!*/
-        box-shadow: var(--ring-shadow);
-        background-color: #2b3036; /* Slightly lighter to indicate "lifted" state */
-    }
-
-    /* 4. Controls */
-    .dragger {
-        /* Remove distinct background to match Ring UI "clean" look */
-        background: transparent;
-        color: var(--ring-text-secondary);
-
-        /* Position */
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 24px;
-
-        /* Centering the icon */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: grab;
-        z-index: 20;
-    }
-
-    .dragger:hover {
-        color: var(--ring-text); /* Highlight on hover */
-    }
-
-    .configButton {
-        position: absolute;
-        right: 4px;
-        top: 4px; /* Move into the corner */
-        z-index: 21;
-    }
-
-    /* Style the actual button inside configButton to match Ring UI Icon Buttons */
-    .configButton button {
-        background: transparent;
-        border: none;
-        color: var(--ring-text-secondary);
-        cursor: pointer;
-        padding: 4px;
-        border-radius: 2px;
-        transition:
-            color 0.2s,
-            background-color 0.2s;
-    }
-
-    .configButton button:hover {
-        color: var(--ring-primary);
-        background-color: rgba(53, 140, 246, 0.1);
-    }
-
-    .widget {
-        border: none;
-        flex: 1;
-        position: relative;
-        /* Add margin top if dragger is visible to prevent overlap,
-           or keep it 0 if widget handles its own spacing */
-        margin-top: 12px;
-    }
-
-    .resizer {
-        position: absolute;
-        right: 2px;
-        bottom: 2px;
-        width: 16px;
-        height: 16px;
-        color: var(--ring-text-secondary);
-        cursor: se-resize;
-        z-index: 20;
-        opacity: 0.5;
-        transition: opacity 0.2s;
-    }
-
-    .resizer:hover {
-        opacity: 1;
-        color: var(--ring-primary);
-    }
-
     .backdrop {
         position: fixed;
         top: 0;
