@@ -55,7 +55,11 @@
     };
 </script>
 
-<dialog bind:this={dialog} class="modal">
+<dialog bind:this={dialog} class="modal" onkeydown={(e) => {
+        if (e.key === "Escape") {
+            e.stopPropagation();
+        }
+    }}>
     <div
         class="modal-box bg-base-200 flex min-h-4/6 w-11/12 max-w-6xl max-h-11/12 flex-col gap-y-8"
     >
@@ -93,7 +97,7 @@
                     Discard
                 </button>
 
-                <button class="btn btn-primary" autofocus> Save </button>
+                <button autofocus class="btn btn-primary"> Save </button>
             </form>
         </div>
     </div>

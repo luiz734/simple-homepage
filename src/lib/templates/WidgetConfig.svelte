@@ -21,8 +21,19 @@
     };
 </script>
 
-<dialog bind:this={dialog} class="modal" onclose={onCancel}>
-    <div class="modal-box bg-base-200 max-h-7/12 min-h-4/6 w-11/12 max-w-6xl p-8 flex flex-col overflow-hidden">
+<dialog
+    bind:this={dialog}
+    class="modal"
+    onclose={onCancel}
+    onkeydown={(e) => {
+        if (e.key === "Escape") {
+            e.stopPropagation();
+        }
+    }}
+>
+    <div
+        class="modal-box bg-base-200 flex max-h-7/12 min-h-4/6 w-11/12 max-w-6xl flex-col overflow-hidden p-8"
+    >
         <form
             class="flex grow flex-col justify-between gap-y-2 overflow-hidden"
             onsubmit={sendForm}
@@ -31,7 +42,7 @@
                 {@render children()}
             </div>
 
-            <div class="flex gap-x-2 shrink-0 pt-2">
+            <div class="flex shrink-0 gap-x-2 pt-2">
                 <button class="btn btn-error" onclick={onDelete} type="button">
                     Delete Widget
                 </button>
@@ -43,7 +54,11 @@
                 >
                     Cancel
                 </button>
-                <button class="btn btn-primary min-w-24" type="submit" autofocus>
+                <button
+                    autofocus
+                    class="btn btn-primary min-w-24"
+                    type="submit"
+                >
                     Save
                 </button>
             </div>
