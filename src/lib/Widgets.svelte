@@ -21,6 +21,7 @@
     );
     let configOpen = $state(false);
     let selector = $state();
+    let widgetConfigDialog = $state();
 
     const cols = [[1100, 6]];
 
@@ -33,12 +34,6 @@
         const index = items.findIndex((i) => i.id === id);
         items[index][6].h = newH;
         items = [...items]; // Trigger reactivity
-    };
-
-    const toggleConfig = () => {};
-
-    const onCancel = () => {
-        configOpen = !configOpen;
     };
 
     const addWidget = () => {
@@ -101,7 +96,7 @@
     };
 </script>
 
-<div class="demo-container p-2 bg-base-300 h-full text-primary-content">
+<div class="demo-container bg-base-300 text-primary-content h-full p-2">
     <Grid
         bind:items
         {cols}
@@ -115,7 +110,7 @@
         <div
             class={[
                 "card bg-base-100 h-full w-full overflow-auto border-2  p-8 transition-all duration-200 ease-out",
-                !editLocked && "border-accent shadow-sm border-dashed",
+                !editLocked && "border-accent border-dashed shadow-sm",
                 editLocked && "border-base-300",
             ]}
             use:shrinkEffect={!editLocked}
@@ -131,10 +126,8 @@
                 )}
             {/if}
 
-
             {#if widgetsMap[dataItem.type]}
-                {@const WidgetComponent =
-                    widgetsMap[dataItem.type].component}
+                {@const WidgetComponent = widgetsMap[dataItem.type].component}
 
                 <WidgetComponent
                     backgroundColor={dataItem.data.color}
@@ -145,16 +138,11 @@
             {:else}
                 <p>Widget type "{dataItem.type}" not found.</p>
             {/if}
-
         </div>
     </Grid>
 
     {#if !editLocked}
         {@render floating_buttons(addWidget, restoreWidgets)}
-    {/if}
-
-    {#if configOpen && selectedWidget}
-        {@render config_popup()}
     {/if}
 
     <WidgetTypeSelector
@@ -164,6 +152,10 @@
         }}
     ></WidgetTypeSelector>
 </div>
+
+{#if selectedWidget}
+    {@render config_popup()}
+{/if}
 
 {#snippet widget_buttons(movePointerDown, onClickConfig, resizePointerDown)}
     <button
@@ -210,45 +202,30 @@
 
     {#if widgetDef?.config}
         {@const ConfigComponent = widgetDef.config}
-        <div class="backdrop">
-            <ConfigComponent
-                widgetData={selectedWidget.data}
-                {onCancel}
-                onSubmit={(newData) => {
-                    const index = items.findIndex((i) => i.id === selectedId);
-                    if (index !== -1) {
-                        items[index].data = newData;
-                        items = [...items];
-                        // console.log("updated", $state.snapshot(items));
-                    }
-                    configOpen = false;
-                    selectedId = null;
-                }}
-                onDelete={() => {
-                    const index = items.findIndex((i) => i.id === selectedId);
-                    if (index !== -1) {
-                        items.splice(index, 1);
-                    }
-                    configOpen = false;
-                    selectedId = null;
-                }}
-            />
-        </div>
+        <ConfigComponent
+            bind:this={widgetConfigDialog}
+            widgetData={selectedWidget.data}
+            onCancel={() => {
+                configOpen = false;
+                selectedId = null;
+            }}
+            onSubmit={(newData) => {
+                const index = items.findIndex((i) => i.id === selectedId);
+                if (index !== -1) {
+                    items[index].data = newData;
+                    items = [...items];
+                }
+                configOpen = false;
+                selectedId = null;
+            }}
+            onDelete={() => {
+                const index = items.findIndex((i) => i.id === selectedId);
+                if (index !== -1) {
+                    items.splice(index, 1);
+                }
+                configOpen = false;
+                selectedId = null;
+            }}
+        />
     {/if}
 {/snippet}
-
-<style>
-    .backdrop {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6); /* Slightly darker backdrop */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        backdrop-filter: blur(2px); /* Optional: adds a modern touch */
-    }
-</style>
