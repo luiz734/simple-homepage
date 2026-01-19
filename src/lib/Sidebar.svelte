@@ -21,10 +21,10 @@
     }}
 />
 
-<div class="drawer drawer-open">
+<div class="drawer drawer-open h-screen overflow-hidden">
     <input class="drawer-toggle" id="drawer-toggle" type="checkbox" />
 
-    <div class="drawer-content">
+    <div class="drawer-content overflow-y-auto h-full">
         {@render children()}
     </div>
 

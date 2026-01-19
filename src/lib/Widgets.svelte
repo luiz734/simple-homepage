@@ -96,7 +96,7 @@
     };
 </script>
 
-<div class="demo-container bg-base-300 text-primary-content h-full p-2">
+<div class="demo-container bg-base-300 text-primary-content min-h-full p-2">
     <Grid
         bind:items
         {cols}
