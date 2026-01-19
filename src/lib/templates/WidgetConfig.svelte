@@ -22,28 +22,30 @@
 </script>
 
 <dialog bind:this={dialog} class="modal">
-    <div class="modal-box bg-base-100 max-h-11/12 min-h-4/6 w-11/12 max-w-6xl p-8">
+    <div class="modal-box bg-base-200 max-h-7/12 min-h-4/6 w-11/12 max-w-6xl p-8 flex flex-col overflow-hidden">
         <form
-            class="flex grow flex-col justify-between gap-y-2"
+            class="flex grow flex-col justify-between gap-y-2 overflow-hidden"
             onsubmit={sendForm}
         >
-            <div class="prop-content">
+            <div class="prop-content grow overflow-y-auto">
                 {@render children()}
             </div>
 
-            <div class="flex gap-x-2">
+            <div class="flex gap-x-2 shrink-0 pt-2">
                 <button class="btn btn-error" onclick={onDelete} type="button">
-                    Delete Widget</button
-                >
+                    Delete Widget
+                </button>
                 <div class="grow"></div>
                 <button
                     class="btn btn-link btn-error"
                     onclick={onCancel}
-                    type="button">Cancel</button
+                    type="button"
                 >
-                <button class="btn btn-primary min-w-24" type="submit" autofocus
-                    >Save</button
-                >
+                    Cancel
+                </button>
+                <button class="btn btn-primary min-w-24" type="submit" autofocus>
+                    Save
+                </button>
             </div>
         </form>
     </div>

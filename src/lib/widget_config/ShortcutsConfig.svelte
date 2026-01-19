@@ -1,10 +1,10 @@
 <script>
-    import {Pencil, Check, Plus} from 'lucide-svelte'; // Added Plus icon
-    import {tick} from 'svelte';
-    import {slide} from 'svelte/transition';
+    import { Pencil, Check, Plus, Trash } from "lucide-svelte"; // Added Plus icon
+    import { tick } from "svelte";
+    import { slide } from "svelte/transition";
     import WidgetConfig from "../templates/WidgetConfig.svelte";
 
-    let {onCancel, onSubmit, onDelete, widgetData} = $props();
+    let { onCancel, onSubmit, onDelete, widgetData } = $props();
 
     // We want copies
     // Values will be changed in the submit callback
@@ -25,7 +25,7 @@
     }
 
     function handleTitleKeydown(e) {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             saveTitle();
         }
     }
@@ -39,7 +39,18 @@
         if (last.name === "" || last.url === "") {
             return;
         }
-        links = [...links, {name: "", url: ""}];
+        links = [...links, { name: "", url: "" }];
+        scrollToBottom();
+    }
+
+    let bottomRef;
+    $effect(() => {
+        scrollToBottom();
+    });
+    const scrollToBottom = () => {
+        tick().then(() => {
+            bottomRef?.scrollIntoView({ behavior: "smooth", block: "end" });
+        });
     }
 
     const sendForm = (event) => {
@@ -52,238 +63,89 @@
         };
 
         onSubmit(payload);
-    }
-
+    };
 </script>
 
 <WidgetConfig
-        {onCancel}
-        {onDelete}
-        {onSubmit}
-        widgetData={{
+    {onCancel}
+    {onDelete}
+    {onSubmit}
+    widgetData={{
         ...widgetData,
         title,
-        links
-    }}>
-
-    <div class="title-row">
+        links,
+    }}
+>
+    <div class="text-base-content flex justify-start pb-4">
         {#if isEditingTitle}
             <input
-                    bind:this={titleInput}
-                    bind:value={title}
-                    class="title-input"
-                    onkeydown={handleTitleKeydown}
-                    onblur={saveTitle}
+                bind:this={titleInput}
+                bind:value={title}
+                class="w-full text-xl font-bold"
+                onkeydown={handleTitleKeydown}
+                onblur={saveTitle}
             />
-            <button type="button" class="ring-btn-icon title-icon" onmousedown={saveTitle}>
-                <Check size={18}/>
+            <button type="button" class="btn btn-ghost" onmousedown={saveTitle}>
+                <Check size="18px" />
             </button>
         {:else}
-            <h1 class="dialog-title prevent-select" onclick={enableTitleEdit}>{title}</h1>
-            <button type="button" class="ring-btn-icon title-icon" onclick={enableTitleEdit}>
-                <Pencil size={18}/>
+            <button
+                class="btn btn-link text-base-content w-full justify-start px-0 text-xl font-bold no-underline"
+                onclick={enableTitleEdit}
+            >
+                {title}
+                <span class="text-base-content/50">
+                    <Pencil size={18} />
+                </span>
             </button>
         {/if}
     </div>
 
-    <div class="grid-row mb-2 prevent-select">
-        <div class="header">Name</div>
-        <div class="header">URL</div>
-        <div class="header"></div>
+    <div class="grid grid-cols-[1fr_2fr_auto] gap-x-4">
+        <div class="text-primary-content font-extrabold">Name</div>
+        <div class="text-primary-content font-extrabold">URL</div>
+        <div class="w-16"></div>
     </div>
 
-    <div class="dataOverflow">
+    <div class="mt-4 flex flex-col">
         {#each links as row, i (row)}
-            <div class="grid-row mb-2" transition:slide|local>
-                <input type="text" class="ring-input" bind:value={row.name} placeholder="Name"/>
-                <input type="url" class="ring-input" bind:value={row.url} placeholder="https://example.com"/>
-                <button type="button" class="ring-btn ring-btn-icon" onclick={() => removeRow(i)} title="Remove">
-                    <span class="prevent-select"> ✕ </span>
+            <div class="grid grid-cols-[1fr_2fr_auto] gap-x-4 items-center box" transition:slide|local>
+
+                <label class="label mt-2">
+                    <input
+                        type="text"
+                        class="input input-md"
+                        bind:value={row.name}
+                        placeholder="My Shortcut"
+                    />
+                </label>
+
+                <label class="label">
+                    <input
+                            type="url"
+                            class="input input-md w-full"
+                            bind:value={row.url}
+                            placeholder="https://www.example.com"
+                    />
+                </label>
+
+                <button
+                    type="button"
+                    class="btn btn-error btn-link w-16"
+                    onclick={() => removeRow(i)}
+                    title="Remove"
+                >
+                    Delete
                 </button>
+
             </div>
         {/each}
     </div>
 
-    <button type="button" class="ring-link-btn prevent-select" onclick={addRow}>
-        <Plus size={16}/>
+    <button bind:this={bottomRef} class="btn btn-primary btn-link mt-4" onclick={addRow} type="button">
+        <Plus size={16} />
         Add Shortcut
     </button>
 
+
 </WidgetConfig>
-
-
-<style>
-    :global(body) {
-        background-color: #191919;
-        color: #dfdfdf;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    .dataOverflow {
-        max-height: 300px; /* Adjust this value to your preferred max height */
-        overflow-y: auto; /* Enables vertical scrolling */
-        overflow-x: hidden; /* Hides horizontal scrollbar */
-        padding-right: 4px; /* Adds space for the scrollbar to avoid overlap */
-        margin-bottom: 16px; /* Spacing between the list and the 'Add' button */
-    }
-
-    /* Optional: Style the scrollbar to match the dark theme */
-    .dataOverflow::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .dataOverflow::-webkit-scrollbar-track {
-        background: #23272b;
-    }
-
-    .dataOverflow::-webkit-scrollbar-thumb {
-        background-color: #474747;
-        border-radius: 4px;
-    }
-
-    .dataOverflow::-webkit-scrollbar-thumb:hover {
-        background-color: #555;
-    }
-
-    /* Title Styles */
-    .title-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 16px;
-        height: 32px;
-    }
-
-    .dialog-title {
-        margin: 0;
-        font-size: 18px;
-        font-weight: 700;
-        cursor: text;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .title-input {
-        background-color: var(--ring-input-bg);
-        border: 1px solid var(--ring-primary);
-        color: var(--ring-text);
-        font-size: 18px;
-        font-weight: 700;
-        padding: 2px 6px;
-        border-radius: 2px;
-        width: 100%;
-        margin: 0;
-        outline: none;
-        font-family: inherit;
-    }
-
-    .title-icon {
-        color: var(--ring-text-secondary);
-        opacity: 0.7;
-    }
-
-    .title-icon:hover {
-        opacity: 1;
-        color: var(--ring-primary);
-        background-color: transparent;
-    }
-
-    /* Grid Styles */
-    .grid-row {
-        display: grid;
-        grid-template-columns: 1fr 2fr 32px;
-        gap: 8px;
-        align-items: center;
-    }
-
-    .mb-2 {
-        margin-bottom: 8px;
-    }
-
-
-    .ring-btn-icon {
-        height: 32px;
-    }
-
-    .header {
-        font-size: 12px;
-        color: var(--ring-text-secondary);
-        text-transform: uppercase;
-        font-weight: 600;
-        padding-bottom: 4px;
-    }
-
-    .ring-input {
-        background-color: var(--ring-input-bg);
-        border: 1px solid var(--ring-border);
-        color: var(--ring-text);
-        padding: 6px 10px;
-        border-radius: 2px;
-        font-size: 14px;
-        line-height: 20px;
-        width: 100%;
-        box-sizing: border-box;
-        transition: border-color 0.15s ease-in-out;
-    }
-
-    .ring-input:focus {
-        outline: none;
-        border-color: var(--ring-primary);
-    }
-
-    /* Add Row Button Style */
-    .ring-link-btn {
-        background: none;
-        border: none;
-        color: var(--ring-primary);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 13px;
-        padding: 0;
-        margin-bottom: 24px;
-    }
-
-    .ring-link-btn:hover {
-        color: var(--ring-primary-hover);
-        text-decoration: underline;
-    }
-
-
-    .ring-btn {
-        background-color: transparent;
-        border: 1px solid var(--ring-border);
-        color: var(--ring-text);
-        padding: 0 16px;
-        height: 32px;
-        line-height: 30px;
-        font-size: 14px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .ring-btn:hover {
-        border-color: #707070;
-    }
-
-    .ring-btn-icon {
-        padding: 0;
-        width: 28px;
-        height: 28px;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--ring-text-secondary);
-        background: transparent;
-        cursor: pointer;
-    }
-
-    .ring-btn-icon:hover {
-        color: var(--ring-error);
-        background-color: rgba(194, 39, 49, 0.1);
-    }
-</style>
