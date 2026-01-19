@@ -113,9 +113,11 @@
         rowHeight={100}
     >
         <div
-            class={["card h-full w-full overflow-clip p-6 transition-all duration-200 ease-out bg-base-100",
-            !editLocked && "border border-dashed"]}
-
+            class={[
+                "card bg-base-100 h-full w-full overflow-clip border-2 border-dashed p-6 transition-all duration-200 ease-out",
+                !editLocked && "border-primary shadow-sm",
+                editLocked && "border-transparent",
+            ]}
             use:shrinkEffect={!editLocked}
         >
             {#if !editLocked}
