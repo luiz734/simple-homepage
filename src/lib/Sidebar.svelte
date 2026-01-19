@@ -24,7 +24,7 @@
 <div class="drawer drawer-open">
     <input class="drawer-toggle" id="drawer-toggle" type="checkbox" />
 
-    <div class="drawer-content overflow-auto">
+    <div class="drawer-content">
         {@render children()}
     </div>
 
@@ -36,7 +36,7 @@
         ></label>
 
         <div
-            class="bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64 flex min-h-full flex-col items-start gap-y-4"
+            class="is-drawer-close:w-14 is-drawer-open:w-64 flex min-h-full flex-col items-start gap-y-4 bg-base-100 text-base-content"
         >
             <ul class="menu flex w-full grow flex-col gap-y-3">
                 <li>
@@ -57,7 +57,7 @@
                     <button
                         class={[
                             "is-drawer-close:tooltip is-drawer-close:tooltip-right",
-                            !locked && "text-primary",
+                            !locked && "text-accent-content bg-accent",
                         ]}
                         data-tip="Edit Mode"
                         onclick={onToggle}

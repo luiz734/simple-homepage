@@ -101,7 +101,7 @@
     };
 </script>
 
-<div class="demo-container p-1">
+<div class="demo-container p-2 bg-base-300 h-full text-primary-content">
     <Grid
         bind:items
         {cols}
@@ -114,9 +114,9 @@
     >
         <div
             class={[
-                "card bg-base-100 h-full w-full overflow-clip border-2 border-dashed p-6 transition-all duration-200 ease-out",
-                !editLocked && "border-primary shadow-sm",
-                editLocked && "border-transparent",
+                "card bg-base-100 h-full w-full overflow-auto border-2  p-8 transition-all duration-200 ease-out",
+                !editLocked && "border-accent shadow-sm border-dashed",
+                editLocked && "border-base-300",
             ]}
             use:shrinkEffect={!editLocked}
         >
@@ -131,21 +131,21 @@
                 )}
             {/if}
 
-            <div class="flex-1">
-                {#if widgetsMap[dataItem.type]}
-                    {@const WidgetComponent =
-                        widgetsMap[dataItem.type].component}
 
-                    <WidgetComponent
-                        backgroundColor={dataItem.data.color}
-                        {editLocked}
-                        onSizeChanged={(size) => onSizeChanged(item.id, size)}
-                        data={dataItem.data}
-                    />
-                {:else}
-                    <p>Widget type "{dataItem.type}" not found.</p>
-                {/if}
-            </div>
+            {#if widgetsMap[dataItem.type]}
+                {@const WidgetComponent =
+                    widgetsMap[dataItem.type].component}
+
+                <WidgetComponent
+                    backgroundColor={dataItem.data.color}
+                    {editLocked}
+                    onSizeChanged={(size) => onSizeChanged(item.id, size)}
+                    data={dataItem.data}
+                />
+            {:else}
+                <p>Widget type "{dataItem.type}" not found.</p>
+            {/if}
+
         </div>
     </Grid>
 
@@ -167,7 +167,7 @@
 
 {#snippet widget_buttons(movePointerDown, onClickConfig, resizePointerDown)}
     <button
-        class="dragger btn btn-link text-neutral absolute top-0 left-1/2 z-20 flex w-full -translate-x-1/2 cursor-grab items-center justify-center"
+        class="dragger text-primary-content btn btn-link absolute top-0 left-1/2 z-20 flex w-full -translate-x-1/2 cursor-grab items-center justify-center"
         onpointerdown={movePointerDown}
         transition:slide
     >
@@ -177,16 +177,16 @@
     <div class="absolute top-0 right-0 z-20" transition:slide={{ axis: "x" }}>
         <button
             type="button"
-            class="btn btn-link text-neutral"
+            class="btn btn-link text-primary-content"
             onclick={onClickConfig}
         >
-            <Settings2 size={18} />
+            <Settings2 size="18px" />
         </button>
     </div>
 
     <div
-        class="resizer btn btn-link text-neutral absolute right-0 bottom-0 cursor-se-resize items-center justify-center"
-        transition:slide
+        class="resizer btn btn-link text-primary-content absolute right-0 bottom-0 cursor-se-resize items-center justify-center"
+        transition:slide={{ axis: "x" }}
         onpointerdown={resizePointerDown}
     >
         <MoveDiagonal_2 size="18px" />
