@@ -1,89 +1,88 @@
 <script>
-    import {Lock, Settings, Unlock, User} from "lucide-svelte";
+    import {
+        ChevronRight,
+        Lock,
+        Menu,
+        Settings,
+        Unlock,
+        User,
+    } from "lucide-svelte";
     import AddonSettings from "./settings/AddonSettings.svelte";
 
-    let {locked, onToggle} = $props();
+    let { locked, onToggle, children } = $props();
     let settingsDialog = $state();
-
 </script>
 
-<div class="sidebar">
-    <button onclick={onToggle} class:active={!locked} title={locked ? "Unlock Layout" : "Lock Layout"}>
-        {#if locked}
-            <Lock size={20} />
-        {:else}
-            <Unlock size={20} />
-        {/if}
-    </button>
+<div class="drawer drawer-open">
+    <input class="drawer-toggle" id="drawer-toggle" type="checkbox" />
 
-    <button title="User Profile">
-        <User size={20} />
-    </button>
+    <div class="drawer-content overflow-scroll">
+        {@render children()}
+    </div>
 
-    <button title="Settings" onclick={() => {
-        settingsDialog.show();
-    }}>
-        <Settings size={20} />
-    </button>
+    <div class="drawer-side is-drawer-close:overflow-visible">
+        <label
+            aria-label="close sidebar"
+            class="drawer-overlay"
+            for="drawer-toggle"
+        ></label>
+
+        <div
+            class="bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64 flex min-h-full flex-col items-start gap-y-4"
+        >
+            <ul class="menu flex w-full grow flex-col gap-y-3">
+                <li>
+                    <label
+                        aria-label="open sidebar"
+                        class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                        data-tip="Expand menu"
+                        for="drawer-toggle"
+                    >
+                        <Menu size={20} />
+                        <span class="is-drawer-close:hidden">Menu</span>
+                    </label>
+                </li>
+
+                <li class="grow bg-transparent"></li>
+
+                <li>
+                    <button
+                        class={[
+                            "is-drawer-close:tooltip is-drawer-close:tooltip-right",
+                            !locked && "text-primary",
+                        ]}
+                        data-tip="Edit Mode"
+                        onclick={onToggle}
+                    >
+                        {#if locked}
+                            <Lock size={20} />
+                            <span class="is-drawer-close:hidden">Unlock</span>
+                        {:else}
+                            <Unlock size={20} />
+                            <span class="is-drawer-close:hidden">Lock</span>
+                        {/if}
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                        class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                        data-tip="Settings"
+                        onclick={() => {
+                            settingsDialog.show();
+                        }}
+                    >
+                        <Settings size={20} />
+                        <span class="is-drawer-close:hidden">Settings</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
-
-
 
 <AddonSettings
     bind:this={settingsDialog}
-    onCancel={() => { }}
-    onSubmit={() => { }}
+    onCancel={() => {}}
+    onSubmit={() => {}}
 />
-
-
-<style>
-    .sidebar {
-        /* Layout */
-        width: 60px; /* Standard toolbar width */
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 12px 0; /* Vertical padding */
-        gap: 8px; /* Space between icons */
-        box-sizing: border-box;
-
-        /* Theme Colors */
-        background-color: var(--ring-dark-bg);
-        border-right: 1px solid var(--ring-border);
-    }
-
-    /* Base Button Style (Toolbar Icon) */
-    .sidebar button {
-        width: 40px;
-        height: 40px;
-        background-color: transparent; /* Cleaner default look */
-        border: none;
-        color: var(--ring-text-secondary); /* #808080 */
-        border-radius: var(--ring-radius); /* 4px */
-        cursor: pointer;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        transition: all 0.2s ease;
-    }
-
-    /* Hover State */
-    .sidebar button:hover {
-        background-color: rgba(255, 255, 255, 0.05);
-        color: var(--ring-text); /* Brighter white on hover */
-    }
-
-    /* Active State (Used for the Unlock button when editing) */
-    .sidebar button.active {
-        color: var(--ring-primary); /* Blue */
-        background-color: rgba(53, 140, 246, 0.1); /* Blue Tint */
-    }
-
-    /* Optional: Active state hover */
-    .sidebar button.active:hover {
-        background-color: rgba(53, 140, 246, 0.2);
-    }
-</style>

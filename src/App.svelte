@@ -47,10 +47,10 @@
 </script>
 
 <div class="app">
-    <Sidebar {locked} onToggle={toggleLayoutLock}/>
-    <Widgets {locked} bind:items={context.widgets}
-             restoreWidgets={() => {context.restoreSnapshot()}}
-    />
+    <Sidebar {locked} onToggle={toggleLayoutLock}>
+        <Widgets bind:items={context.widgets} {locked}
+                 restoreWidgets={() => {context.restoreSnapshot()}}/>
+    </Sidebar>
     <!--    <ShortcutsConfig/>-->
 </div>
 
