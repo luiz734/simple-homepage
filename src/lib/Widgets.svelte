@@ -187,7 +187,7 @@
 
 {#snippet floating_buttons(addWidget, restoreWidgets)}
     <div
-        class="bg-base-200 fixed bottom-2 left-1/2 z-20 flex h-14 -translate-x-1/2 items-center justify-center gap-4 rounded-md p-3"
+        class="bg-base-100 fixed bottom-2 left-1/2 z-20 flex h-20 -translate-x-1/2 items-center justify-center gap-4 rounded-md p-6 border border-base-content/10"
         transition:slide
     >
         <button class="btn btn-success" onclick={addWidget}> Add Widget</button>
