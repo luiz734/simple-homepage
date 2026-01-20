@@ -2,15 +2,29 @@
     import {
         ChevronRight,
         Lock,
-        Menu,
+        Menu, Moon, Sun,
         Settings,
         Unlock,
         User,
     } from "lucide-svelte";
     import AddonSettings from "./settings/AddonSettings.svelte";
+    import { getContext } from "svelte";
+    import { APPLICATION_KEY } from "./storage/database.svelte.js";
 
     let { locked, onToggle, children } = $props();
     let settingsDialog = $state();
+
+    const context = getContext(APPLICATION_KEY);
+    let ThemeIcon = $derived.by(() => {
+        if (context.settings.themes.active === context.settings.themes.light) {
+            return Sun;
+
+        } else {
+            return Moon;
+        }
+    })
+
+
 </script>
 
 <svelte:window
@@ -51,7 +65,6 @@
                     </label>
                 </li>
 
-                <li class="grow bg-transparent"></li>
 
                 <li>
                     <button
@@ -60,6 +73,22 @@
                             !locked && "text-accent-content bg-accent",
                         ]}
                         data-tip="Edit Mode"
+                        onclick={() => { context.toggleActiveTheme() }}
+                    >
+
+                        <ThemeIcon size={20} />
+                    </button>
+                </li>
+
+                <li class="grow bg-transparent"></li>
+
+                <li>
+                    <button
+                        class={[
+                            "is-drawer-close:tooltip is-drawer-close:tooltip-right",
+                            !locked && "text-accent-content bg-accent",
+                        ]}
+                        data-tip="Toggle theme"
                         onclick={onToggle}
                     >
                         {#if locked}
@@ -71,6 +100,8 @@
                         {/if}
                     </button>
                 </li>
+
+
 
                 <li>
                     <button

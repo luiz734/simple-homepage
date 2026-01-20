@@ -9,7 +9,7 @@ const itemProps = {
     min: {w: 1, h: 1},
 };
 
-const defaultData = {
+const defaultWidgets = {
     widgets: [
         // ROW 1: 3 widgets of equal size (2x2)
         {
@@ -77,7 +77,7 @@ const defaultData = {
         {
             id: 5,
             type: "calculator",
-            6: gridHelp.item({x: 4, y: 2, w: 2, h: 5, ...itemProps}),
+            6: gridHelp.item({x: 4, y: 2, w: 2, h: 4, ...itemProps}),
             data: {
                 // title: "Reference & Tools",
                 // color: "#c2410c", // orange-700
@@ -121,11 +121,19 @@ const defaultData = {
         {
             id: 8,
             type: "clock",
-            6: gridHelp.item({x: 4, y: 7, w: 2, h: 1, ...itemProps}),
+            6: gridHelp.item({x: 4, y: 6, w: 2, h: 2, ...itemProps}),
             data: {}
         }
     ]
 };
+
+const defaultSettings = {
+    themes: {
+        light: "light",
+        dark: "dark",
+        active: "dark",
+    }
+}
 
 const createId = () => "_" + Math.random().toString(36).substr(2, 9);
 
@@ -133,7 +141,6 @@ const createId = () => "_" + Math.random().toString(36).substr(2, 9);
 /**
  * Storage Adapter
  * Automatically detects environment (Extension vs Browser) and normalizes the API.
- *
  */
 const storage = {
     async get(keys) {
@@ -172,8 +179,10 @@ const storage = {
 export class ApplicationState {
     widgets = $state([]);
     previousWidgets = $state([]);
-    isLoaded = $state(false); // 1. Add loading state
+    settings = $state([]);
+    previousSettings = $state([]);
 
+    isLoaded = $state(false); // 1. Add loading state
     #saveTimeout = null;
 
     constructor() {
@@ -198,20 +207,28 @@ export class ApplicationState {
     async persistData() {
         // Snapshot only when actually saving
         const plainWidgets = $state.snapshot(this.widgets);
-        await storage.set({ widgets: plainWidgets });
+        const plainSettings = $state.snapshot(this.settings);
+        await storage.set({ widgets: plainWidgets, settings: plainSettings });
         console.log("Storage updated (Debounced)");
         this.#saveTimeout = null;
     }
 
 
     async loadStorageOrDefault() {
-        const result = await storage.get(["widgets"]);
+        const widgetsData = await storage.get(["widgets"]);
+        const settingsData = await storage.get(["settings"]);
 
-        // Batch updates to ensure consistency
-        if (result && result.widgets && Array.isArray(result.widgets)) {
-            this.widgets = result.widgets;
+
+        if (widgetsData && widgetsData.widgets && Array.isArray(widgetsData.widgets)) {
+            this.widgets = widgetsData.widgets;
         } else {
-            this.widgets = defaultData.widgets;
+            this.widgets = defaultWidgets.widgets;
+        }
+
+        if (settingsData && settingsData.settings && Array.isArray(settingsData.settings)) {
+            this.settings = settingsData.settings;
+        } else {
+            this.settings = defaultSettings;
         }
 
         // Enable the effect only after data is set
@@ -262,34 +279,49 @@ export class ApplicationState {
     }
 
     importState(importedData) {
-        if (importedData && Array.isArray(importedData.widgets)) {
-            this.widgets = importedData.widgets;
-            console.log('State successfully updated from import.');
-        } else {
-            console.error('Invalid import data: missing "widgets" array.');
+        if (!importedData) {
+            console.error(`Missing imported data for ${importedData}`);
+            return;
         }
+
+        this.widgets = importedData.widgets === null ? defaultWidgets.widgets : importedData.widgets;
+        this.settings = importedData.settings === null ? defaultSettings : importedData.settings;
+        console.log('State successfully updated from import.');
     }
 
     exportJsonBlob() {
-        const jsonString = JSON.stringify({
-                widgets: this.widgets
-            }
-            , null, 2);
+        const object = {
+            widgets: this.widgets ? this.widgets : defaultWidgets.widgets,
+            settings: this.settings ? this.settings : defaultSettings
+        }
+        const jsonString = JSON.stringify(object, null, 2);
         return new Blob([jsonString], {type: 'application/json'});
     }
 
     saveSnapshot() {
         this.previousWidgets =  structuredClone($state.snapshot(this.widgets));
+        this.previousSettings =  structuredClone($state.snapshot(this.settings));
     }
     restoreSnapshot() {
-        if (this.previousWidgets === null) {
+        if (this.previousWidgets === null || this.previousSettings === null) {
             console.error('No snapshot found');
             return;
         }
-        this.widgets = structuredClone($state.snapshot(this.previousWidgets))
+        this.widgets = structuredClone($state.snapshot(this.previousWidgets));
+        this.settings = structuredClone($state.snapshot(this.previousSettings))
     }
     clearSnapshot() {
         this.previousWidgets = null;
+        this.previousSettings = null;
+    }
+
+    toggleActiveTheme() {
+        console.log($state.snapshot(this));
+        const light = this.settings.themes.light;
+        const dark = this.settings.themes.dark;
+        const active = this.settings.themes.active;
+
+        this.settings.themes.active = active === light ? dark : light
     }
 }
 
