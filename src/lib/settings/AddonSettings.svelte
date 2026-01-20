@@ -2,6 +2,7 @@
     import { getContext } from "svelte";
     import { APPLICATION_KEY } from "../storage/database.svelte.js";
     import { Download } from "lucide-svelte";
+    import DarkLightTheme from "./DarkLightTheme.svelte";
 
     let { onCancel, onSubmit } = $props();
     let dialog = $state();
@@ -89,6 +90,9 @@
                     </fieldset>
                 </div>
             </div>
+
+            <DarkLightTheme/>
+
         </div>
 
         <div class="modal-action">
