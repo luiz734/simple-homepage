@@ -15,7 +15,7 @@
     const context = getContext(APPLICATION_KEY);
     let { locked: editLocked, items = $bindable(), restoreWidgets } = $props();
 
-    console.log($state.snapshot(items));
+    // console.log($state.snapshot(items));
 
     let selectedId = $state(null);
     let selectedWidget = $derived(
@@ -99,6 +99,7 @@
 </script>
 
 <div class="demo-container bg-base-300 text-primary-content min-h-full p-2">
+
     <Grid
         bind:items
         {cols}
