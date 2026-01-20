@@ -15,6 +15,8 @@
     const context = getContext(APPLICATION_KEY);
     let { locked: editLocked, items = $bindable(), restoreWidgets } = $props();
 
+    console.log($state.snapshot(items));
+
     let selectedId = $state(null);
     let selectedWidget = $derived(
         selectedId ? items.find((i) => i.id === selectedId) : null,

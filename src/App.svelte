@@ -20,7 +20,6 @@
     setContext(APPLICATION_KEY, applicationState);
     const context = getContext(APPLICATION_KEY);
 
-    // $inspect(applicationState.settings);
 
     let locked = $state(true);
 
