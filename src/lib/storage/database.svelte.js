@@ -177,10 +177,10 @@ const storage = {
 };
 
 export class ApplicationState {
-    widgets = $state([]);
-    previousWidgets = $state([]);
-    settings = $state([]);
-    previousSettings = $state([]);
+    widgets = $state();
+    previousWidgets = $state();
+    settings = $state();
+    previousSettings = $state();
 
     isLoaded = $state(false); // 1. Add loading state
     #saveTimeout = null;
@@ -189,7 +189,10 @@ export class ApplicationState {
         $effect(() => {
             if (!this.isLoaded) return;
 
-            const _effectTrigger = this.widgets;
+            // Trigger the effect
+            $state.snapshot(this.widgets);
+            $state.snapshot(this.settings);
+
             // We use a debouncing pattern to save changes after 1 second
             // This ensures to minimize calls to the chrome storage API
             this.scheduleSave();
@@ -225,9 +228,14 @@ export class ApplicationState {
             this.widgets = defaultWidgets.widgets;
         }
 
-        if (settingsData && settingsData.settings && Array.isArray(settingsData.settings)) {
+        if (
+            settingsData &&
+            settingsData.settings &&
+            !Array.isArray(settingsData.settings)
+        ) {
             this.settings = settingsData.settings;
         } else {
+            // If storage has an Array (bad data), force the Default Object
             this.settings = defaultSettings;
         }
 
@@ -316,12 +324,11 @@ export class ApplicationState {
     }
 
     toggleActiveTheme() {
-        console.log($state.snapshot(this));
         const light = this.settings.themes.light;
         const dark = this.settings.themes.dark;
         const active = this.settings.themes.active;
 
-        this.settings.themes.active = active === light ? dark : light
+        this.settings.themes.active = (active === light) ? dark : light;
     }
 }
 
