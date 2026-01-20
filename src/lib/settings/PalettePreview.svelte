@@ -28,10 +28,10 @@
                 >
                     <div class="font-bold">{theme}</div>
                     <div class="flex flex-wrap gap-1">
-                        <div class="bg-primary aspect-square w-5 rounded lg:w-6"></div>
-                        <div class="bg-secondary aspect-square w-5 rounded lg:w-6"></div>
-                        <div class="bg-accent aspect-square w-5 rounded lg:w-6"></div>
-                        <div class="bg-neutral aspect-square w-5 rounded lg:w-6"></div>
+                        <div class="bg-primary text-primary-content pl-1.5 font-bold aspect-square w-5 rounded lg:w-6">A </div>
+                        <div class="bg-secondary text-secondary-content pl-1.5 font-bold aspect-square w-5 rounded lg:w-6">A</div>
+                        <div class="bg-accent text-accent-content font-bold pl-1.5 aspect-square w-5 rounded lg:w-6">A</div>
+                        <div class="bg-neutral text-neutral-content font-bold pl-1.5 aspect-square w-5 rounded lg:w-6">A</div>
                     </div>
                 </div>
             </div>
