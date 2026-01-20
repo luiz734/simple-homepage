@@ -1,24 +1,96 @@
 <script>
-    import { getContext } from "svelte";
+    import { getContext, onDestroy } from "svelte";
     import { APPLICATION_KEY } from "../storage/database.svelte.js";
     import PalettePreview from "./PalettePreview.svelte";
 
-    const lightThemes = ["light", "cupcake", "bumblebee", "emerald"];
-    const darkThemes = ["dark", "synthwave", "cyberpunk", "halloween"];
+    const lightThemes = [
+        "light",
+        "cupcake",
+        "bumblebee",
+        "emerald",
+        "corporate",
+        "retro",
+        "valentine",
+        "garden",
+        "lofi",
+        "pastel",
+        "fantasy",
+        "wireframe",
+        "cmyk",
+        "autumn",
+        "acid",
+        "lemonade",
+        "winter",
+        "nord",
+        "caramellatte",
+        "silk",
+    ];
+    const darkThemes = [
+        "dark",
+        "synthwave",
+        "cyberpunk",
+        "halloween",
+        "forest",
+        "aqua",
+        "black",
+        "luxury",
+        "dracula",
+        "business",
+        "night",
+        "coffee",
+        "dim",
+        "sunset",
+        "abyss",
+    ];
 
     let context = getContext(APPLICATION_KEY);
 
-    const paletteProps = "btn h-16 w-16";
+    // Snapshot state
+    const initialActive = context.settings.themes.active;
+    const wasDark = darkThemes.includes(initialActive);
+
+    let lightTheme = $state(context.settings.themes.light);
+    let darkTheme = $state(context.settings.themes.dark);
+
+    // Trackers to prevent overriding the active theme immediately on mount
+    let currentLight = context.settings.themes.light;
+    let currentDark = context.settings.themes.dark;
+
+    $effect(() => {
+        if (lightTheme !== currentLight) {
+            currentLight = lightTheme;
+            context.settings.themes.light = lightTheme;
+            context.settings.themes.active = lightTheme;
+        }
+    });
+
+    $effect(() => {
+        if (darkTheme !== currentDark) {
+            currentDark = darkTheme;
+            context.settings.themes.dark = darkTheme;
+            context.settings.themes.active = darkTheme;
+        }
+    });
 </script>
 
-<div class="justify- flex flex-wrap gap-4 align-top prevent-select">
-    {#each lightThemes as theme}
-        <PalettePreview {theme} />
-    {/each}
-</div>
+<div class="flex flex-col gap-4">
+    <div class="prevent-select flex grow flex-wrap gap-4 align-top">
+        {#each lightThemes as theme}
+            <PalettePreview
+                {theme}
+                name="theme_selection_light"
+                bind:group={lightTheme}
+            />
+        {/each}
+    </div>
 
-<div class="justify- flex flex-wrap gap-4 align-top prevent-select">
-    {#each darkThemes as theme}
-        <PalettePreview {theme} />
-    {/each}
+    <div class="prevent-select flex grow flex-wrap gap-4 align-top">
+        {#each darkThemes as theme}
+            <PalettePreview
+                {theme}
+                name="theme_selection_dark"
+                bind:group={darkTheme}
+            />
+        {/each}
+    </div>
 </div>

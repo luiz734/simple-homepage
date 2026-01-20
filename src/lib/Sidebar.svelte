@@ -2,7 +2,9 @@
     import {
         ChevronRight,
         Lock,
-        Menu, Moon, Sun,
+        Menu,
+        Moon,
+        Sun,
         Settings,
         Unlock,
         User,
@@ -18,19 +20,16 @@
     let ThemeIcon = $derived.by(() => {
         if (context.settings.themes.active === context.settings.themes.light) {
             return Sun;
-
         } else {
             return Moon;
         }
-    })
-
-
+    });
 </script>
 
 <svelte:window
     onkeydown={(event) => {
         if (!locked && event.key === "Escape") {
-            onToggle()
+            onToggle();
         }
     }}
 />
@@ -38,7 +37,7 @@
 <div class="drawer drawer-open h-screen overflow-hidden">
     <input class="drawer-toggle" id="drawer-toggle" type="checkbox" />
 
-    <div class="drawer-content overflow-y-auto h-full">
+    <div class="drawer-content h-full overflow-y-auto">
         {@render children()}
     </div>
 
@@ -50,7 +49,7 @@
         ></label>
 
         <div
-            class="is-drawer-close:w-14 is-drawer-open:w-64 flex min-h-full flex-col items-start gap-y-4 bg-base-100 text-base-content"
+            class="is-drawer-close:w-14 is-drawer-open:w-64 bg-base-100 text-base-content flex min-h-full flex-col items-start gap-y-4"
         >
             <ul class="menu flex w-full grow flex-col gap-y-3">
                 <li>
@@ -65,18 +64,18 @@
                     </label>
                 </li>
 
-
                 <li>
                     <button
                         class={[
                             "is-drawer-close:tooltip is-drawer-close:tooltip-right",
-                            !locked && "text-accent-content bg-accent",
                         ]}
-                        data-tip="Edit Mode"
-                        onclick={() => { context.toggleActiveTheme() }}
+                        data-tip="Toggle dark mode"
+                        onclick={() => {
+                            context.toggleActiveTheme();
+                        }}
                     >
-
                         <ThemeIcon size={20} />
+                        <span class="is-drawer-close:hidden">Toggle Dark Mode</span>
                     </button>
                 </li>
 
@@ -100,8 +99,6 @@
                         {/if}
                     </button>
                 </li>
-
-
 
                 <li>
                     <button

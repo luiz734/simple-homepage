@@ -64,7 +64,7 @@
     <div
         class="modal-box bg-base-200 flex min-h-4/6 w-11/12 max-w-6xl max-h-11/12 flex-col gap-y-8"
     >
-        <div class="flex grow flex-col gap-y-8">
+        <div class="flex grow flex-col gap-y-2">
 
             <div class="flex flex-col p-8 card bg-base-100 shadow-sm">
                 <div class="flex">
@@ -91,7 +91,10 @@
                 </div>
             </div>
 
-            <DarkLightTheme/>
+            <div class="flex flex-col p-8 card bg-base-100 shadow-sm grow">
+                <DarkLightTheme/>
+            </div>
+
 
         </div>
 
