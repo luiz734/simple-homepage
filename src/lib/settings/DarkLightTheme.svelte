@@ -75,7 +75,7 @@
 
 <div class="flex flex-col gap-4 w-full h-full">
 
-    <span class="text-base-content font-bold"> Dark Theme </span>
+    <span class="text-base-content font-bold"> Light Theme </span>
     <div class="prevent-select flex grow flex-wrap gap-4 align-top">
         {#each lightThemes as theme}
             <PalettePreview

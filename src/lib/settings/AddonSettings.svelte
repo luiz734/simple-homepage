@@ -20,10 +20,10 @@
     };
 
     const sectionsMapping = {
-        importExport: ImportExport,
-        themes: DarkLightTheme,
+        "Import/Export": ImportExport,
+        "Themes": DarkLightTheme,
         divider: "divider",
-        foo: DarkLightTheme,
+        "Foo": DarkLightTheme,
     };
     let sections = Object.keys(sectionsMapping);
     let selected = $state(sections[0]);
@@ -44,7 +44,7 @@
     }}
 >
     <div
-        class="modal-box bg-base-100 prevent-select flex h-11/12 min-h-4/6 w-11/12 max-w-6xl gap-6 overflow-hidden p-0"
+        class="modal-box bg-base-100 prevent-select flex h-5/12 min-h-4/6 w-11/12 max-w-6xl gap-6 overflow-hidden p-0"
     >
         <div
             class="bg-base-300 flex h-full min-h-0 w-64 shrink-0 flex-col overflow-auto p-6"
@@ -53,9 +53,16 @@
         </div>
 
         <div
-            class="bg-base-100 flex h-full min-h-0 grow-2 flex-col overflow-auto p-6"
+            class="bg-base-100 flex flex-col min-h-0 grow-2 overflow-auto py-6 px-20"
         >
-            <SelectedComponent></SelectedComponent>
+            <div class="h-20 text-xl font-bold pb-10"> {selected} </div>
+
+            <div class="grow">
+                <SelectedComponent></SelectedComponent>
+            </div>
+
+            <div class="h-20"> </div>
+
         </div>
     </div>
 </dialog>
