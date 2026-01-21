@@ -3,7 +3,7 @@
     let { theme, name, group = $bindable() } = $props();
 </script>
 
-<label class="cursor-pointer relative block">
+<label class="cursor-pointer relative block w-40">
     <input
         aria-label={theme}
         bind:group={group}
@@ -14,7 +14,7 @@
     />
 
     <div
-        class="border-base-content/20 hover:border-base-content/40 overflow-hidden rounded-lg border outline-2 outline-offset-2 outline-transparent peer-checked:outline-base-content"
+        class="border-base-content/20 hover:border-base-content/40 overflow-hidden rounded-lg border outline-3 outline-offset-2 outline-transparent peer-checked:outline-base-content"
     >
         <div
             class="bg-base-100 text-base-content w-full font-sans"
@@ -26,12 +26,14 @@
                 <div
                     class="bg-base-100 col-span-4 col-start-2 row-span-3 row-start-1 flex flex-col gap-1 p-2"
                 >
-                    <div class="font-bold">{theme}</div>
-                    <div class="flex flex-wrap gap-1">
-                        <div class="bg-primary text-primary-content pl-1.5 font-bold aspect-square w-5 rounded lg:w-6">A </div>
-                        <div class="bg-secondary text-secondary-content pl-1.5 font-bold aspect-square w-5 rounded lg:w-6">A</div>
-                        <div class="bg-accent text-accent-content font-bold pl-1.5 aspect-square w-5 rounded lg:w-6">A</div>
-                        <div class="bg-neutral text-neutral-content font-bold pl-1.5 aspect-square w-5 rounded lg:w-6">A</div>
+                    <div class="mx-auto w-fit">
+                        <div class="font-bold">{theme}</div>
+                        <div class="flex flex-wrap gap-1 justify-center">
+                            <div class="shrink-0 flex items-center justify-center bg-primary text-primary-content font-bold aspect-square w-5 rounded lg:w-6">A</div>
+                            <div class="shrink-0 flex items-center justify-center bg-secondary text-secondary-content font-bold aspect-square w-5 rounded lg:w-6">A</div>
+                            <div class="shrink-0 flex items-center justify-center bg-accent text-accent-content font-bold aspect-square w-5 rounded lg:w-6">A</div>
+                            <div class="shrink-0 flex items-center justify-center bg-neutral text-neutral-content font-bold aspect-square w-5 rounded lg:w-6">A</div>
+                        </div>
                     </div>
                 </div>
             </div>

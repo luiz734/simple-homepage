@@ -53,7 +53,7 @@
         </div>
 
         <div
-            class="bg-base-100 flex flex-col min-h-0 grow-2 overflow-auto py-6 px-20"
+            class="bg-base-100 flex flex-col min-h-0 grow-2 overflow-auto py-6 lg:px-20"
         >
             <div class="h-20 text-xl font-bold pb-10"> {selected} </div>
 

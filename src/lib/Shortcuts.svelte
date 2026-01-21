@@ -40,8 +40,8 @@
     </div>
 
     {#each links as link}
-        <div class="">
-            <a class="" href="{link.url}"> {link.name}</a>
+        <div class="p-1">
+            <a class="hover:bg-base-300 hover:p-4 rounded-2xl p-2" href="{link.url}"> {link.name}</a>
         </div>
     {/each}
 </div>

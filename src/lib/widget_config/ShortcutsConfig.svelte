@@ -76,76 +76,84 @@
         links,
     }}
 >
-    <div class="text-base-content flex justify-start pb-4">
-        {#if isEditingTitle}
-            <input
-                bind:this={titleInput}
-                bind:value={title}
-                class="w-full text-xl font-bold"
-                onkeydown={handleTitleKeydown}
-                onblur={saveTitle}
-            />
-            <button type="button" class="btn btn-ghost" onmousedown={saveTitle}>
-                <Check size="18px" />
-            </button>
-        {:else}
-            <button
-                class="btn btn-link text-base-content w-full justify-start px-0 text-xl font-bold no-underline"
-                onclick={enableTitleEdit}
-            >
-                {title}
-                <span class="text-base-content/50">
+    <div class="flex flex-col">
+
+        <div class="text-base-content flex justify-start pb-4">
+            {#if isEditingTitle}
+                <input
+                    bind:this={titleInput}
+                    bind:value={title}
+                    class="w-full text-xl font-bold outline-0 focus:bg-base-300"
+                    onkeydown={handleTitleKeydown}
+                    onblur={saveTitle}
+                />
+                <button type="button" class="btn btn-ghost" onmousedown={saveTitle}>
+                    <Check size="18px" />
+                </button>
+            {:else}
+                <button
+                    class="btn btn-link text-base-content w-full justify-start px-0 text-xl font-bold no-underline"
+                    onclick={enableTitleEdit}
+                >
+                    {title}
+                    <span class="text-base-content/50">
                     <Pencil size={18} />
                 </span>
-            </button>
-        {/if}
-    </div>
+                </button>
+            {/if}
+        </div>
 
-    <div class="grid grid-cols-[1fr_2fr_auto] gap-x-4">
-        <div class="text-primary-content font-extrabold">Name</div>
-        <div class="text-primary-content font-extrabold">URL</div>
-        <div class="w-16"></div>
-    </div>
+        <div class="grid grid-cols-[1fr_2fr_auto] gap-x-4">
+            <div class="text-base-content font-bold">Name</div>
+            <div class="text-base-content font-bold">URL</div>
+            <div class="w-16"></div>
+        </div>
 
-    <div class="mt-4 flex flex-col">
-        {#each links as row, i (row)}
-            <div class="grid grid-cols-[1fr_2fr_auto] gap-x-4 items-center box" transition:slide|local>
+        <div class="mt-4 flex flex-col">
+            {#each links as row, i (row)}
+                <div class="grid grid-cols-[1fr_2fr_auto] gap-x-4 items-center box p-1 " transition:slide|local>
 
-                <label class="label mt-2">
-                    <input
-                        type="text"
-                        class="input input-md"
-                        bind:value={row.name}
-                        placeholder="My Shortcut"
-                    />
-                </label>
+                    <label class="label mt-2">
+                        <input
+                            type="text"
+                            class="input input-md focus:border-transparent"
+                            spellcheck="false"
+                            bind:value={row.name}
+                            placeholder="My Shortcut"
+                        />
+                    </label>
 
-                <label class="label">
-                    <input
+                    <label class="label">
+                        <input
                             type="url"
-                            class="input input-md w-full"
+                            class="input input-md w-full focus:border-transparent"
+                            spellcheck="false"
                             bind:value={row.url}
                             placeholder="https://www.example.com"
-                    />
-                </label>
+                        />
+                    </label>
 
-                <button
-                    type="button"
-                    class="btn btn-error btn-link w-16"
-                    onclick={() => removeRow(i)}
-                    title="Remove"
-                >
-                    Delete
-                </button>
+                    <button
+                        type="button"
+                        class="btn btn-error btn-link w-16"
+                        onclick={() => removeRow(i)}
+                        title="Remove"
+                    >
+                        Delete
+                    </button>
 
-            </div>
-        {/each}
+                </div>
+            {/each}
+        </div>
+
+        <button bind:this={bottomRef} class="btn btn-link text-base-content mt-4 flex justify-start" onclick={addRow} type="button">
+            <Plus size={16} />
+            Add Shortcut
+        </button>
     </div>
 
-    <button bind:this={bottomRef} class="btn btn-primary btn-link mt-4" onclick={addRow} type="button">
-        <Plus size={16} />
-        Add Shortcut
-    </button>
+
+
 
 
 </WidgetConfig>

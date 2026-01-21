@@ -8,23 +8,18 @@
 
 <div class="flex flex-col">
     {#each sections as section}
-        <!--        <input-->
-        <!--            class="join-item btn py-6"-->
-        <!--            type="radio"-->
-        <!--            name="settings-category"-->
-        <!--            aria-label={section}-->
-        <!--            value={section}-->
-        <!--            bind:group-->
-        <!--        />-->
-
         {#if section === "divider"}
             <div class="divider"></div>
         {:else}
             <label
-                class="btn btn-ghost has-checked:bg-base-100 rounded-2xl py-6"
+                class={[
+                    "btn btn-ghost has-checked:bg-base-100 rounded-2xl border-transparent py-6 has-checked:outline-0",
+                    "not-checked:hover:bg-base-100/50 not-checked:hover:text-base-content",
+                    "has-checked:hover:bg-base-100 has-checked:hover:text-base-content",
+                ]}
             >
                 <input
-                    class="peer checked:bg-accent sr-only"
+                    class="peer checked:bg-accent peer sr-only"
                     bind:group
                     value={section}
                     type="radio"

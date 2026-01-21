@@ -99,7 +99,6 @@
 </script>
 
 <div class="demo-container bg-base-300 text-primary-content min-h-full p-2">
-
     <Grid
         bind:items
         {cols}
@@ -162,7 +161,7 @@
 
 {#snippet widget_buttons(movePointerDown, onClickConfig, resizePointerDown)}
     <button
-        class="dragger text-primary-content btn btn-link absolute top-0 left-1/2 z-20 flex w-full -translate-x-1/2 cursor-grab items-center justify-center"
+        class="dragger text-base-content btn btn-link absolute top-0 left-1/2 z-20 flex w-full -translate-x-1/2 cursor-grab items-center justify-center focus:outline-0"
         onpointerdown={movePointerDown}
         transition:slide
     >
@@ -172,7 +171,7 @@
     <div class="absolute top-0 right-0 z-20" transition:slide={{ axis: "x" }}>
         <button
             type="button"
-            class="btn btn-link text-primary-content"
+            class="btn btn-link text-base-content focus:outline-0"
             onclick={onClickConfig}
         >
             <Settings2 size="18px" />
@@ -180,7 +179,7 @@
     </div>
 
     <div
-        class="resizer btn btn-link text-primary-content absolute right-0 bottom-0 cursor-se-resize items-center justify-center"
+        class="resizer btn btn-link text-base-content absolute right-0 bottom-0 cursor-se-resize items-center justify-center focus:outline-0"
         transition:slide={{ axis: "x" }}
         onpointerdown={resizePointerDown}
     >
@@ -190,7 +189,7 @@
 
 {#snippet floating_buttons(addWidget, restoreWidgets)}
     <div
-        class="bg-base-100 fixed bottom-2 left-1/2 z-20 flex h-20 -translate-x-1/2 items-center justify-center gap-4 rounded-md p-6 border border-base-content/10"
+        class="bg-base-100 border-base-content/10 fixed bottom-2 left-1/2 z-20 flex h-20 -translate-x-1/2 items-center justify-center gap-4 rounded-md border p-6"
         transition:slide
     >
         <button class="btn btn-success" onclick={addWidget}> Add Widget</button>

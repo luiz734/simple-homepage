@@ -75,7 +75,7 @@
                         }}
                     >
                         <ThemeIcon size={20} />
-                        <span class="is-drawer-close:hidden">Toggle Dark Mode</span>
+                        <span class="is-drawer-close:hidden text-nowrap">Toggle Dark Mode</span>
                     </button>
                 </li>
 
