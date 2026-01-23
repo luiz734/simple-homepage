@@ -1,23 +1,20 @@
 <script>
     import Widgets from "./lib/Widgets.svelte";
     import Sidebar from "./lib/Sidebar.svelte";
-    import {
-        ApplicationState,
-        APPLICATION_KEY,
-    } from "./lib/storage/database.svelte.js";
     import { setContext, getContext } from "svelte";
     import "./app.css";
+    import { ApplicationContextSvelte, APPLICATION_KEY } from "./lib/storage/applicationContext.svelte.js";
 
-    const applicationState = new ApplicationState();
+    const appContext = new ApplicationContextSvelte()
 
     $effect(() => {
         // We create a self-executing async function to use await
         (async () => {
-            await applicationState.loadStorageOrDefault();
+            await context.loadStorageOrDefault();
         })();
     });
 
-    setContext(APPLICATION_KEY, applicationState);
+    setContext(APPLICATION_KEY, appContext);
     const context = getContext(APPLICATION_KEY);
 
 

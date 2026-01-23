@@ -10,7 +10,7 @@
     import EmptyConfig from "./widget_config/EmptyConfig.svelte";
     import WidgetTypeSelector from "./WidgetTypeSelector.svelte";
     import { getContext } from "svelte";
-    import { APPLICATION_KEY } from "./storage/database.svelte.js";
+    import { APPLICATION_KEY } from "./storage/applicationContext.svelte.js";
 
     const context = getContext(APPLICATION_KEY);
     let { locked: editLocked, items = $bindable(), restoreWidgets } = $props();

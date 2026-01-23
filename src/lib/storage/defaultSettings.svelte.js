@@ -16,6 +16,9 @@ export const defaultConfig = {
             dark: "dark",
             active: "dark",
         },
+        layout: {
+            numberOfColumns: 6,
+        }
     },
     widgets: [
         {

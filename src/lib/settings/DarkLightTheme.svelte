@@ -1,6 +1,6 @@
 <script>
     import { getContext, onDestroy } from "svelte";
-    import { APPLICATION_KEY } from "../storage/database.svelte.js";
+    import { APPLICATION_KEY } from "../storage/applicationContext.svelte.js";
     import PalettePreview from "./PalettePreview.svelte";
 
     const lightThemes = [

@@ -5,7 +5,7 @@ import { storageAdapter as storage } from "./storageAdapter.svelte.js";
 const createId = () => "_" + Math.random().toString(36).substr(2, 9);
 
 
-export class ApplicationState {
+export class ApplicationContextSvelte {
     // Saved in storage
     widgets = $state();
     settings = $state();

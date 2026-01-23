@@ -11,7 +11,7 @@
     } from "lucide-svelte";
     import AddonSettings from "./settings/AddonSettings.svelte";
     import { getContext } from "svelte";
-    import { APPLICATION_KEY } from "./storage/database.svelte.js";
+    import { APPLICATION_KEY } from "./storage/applicationContext.svelte.js";
 
     let { locked, onToggle, children } = $props();
     let settingsDialog = $state();

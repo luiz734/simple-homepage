@@ -41,7 +41,7 @@
 
     {#each links as link}
         <div class="p-1">
-            <a class="hover:bg-base-300 hover:p-4 rounded-2xl p-2" href="{link.url}"> {link.name}</a>
+            <a target="_blank" class="hover:bg-base-300 rounded-2xl p-2" href="{link.url}"> {link.name}</a>
         </div>
     {/each}
 </div>

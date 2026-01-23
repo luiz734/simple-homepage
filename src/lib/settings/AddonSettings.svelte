@@ -1,10 +1,11 @@
 <script>
     import { getContext } from "svelte";
-    import { APPLICATION_KEY } from "../storage/database.svelte.js";
+    import { APPLICATION_KEY } from "../storage/applicationContext.svelte.js";
     import { Download } from "lucide-svelte";
     import DarkLightTheme from "./DarkLightTheme.svelte";
     import ImportExport from "./ImportExport.svelte";
     import SettingsSidebar from "./SettingsSidebar.svelte";
+    import Layout from "./Layout.svelte";
 
     let { onCancel, onSubmit } = $props();
     let dialog = $state();
@@ -23,7 +24,7 @@
         "Import/Export": ImportExport,
         "Themes": DarkLightTheme,
         divider: "divider",
-        "Foo": DarkLightTheme,
+        "Layout": Layout,
     };
     let sections = Object.keys(sectionsMapping);
     let selected = $state(sections[0]);
