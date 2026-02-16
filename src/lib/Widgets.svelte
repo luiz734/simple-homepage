@@ -30,7 +30,7 @@
     const onSizeChanged = (id, size) => {
         console.log(size);
         const pixelHeight = size;
-        const rowHeight = 100; // Must match the Grid's rowHeight prop
+        const rowHeight = 25; // Must match the Grid's rowHeight prop
         const margin = 10; // Default svelte-grid margin is usually 10px
         const newH = Math.ceil((pixelHeight + margin) / (rowHeight + margin));
         const index = items.findIndex((i) => i.id === id);
@@ -107,7 +107,7 @@
         let:item
         let:movePointerDown
         let:resizePointerDown
-        rowHeight={100}
+        rowHeight={25}
     >
         <div
             class={[

@@ -87,7 +87,7 @@
                             "is-drawer-close:tooltip is-drawer-close:tooltip-right",
                             !locked && "text-accent-content bg-accent",
                         ]}
-                        data-tip="Toggle theme"
+                        data-tip="Edit Mode"
                         onclick={onToggle}
                     >
                         {#if locked}
