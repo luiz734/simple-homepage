@@ -35,10 +35,13 @@
     }
 
     function addRow() {
-        const last = links[links.length - 1];
-        if (last.name === "" || last.url === "") {
-            return;
+        if (links.length > 0) {
+            const last = links[links.length - 1];
+            if (links.length > 0 && last.name === "" || last.url === "") {
+                return;
+            }
         }
+        // Happy path
         links = [...links, { name: "", url: "" }];
         scrollToBottom();
     }
