@@ -225,7 +225,10 @@
             onDelete={() => {
                 const index = items.findIndex((i) => i.id === selectedId);
                 if (index !== -1) {
-                    items.splice(index, 1);
+                    // Same trigger as onSubmit
+                    const updatedItems = [...items]
+                    updatedItems.splice(index, 1);
+                    items = updatedItems;
                 }
                 configOpen = false;
                 selectedId = null;
