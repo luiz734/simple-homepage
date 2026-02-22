@@ -108,6 +108,7 @@
         let:movePointerDown
         let:resizePointerDown
         rowHeight={25}
+        fastStart={true}
     >
         <div
             class={[
