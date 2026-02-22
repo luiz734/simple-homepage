@@ -10,7 +10,7 @@
     import EmptyConfig from "./widget_config/EmptyConfig.svelte";
     import WidgetTypeSelector from "./WidgetTypeSelector.svelte";
     import { getContext } from "svelte";
-    import { APPLICATION_KEY } from "./storage/applicationContext.svelte.js";
+    import { APPLICATION_KEY } from "./storage/applicationContext.svelte.ts";
 
     const context = getContext(APPLICATION_KEY);
     let { locked: editLocked, items = $bindable(), restoreWidgets } = $props();
@@ -25,7 +25,7 @@
     let selector = $state();
     let widgetConfigDialog = $state();
 
-    const cols = [[1100, 6]];
+    const cols = $derived([[1100, context.settings.layout.numberOfColumns]]);
 
     const onSizeChanged = (id, size) => {
         console.log(size);
@@ -34,7 +34,7 @@
         const margin = 10; // Default svelte-grid margin is usually 10px
         const newH = Math.ceil((pixelHeight + margin) / (rowHeight + margin));
         const index = items.findIndex((i) => i.id === id);
-        items[index][6].h = newH;
+        items[index].h = newH;
         items = [...items]; // Trigger reactivity
     };
 
@@ -214,8 +214,10 @@
             onSubmit={(newData) => {
                 const index = items.findIndex((i) => i.id === selectedId);
                 if (index !== -1) {
-                    items[index].data = newData;
-                    items = [...items];
+                    // We make like this so the assignment operator triggers the setter
+                    const updatedItems = [...items]
+                    updatedItems[index].data = newData;
+                    items = updatedItems;
                 }
                 configOpen = false;
                 selectedId = null;

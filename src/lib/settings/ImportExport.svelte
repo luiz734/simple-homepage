@@ -1,7 +1,7 @@
 <script>
     import { Download } from "lucide-svelte";
     import { getContext } from "svelte";
-    import { APPLICATION_KEY } from "../storage/applicationContext.svelte.js";
+    import { APPLICATION_KEY } from "../storage/applicationContext.svelte.ts";
 
     const context = getContext(APPLICATION_KEY);
 
@@ -14,12 +14,11 @@
 
         const file = files[0];
         const reader = new FileReader();
-        reader.onloadend = (e) => {
+        reader.onloadend = async (e) => {
             try {
                 const content = e.target.result;
-                const jsonSettings = JSON.parse(content.toString());
-                context.importState(jsonSettings);
-                console.log("Imported Settings:", jsonSettings);
+                await context.importStateFromJsonString(content.toString());
+                console.log("Imported Settings:", content);
             } catch (error) {
                 console.error("Error parsing JSON:", error);
             }

@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { APPLICATION_KEY } from "../storage/applicationContext.svelte.js";
+    import { APPLICATION_KEY } from "../storage/applicationContext.svelte.ts";
     import { Download } from "lucide-svelte";
     import DarkLightTheme from "./DarkLightTheme.svelte";
     import ImportExport from "./ImportExport.svelte";
@@ -30,9 +30,9 @@
     let selected = $state(sections[0]);
     let SelectedComponent = $derived(sectionsMapping[selected]);
 
-    $inspect(selected);
+    // $inspect(selected);
 
-    console.log(sections);
+    // console.log(sections);
 </script>
 
 <dialog

@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { APPLICATION_KEY } from "../storage/applicationContext.svelte.js";
+    import { APPLICATION_KEY } from "../storage/applicationContext.svelte.ts";
 
     const minColumns = 4;
     const maxColumns = 13;

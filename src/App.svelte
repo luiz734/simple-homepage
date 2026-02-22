@@ -3,12 +3,15 @@
     import Sidebar from "./lib/Sidebar.svelte";
     import { setContext, getContext } from "svelte";
     import "./app.css";
-    import { ApplicationContextSvelte, APPLICATION_KEY } from "./lib/storage/applicationContext.svelte.js";
+    import {
+        ApplicationContextSvelte,
+        APPLICATION_KEY,
+    } from "./lib/storage/applicationContext.svelte.ts";
 
-    const appContext = new ApplicationContextSvelte()
+    const appContext = new ApplicationContextSvelte();
 
     $effect(() => {
-        // We create a self-executing async function to use await
+        // Create a self-executing async function to use await
         (async () => {
             await context.loadStorageOrDefault();
         })();
@@ -16,7 +19,6 @@
 
     setContext(APPLICATION_KEY, appContext);
     const context = getContext(APPLICATION_KEY);
-
 
     let locked = $state(true);
 
@@ -34,13 +36,11 @@
             context.widgets.map((widget) => {
                 return {
                     ...widget,
-                    columnLayout: {
-                        ...widget.columnLayout,
-                        6: {
-                            fixed: locked,
-                            resizable: !locked,
-                            draggable: !locked,
-                        },
+                    layout: {
+                        ...widget.layout,
+                        fixed: locked,
+                        resizable: !locked,
+                        draggable: !locked,
                     },
                 };
             }),
@@ -52,7 +52,7 @@
     <div class="app" data-theme={context.settings.themes.active}>
         <Sidebar {locked} onToggle={toggleLayoutLock}>
             <Widgets
-                bind:items={context.widgets}
+                bind:items={context.libraryFormatWidgets}
                 {locked}
                 restoreWidgets={() => {
                     context.restoreSnapshot();

@@ -1,85 +1,17 @@
 import gridHelp from "svelte-grid/src/utils/helper.js";
 import { defaultConfig, defaultItemsProps } from "./defaultSettings.svelte.js";
-import { storageAdapter as storage } from "./storageAdapter.svelte.js";
+import { Settings, InternalWidget } from "../types";
+import { settingsManager } from "./SettingsReadWriter";
+import {
+    fromInternalToWidgetToLib,
+    fromLibToInternalWidget,
+} from "../types/widget.types";
 
-// --- Interfaces ---
 
-interface Link {
-    name: string;
-    url: string;
+class StorageState {
+    widgets: InternalWidget[];
+    settings: Settings;
 }
-
-interface InternalWidget {
-    id: string | number;
-    type: string;
-
-    // Optional props often managed by gridHelp or defaults
-    fixed?: boolean;
-    resizable?: boolean;
-    draggable?: boolean;
-
-    // Positioning (can be root level or nested depending on grid lib version)
-    x?: number;
-    y?: number;
-    width?: number;
-    height?: number;
-    minimumWidth?: number;
-    minimumHeight?: number;
-
-    readonly customResizer?: boolean;
-    readonly customDragger?: boolean;
-
-    data: Record<string, any>;
-
-    // Index signature to allow svelte-grid column keys (e.g., "6": { ... })
-    [key: number]: any;
-}
-
-interface ExternalLibraryWidget {
-    id: string | number;
-    type: string;
-
-    // Optional props often managed by gridHelp or defaults
-    fixed?: boolean;
-    resizable?: boolean;
-    draggable?: boolean;
-
-    // Positioning (can be root level or nested depending on grid lib version)
-    x?: number;
-    y?: number;
-    width?: number;
-    height?: number;
-    minimumWidth?: number;
-    minimumHeight?: number;
-
-    readonly customResizer?: boolean;
-    readonly customDragger?: boolean;
-
-    data: Record<string, any>;
-    [key: number]: any;
-}
-
-interface ThemeSettings {
-    light: string;
-    dark: string;
-    active: string;
-}
-
-interface LayoutSettings {
-    numberOfColumns: number;
-}
-
-interface Settings {
-    themes: ThemeSettings;
-    layout: LayoutSettings;
-}
-
-interface StorageData {
-    widgets?: InternalWidget[];
-    settings?: Settings;
-}
-
-// --- Implementation ---
 
 const createId = (): string => "_" + Math.random().toString(36).substr(2, 9);
 
@@ -88,12 +20,36 @@ export class ApplicationContextSvelte {
     widgets = $state<InternalWidget[]>([]);
     settings = $state<Settings>();
 
+    // libraryFormatWidgets = $derived(
+    //     this.widgets.map((widget: InternalWidget) =>
+    //         fromInternalToWidgetToLib(this.settings?.layout?.numberOfColumns || 1, widget)
+    //     )
+    // );
+
+
+    get libraryFormatWidgets() {
+        const columns = this.settings.layout.numberOfColumns;
+        return this.widgets.map((widget: InternalWidget) =>
+            fromInternalToWidgetToLib(columns, widget)
+        );
+    }
+    set libraryFormatWidgets(updatedLibraryWidgets: any[]) {
+        const columns = this.settings.layout.numberOfColumns;
+        let newWidgets = updatedLibraryWidgets.map((libWidget) => {
+            // Find the original widget to preserve data properties not managed by the grid
+            const originalWidget = this.widgets.find(w => w.id === libWidget.id);
+            return fromLibToInternalWidget(columns, libWidget, originalWidget);
+        });
+        this.widgets = newWidgets;
+        const foo = 1;
+    }
+
+
     // Undo/Redo state
     previousWidgets = $state<InternalWidget[] | null>(null);
     previousSettings = $state<Settings | null>(null);
 
     isLoaded = $state<boolean>(false);
-    #saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
     constructor() {
         $effect(() => {
@@ -103,70 +59,46 @@ export class ApplicationContextSvelte {
             $state.snapshot(this.widgets);
             $state.snapshot(this.settings);
 
-            // Debounce save
-            this.scheduleSave();
+            const currentSettings = $state.snapshot(this.settings);
+            const currentWidgets = $state.snapshot(this.widgets);
+            settingsManager.writeDebounced(currentSettings, currentWidgets);
         });
     }
 
-    scheduleSave(): void {
-        if (this.#saveTimeout) {
-            clearTimeout(this.#saveTimeout);
-        }
-        this.#saveTimeout = setTimeout(() => {
-            this.persistData();
-        }, 1000);
-    }
-
-    async persistData(): Promise<void> {
-        // Create clean snapshots for storage
-        const plainWidgets = $state.snapshot(this.widgets);
-        const plainSettings = $state.snapshot(this.settings);
-
-        await storage.set({ widgets: plainWidgets, settings: plainSettings });
-        console.log("Storage updated (Debounced)");
-        this.#saveTimeout = null;
-    }
-
     async loadStorageOrDefault(): Promise<void> {
-        // storage.get returns generic objects, we cast them implicitly or validate
-        const widgetsData = await storage.get(["widgets"]);
-        const settingsData = await storage.get(["settings"]);
-
-        const storageWidgetsIsValid =
-            widgetsData &&
-            widgetsData.widgets &&
-            Array.isArray(widgetsData.widgets);
-
-        const storageSettingsIsValid =
-            settingsData &&
-            settingsData.settings &&
-            !Array.isArray(settingsData.settings);
-
-        this.widgets = storageWidgetsIsValid
-            ? (widgetsData.widgets as InternalWidget[])
-            : (defaultConfig.widgets as InternalWidget[]);
-
-        this.settings = storageSettingsIsValid
-            ? (settingsData.settings as Settings)
-            : (defaultConfig.settings as Settings);
-
-        this.isLoaded = true;
+        try {
+            const data = await settingsManager.loadFromStorage();
+            this.settings = data.settings;
+            this.widgets = data.widgets;
+        } catch (error) {
+            console.warn("Using default settings values");
+            this.settings = defaultConfig.settings;
+            this.widgets = defaultConfig.widgets;
+        } finally {
+            this.isLoaded = true;
+        }
     }
 
     addWidget(type: string): void {
         const id = createId();
+        const columns = this.settings.layout.numberOfColumns;
 
         let newWidget: InternalWidget = {
             id: id,
-            type,
-            // 6 is the specific column configuration for svelte-grid
-            6: gridHelp.item({
-                x: 0,
-                y: 0,
-                w: 1,
-                h: 8,
-                ...defaultItemsProps,
-            }),
+            type: type,
+            layout: {
+                positionX: 0,
+                positionY: 0,
+                width: 1,
+                height: 8,
+                minHeight: 1,
+                minWidth: 1,
+                customResizer: true,
+                customDragger: true,
+                fixed: false,
+                resizable: false,
+                draggable: false,
+            },
             data: {
                 title: "Widget " + id,
                 color: "#1d4ed8",
@@ -174,16 +106,21 @@ export class ApplicationContextSvelte {
             },
         };
 
-        // gridHelp.findSpace is untyped, returns layout object
-        let findOutPosition = gridHelp.findSpace(newWidget, this.widgets, 6);
+        let newWidgetLibFormat = fromInternalToWidgetToLib(columns, newWidget);
 
-        newWidget = {
-            ...newWidget,
-            6: {
-                ...newWidget[6],
-                ...findOutPosition,
-            },
-        };
+        // gridHelp.findSpace is untyped, returns layout object
+        let findOutPosition = gridHelp.findSpace(newWidgetLibFormat, this.libraryFormatWidgets, columns);
+
+        // newWidget = {
+        //     ...newWidget,
+        //     layout: {
+        //         ...newWidget.layout,
+        //         positionX: findOutPosition.x,
+        //         positionY: findOutPosition.y,
+        //     },
+        // };
+        newWidget.layout.positionX = findOutPosition.x;
+        newWidget.layout.positionY = findOutPosition.y;
 
         this.widgets.push(newWidget);
     }
@@ -192,30 +129,27 @@ export class ApplicationContextSvelte {
         this.widgets = widgets;
     }
 
-    importState(importedData: StorageData): void {
-        if (!importedData) {
-            console.error(`Missing imported data`);
-            return;
+    async importStateFromJsonString(jsonString: string): Promise<void> {
+        try {
+            const data = await settingsManager.loadFromRawJson(jsonString);
+            this.settings = data.settings;
+            this.widgets = data.widgets;
+        } catch (error) {
+            console.error(error);
+            console.warn("Using default settings values");
+            this.settings = defaultConfig.settings;
+            this.widgets = defaultConfig.widgets;
+        } finally {
+            this.isLoaded = true;
         }
-
-        // Create missing entries if necessary using default fallback
-        this.widgets =
-            importedData.widgets == null
-                ? (defaultConfig.widgets as InternalWidget[])
-                : importedData.widgets;
-
-        this.settings =
-            importedData.settings == null
-                ? (defaultConfig.settings as Settings)
-                : importedData.settings;
 
         console.log("State successfully updated from import.");
     }
 
     exportJsonBlob(): Blob {
-        const object: StorageData = {
-            widgets: this.widgets ? this.widgets : defaultConfig.widgets,
-            settings: this.settings ? this.settings : defaultConfig.settings,
+        const object: StorageState = {
+            widgets: this.widgets,
+            settings: this.settings
         };
         const jsonString = JSON.stringify(object, null, 2);
         return new Blob([jsonString], { type: "application/json" });
