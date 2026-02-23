@@ -41,6 +41,7 @@
     onkeydown={(e) => {
         if (e.key === "Escape") {
             e.stopPropagation();
+            onSubmit();
         }
     }}
 >

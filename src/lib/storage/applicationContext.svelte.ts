@@ -18,7 +18,22 @@ const createId = (): string => "_" + Math.random().toString(36).substr(2, 9);
 export class ApplicationContextSvelte {
     // State initialization
     widgets = $state<InternalWidget[]>([]);
-    settings = $state<Settings>();
+    #settings = $state<Settings>();
+    set settings(settings: Settings) {
+        // if (this.isLoaded) {
+        //     const oldColumns = this.#settings.layout.numberOfColumns;
+        //     this.#settings = settings;
+        //     if (oldColumns !== this.#settings.layout.numberOfColumns) {
+        //         this.reorganizeWidgets();
+        //     }
+        // } else {
+        //
+        // }
+        this.#settings = settings;
+    }
+    get settings(): Settings {
+        return this.#settings;
+    }
 
     // libraryFormatWidgets = $derived(
     //     this.widgets.map((widget: InternalWidget) =>
@@ -184,6 +199,25 @@ export class ApplicationContextSvelte {
 
         this.settings.themes.active = active === light ? dark : light;
     }
+
+    // reorganizeWidgets(): void {
+        // const cols = this.settings.layout.numberOfColumns;
+        // let organizedWidgets = gridHelp.adjust(this.libraryFormatWidgets, cols);
+        //
+        // let normalizedWidgets = gridHelp.normalize(this.libraryFormatWidgets, cols);
+        // let organizedAndNormalized = gridHelp.normalize(organizedWidgets, cols);
+        //
+        // let x = [];
+        // for (let i = 0; i < organizedWidgets.length; i++) {
+        //     x.push({
+        //         "normalized": normalizedWidgets[i][cols],
+        //         "organized": organizedWidgets[i][cols],
+        //         "normalizedAndNormalized": organizedAndNormalized[i][cols],
+        //     })
+        // }
+        //
+        // this.libraryFormatWidgets = organizedAndNormalized;
+    // }
 }
 
 export const APPLICATION_KEY = Symbol("mookbark");

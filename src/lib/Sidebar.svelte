@@ -120,5 +120,7 @@
 <AddonSettings
     bind:this={settingsDialog}
     onCancel={() => {}}
-    onSubmit={() => {}}
+    onSubmit={() => {
+        // context.reorganizeWidgets()
+    }}
 />
