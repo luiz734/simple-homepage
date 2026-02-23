@@ -1,7 +1,7 @@
 <script>
     import Grid from "svelte-grid";
     import Shortcuts from "./Shortcuts.svelte";
-    import { GripHorizontalIcon, Settings2 } from "lucide-svelte";
+    import { GripHorizontalIcon, GripVertical, MoveHorizontal, Settings2 } from "lucide-svelte";
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import { slide } from "svelte/transition";
     import ShortcutsConfig from "./widget_config/ShortcutsConfig.svelte";
@@ -14,6 +14,14 @@
 
     const context = getContext(APPLICATION_KEY);
     let { locked: editLocked, items = $bindable(), restoreWidgets } = $props();
+
+    // Restore widgets buttons X position
+    $effect(() => {
+        if (editLocked) {
+            offsetX = 0;
+            startX = 0;
+        }
+    })
 
     // console.log($state.snapshot(items));
 
@@ -96,19 +104,41 @@
             },
         };
     };
+
+    // Grip bottom buttons logic
+    let offsetX = $state(0);
+    let startX = $state(0);
+    let isDragging = $state(false);
+
+    function handlePointerDown(event) {
+        event.preventDefault();
+        isDragging = true;
+        startX = event.clientX - offsetX;
+        // Captures pointer events even if the cursor leaves the element bounds
+        event.currentTarget.setPointerCapture(event.pointerId);
+    }
+    function handlePointerMove(event) {
+        if (!isDragging) return;
+        offsetX = event.clientX - startX;
+    }
+    function handlePointerUp(event) {
+        isDragging = false;
+        event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
 </script>
 
 <div class="demo-container bg-base-300 text-primary-content min-h-full p-2 overflow-x-hidden">
     <Grid
         bind:items
         {cols}
+        fastStart={true}
         gap={[4, 4]}
         let:dataItem
         let:item
         let:movePointerDown
         let:resizePointerDown
         rowHeight={25}
-        fastStart={true}
     >
         <div
             class={[
@@ -189,14 +219,29 @@
 {/snippet}
 
 {#snippet floating_buttons(addWidget, restoreWidgets)}
-    <div
-        class="bg-base-100 border-base-content/10 fixed bottom-2 left-1/2 z-20 flex h-20 -translate-x-1/2 items-center justify-center gap-4 rounded-md border p-6"
-        transition:slide
-    >
-        <button class="btn btn-success" onclick={addWidget}> Add Widget</button>
-        <button class="btn btn-error" onclick={restoreWidgets}>
-            Discard All Changes</button
+    <div class="fixed bottom-2 left-1/2 z-20 -translate-x-1/2"  style="transform: translateX({offsetX}px);">
+
+        <div
+                class="bg-base-100 border-base-content/10 flex h-20 items-center justify-center gap-4 rounded-md border p-6 z-20"
+                transition:slide
+
         >
+            <button class="btn btn-success" onclick={addWidget}> Add Widget</button>
+            <button class="btn btn-error" onclick={restoreWidgets}>
+                Discard All Changes
+            </button>
+
+            <div
+                    class="text-base-content/50 -mx-2 -mr-3 cursor-grab active:cursor-grabbing"
+                    onpointerdown={handlePointerDown}
+                    onpointermove={handlePointerMove}
+                    onpointerup={handlePointerUp}
+                    onpointercancel={handlePointerUp}
+            >
+                <GripVertical size="18px" />
+            </div>
+        </div>
+
     </div>
 {/snippet}
 
