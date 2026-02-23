@@ -133,7 +133,7 @@
         bind:items
         {cols}
         fastStart={true}
-        gap={[4, 4]}
+        gap={[context.settings.layout.gapX, context.settings.layout.gapY]}
         let:dataItem
         let:item
         let:movePointerDown

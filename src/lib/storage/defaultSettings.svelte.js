@@ -9,6 +9,8 @@ export const defaultConfig = {
         },
         layout: {
             numberOfColumns: 6,
+            gapX: 4,
+            gapY: 4,
         },
     },
     widgets: [
