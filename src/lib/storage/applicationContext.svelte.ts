@@ -111,8 +111,8 @@ export class ApplicationContextSvelte {
                 customResizer: true,
                 customDragger: true,
                 fixed: false,
-                resizable: false,
-                draggable: false,
+                resizable: true,
+                draggable: true,
             },
             data: {
                 title: "Widget " + id,

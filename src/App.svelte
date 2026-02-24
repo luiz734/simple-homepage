@@ -51,13 +51,15 @@
 {#if context.isLoaded}
     <div class="app" data-theme={context.settings.themes.active}>
         <Sidebar {locked} onToggle={toggleLayoutLock}>
-            <Widgets
-                bind:items={context.libraryFormatWidgets}
-                {locked}
-                restoreWidgets={() => {
-                    context.restoreSnapshot();
-                }}
-            />
+            {#key context.settings.layout.numberOfColumns}
+                <Widgets
+                    bind:items={context.libraryFormatWidgets}
+                    {locked}
+                    restoreWidgets={() => {
+                        context.restoreSnapshot();
+                    }}
+                />
+            {/key}
         </Sidebar>
     </div>
 {/if}
