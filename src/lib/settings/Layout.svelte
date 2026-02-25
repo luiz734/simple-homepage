@@ -33,10 +33,15 @@
                     class="input"
                     id="gapX"
                     min="0"
-                    placeholder="default 4"
+                    step="2"
+                    placeholder="default 6"
                     type="number"
                 />
-                <p class="label">Gap in pixels on X axis</p>
+                {#if context.settings.layout.gapX % 2 !== 0}
+                    <p class="label text-error">Odd numbers may not align correctly.</p>
+                {:else}
+                    <p class="label">Gap in pixels on X axis</p>
+                {/if}
             </div>
 
             <div class="flex w-full flex-col">
@@ -46,10 +51,15 @@
                     class="input"
                     id="gapY"
                     min="0"
-                    placeholder="default 4"
+                    step="2"
+                    placeholder="default 6"
                     type="number"
                 />
-                <p class="label">Gap in pixels on Y axis</p>
+                {#if context.settings.layout.gapY % 2 !== 0}
+                    <p class="label text-error">Odd numbers may not align correctly.</p>
+                {:else}
+                    <p class="label">Gap in pixels on X axis</p>
+                {/if}
             </div>
         </div>
     </fieldset>

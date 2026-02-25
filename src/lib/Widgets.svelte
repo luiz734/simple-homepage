@@ -128,7 +128,9 @@
 
 </script>
 
-<div class="demo-container bg-base-300 text-primary-content min-h-full p-2 overflow-x-hidden">
+<div class="demo-container bg-base-300 text-primary-content min-h-full overflow-x-hidden"
+     style:padding="{context.settings.layout.gapY}px {context.settings.layout.gapX}px"
+>
     <Grid
         bind:items
         {cols}
@@ -142,7 +144,7 @@
     >
         <div
             class={[
-                "card bg-base-100 h-full w-full overflow-auto border-2  p-8 transition-all duration-200 ease-out",
+                "card bg-base-100 h-full w-full overflow-auto p-8 transition-all duration-200 ease-out",
                 !editLocked && "border-accent border-dashed shadow-sm",
                 editLocked && "border-base-300",
             ]}
