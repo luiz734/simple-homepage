@@ -64,22 +64,51 @@
         </div>
     </fieldset>
 
-    <!--    <fieldset class="fieldset w-full max-w-xs">-->
-    <!--        <legend class="fieldset-legend">Columns</legend>-->
-    <!--        <input-->
-    <!--            bind:value={numberOfColumns}-->
-    <!--            class="range"-->
-    <!--            max={maxColumns - 1}-->
-    <!--            min={minColumns}-->
-    <!--            step="1"-->
-    <!--            type="range"-->
-    <!--        />-->
-    <!--        <div class="mt-2 flex justify-between px-2.5 text-xs">-->
-    <!--            {#each Array(columnsRange) as _, i}-->
-    <!--                <span>{i + minColumns}</span>-->
-    <!--            {/each}-->
-    <!--        </div>-->
-    <!--&lt;!&ndash;        <p class="label">The number of widgets columns</p>&ndash;&gt;-->
-    <!--    </fieldset>-->
-    <!--    {numberOfColumns}-->
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">Widget Border Radius</legend>
+
+        <div class="flex w-full gap-4">
+            <div class="flex w-full flex-col justify-center">
+<!--                <label for="options"> Widget Border Radius </label>-->
+                <div class="flex w-full gap-4">
+                    <div class="join flex flex-1">
+                        <input
+                            bind:group={context.settings.layout.widgetsBorder.useFromTheme}
+                            aria-label="From theme"
+                            class="join-item btn flex-1"
+                            name="options"
+                            type="radio"
+                            value={true}
+                        />
+                        <input
+                            bind:group={context.settings.layout.widgetsBorder.useFromTheme}
+                            aria-label="Custom"
+                            class="join-item btn flex-1"
+                            name="options"
+                            type="radio"
+                            value={false}
+                        />
+
+                    </div>
+                </div>
+<!--                <p class="label">Border radius in pixels.</p>-->
+            </div>
+
+            <!-- Only enabled for custom values-->
+            <div class="flex w-full flex-col">
+                <label for="borderRadius"> Widget Border Radius </label>
+                <input
+                    bind:value={context.settings.layout.widgetsBorder.valuePx}
+                    disabled={context.settings.layout.widgetsBorder.useFromTheme}
+                    class="input"
+                    id="borderRadius"
+                    min="0"
+                    placeholder="Default 8"
+                    step="1"
+                    type="number"
+                />
+                <p class="label">Border radius in pixels.</p>
+            </div>
+        </div>
+    </fieldset>
 </div>

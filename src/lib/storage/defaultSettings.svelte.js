@@ -11,6 +11,10 @@ export const defaultConfig = {
             numberOfColumns: 6,
             gapX: 6,
             gapY: 6,
+            widgetsBorder: {
+                useFromTheme: true,
+                valuePx: 8.
+            },
         },
     },
     widgets: [

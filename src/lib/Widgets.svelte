@@ -149,6 +149,7 @@
                 editLocked && "border-base-300",
             ]}
             use:shrinkEffect={!editLocked}
+            style:border-radius={context.settings.layout.widgetsBorder.useFromTheme ? null : `${context.settings.layout.widgetsBorder.valuePx}px`}
         >
             {#if !editLocked}
                 {@render widget_buttons(
@@ -243,7 +244,6 @@
                 <GripVertical size="18px" />
             </div>
         </div>
-
     </div>
 {/snippet}
 
