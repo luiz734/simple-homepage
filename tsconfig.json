@@ -5,5 +5,10 @@
         "moduleResolution": "bundler",
         "isolatedModules": true
     },
-
+    "exclude": [
+        "node_modules",
+        "build",
+        "dist",
+        "public"
+    ]
 }

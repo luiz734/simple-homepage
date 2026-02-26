@@ -7,7 +7,7 @@
 
 <div class="text-field">
     <label for={label.toLowerCase()}>{label}</label>
-    <input type="text" name={label.toLowerCase()} required>
+    <input name={label.toLowerCase()} required type="text">
 </div>
 
 <style>

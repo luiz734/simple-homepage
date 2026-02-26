@@ -34,7 +34,6 @@ export function fromInternalToWidgetToLib(
 ): Record<any, ReturnType<typeof gridHelp.item>> {
     return {
         [column]: gridHelp.item({
-
             x: widget.layout.positionX,
             y: widget.layout.positionY,
             w: widget.layout.width,
@@ -47,24 +46,25 @@ export function fromInternalToWidgetToLib(
             min: {
                 h: widget.layout.minHeight,
                 w: widget.layout.minWidth,
-            }
+            },
         }),
         id: widget.id,
         type: widget.type,
         data: {
             ...widget.data,
-        }
+        },
     };
 }
-
 
 export function fromLibToInternalWidget(
     column: number,
     libWidget: any,
-    originalWidget?: InternalWidget
+    originalWidget?: InternalWidget,
 ): InternalWidget {
     if (!originalWidget) {
-        throw new Error(`Widget ID ${libWidget.id} not found during reverse mapping.`);
+        throw new Error(
+            `Widget ID ${libWidget.id} not found during reverse mapping.`,
+        );
     }
 
     const libLayout = libWidget[column];
@@ -80,6 +80,6 @@ export function fromLibToInternalWidget(
             height: libLayout.h,
             minHeight: libLayout.min.h,
             minWidth: libLayout.min.w,
-        }
+        },
     };
 }

@@ -1,14 +1,5 @@
 <script>
-    import {
-        ChevronRight,
-        Lock,
-        Menu,
-        Moon,
-        Sun,
-        Settings,
-        Unlock,
-        User,
-    } from "lucide-svelte";
+    import { Lock, Menu, Moon, Sun, Settings, Unlock } from "lucide-svelte";
     import AddonSettings from "./settings/AddonSettings.svelte";
     import { getContext } from "svelte";
     import { APPLICATION_KEY } from "./storage/applicationContext.svelte.ts";
@@ -75,7 +66,9 @@
                         }}
                     >
                         <ThemeIcon size={20} />
-                        <span class="is-drawer-close:hidden text-nowrap">Toggle Dark Mode</span>
+                        <span class="is-drawer-close:hidden text-nowrap"
+                            >Toggle Dark Mode</span
+                        >
                     </button>
                 </li>
 
@@ -120,7 +113,5 @@
 <AddonSettings
     bind:this={settingsDialog}
     onCancel={() => {}}
-    onSubmit={() => {
-        // context.reorganizeWidgets()
-    }}
+    onSubmit={() => {}}
 />

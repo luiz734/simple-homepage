@@ -2,10 +2,6 @@
     import { getContext } from "svelte";
     import { APPLICATION_KEY } from "../storage/applicationContext.svelte.ts";
 
-    const minColumns = 4;
-    const maxColumns = 13;
-    const columnsRange = maxColumns - minColumns;
-
     const context = getContext(APPLICATION_KEY);
 </script>
 
@@ -33,12 +29,14 @@
                     class="input"
                     id="gapX"
                     min="0"
-                    step="2"
                     placeholder="default 6"
+                    step="2"
                     type="number"
                 />
                 {#if context.settings.layout.gapX % 2 !== 0}
-                    <p class="label text-error">Odd numbers may not align correctly.</p>
+                    <p class="label text-error">
+                        Odd numbers may not align correctly.
+                    </p>
                 {:else}
                     <p class="label">Gap in pixels on X axis</p>
                 {/if}
@@ -51,12 +49,14 @@
                     class="input"
                     id="gapY"
                     min="0"
-                    step="2"
                     placeholder="default 6"
+                    step="2"
                     type="number"
                 />
                 {#if context.settings.layout.gapY % 2 !== 0}
-                    <p class="label text-error">Odd numbers may not align correctly.</p>
+                    <p class="label text-error">
+                        Odd numbers may not align correctly.
+                    </p>
                 {:else}
                     <p class="label">Gap in pixels on X axis</p>
                 {/if}
@@ -69,29 +69,34 @@
 
         <div class="flex w-full gap-4">
             <div class="flex w-full flex-col justify-center">
-<!--                <label for="options"> Widget Border Radius </label>-->
+                <!--                <label for="options"> Widget Border Radius </label>-->
                 <div class="flex w-full gap-4">
                     <div class="join flex flex-1">
                         <input
-                            bind:group={context.settings.layout.widgetsBorder.useFromTheme}
                             aria-label="From theme"
+                            bind:group={
+                                context.settings.layout.widgetsBorder
+                                    .useFromTheme
+                            }
                             class="join-item btn flex-1"
                             name="options"
                             type="radio"
                             value={true}
                         />
                         <input
-                            bind:group={context.settings.layout.widgetsBorder.useFromTheme}
                             aria-label="Custom"
+                            bind:group={
+                                context.settings.layout.widgetsBorder
+                                    .useFromTheme
+                            }
                             class="join-item btn flex-1"
                             name="options"
                             type="radio"
                             value={false}
                         />
-
                     </div>
                 </div>
-<!--                <p class="label">Border radius in pixels.</p>-->
+                <!--                <p class="label">Border radius in pixels.</p>-->
             </div>
 
             <!-- Only enabled for custom values-->
@@ -99,8 +104,9 @@
                 <label for="borderRadius"> Widget Border Radius </label>
                 <input
                     bind:value={context.settings.layout.widgetsBorder.valuePx}
-                    disabled={context.settings.layout.widgetsBorder.useFromTheme}
                     class="input"
+                    disabled={context.settings.layout.widgetsBorder
+                        .useFromTheme}
                     id="borderRadius"
                     min="0"
                     placeholder="Default 8"

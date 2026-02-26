@@ -1,12 +1,11 @@
 import gridHelp from "svelte-grid/src/utils/helper.js";
-import { defaultConfig, defaultItemsProps } from "./defaultSettings.svelte.js";
-import { Settings, InternalWidget } from "../types";
+import { defaultConfig } from "./defaultSettings.svelte.js";
+import { InternalWidget, Settings } from "../types";
 import { settingsManager } from "./SettingsReadWriter";
 import {
     fromInternalToWidgetToLib,
     fromLibToInternalWidget,
 } from "../types/widget.types";
-
 
 class StorageState {
     widgets: InternalWidget[];
@@ -18,47 +17,24 @@ const createId = (): string => "_" + Math.random().toString(36).substr(2, 9);
 export class ApplicationContextSvelte {
     // State initialization
     widgets = $state<InternalWidget[]>([]);
-    #settings = $state<Settings>();
-    set settings(settings: Settings) {
-        // if (this.isLoaded) {
-        //     const oldColumns = this.#settings.layout.numberOfColumns;
-        //     this.#settings = settings;
-        //     if (oldColumns !== this.#settings.layout.numberOfColumns) {
-        //         this.reorganizeWidgets();
-        //     }
-        // } else {
-        //
-        // }
-        this.#settings = settings;
-    }
-    get settings(): Settings {
-        return this.#settings;
-    }
-
-    // libraryFormatWidgets = $derived(
-    //     this.widgets.map((widget: InternalWidget) =>
-    //         fromInternalToWidgetToLib(this.settings?.layout?.numberOfColumns || 1, widget)
-    //     )
-    // );
-
+    settings = $state<Settings>();
 
     get libraryFormatWidgets() {
         const columns = this.settings.layout.numberOfColumns;
         return this.widgets.map((widget: InternalWidget) =>
-            fromInternalToWidgetToLib(columns, widget)
+            fromInternalToWidgetToLib(columns, widget),
         );
     }
     set libraryFormatWidgets(updatedLibraryWidgets: any[]) {
         const columns = this.settings.layout.numberOfColumns;
-        let newWidgets = updatedLibraryWidgets.map((libWidget) => {
+        this.widgets = updatedLibraryWidgets.map((libWidget) => {
             // Find the original widget to preserve data properties not managed by the grid
-            const originalWidget = this.widgets.find(w => w.id === libWidget.id);
+            const originalWidget = this.widgets.find(
+                (w) => w.id === libWidget.id,
+            );
             return fromLibToInternalWidget(columns, libWidget, originalWidget);
         });
-        this.widgets = newWidgets;
-        const foo = 1;
     }
-
 
     // Undo/Redo state
     previousWidgets = $state<InternalWidget[] | null>(null);
@@ -124,16 +100,12 @@ export class ApplicationContextSvelte {
         let newWidgetLibFormat = fromInternalToWidgetToLib(columns, newWidget);
 
         // gridHelp.findSpace is untyped, returns layout object
-        let findOutPosition = gridHelp.findSpace(newWidgetLibFormat, this.libraryFormatWidgets, columns);
+        let findOutPosition = gridHelp.findSpace(
+            newWidgetLibFormat,
+            this.libraryFormatWidgets,
+            columns,
+        );
 
-        // newWidget = {
-        //     ...newWidget,
-        //     layout: {
-        //         ...newWidget.layout,
-        //         positionX: findOutPosition.x,
-        //         positionY: findOutPosition.y,
-        //     },
-        // };
         newWidget.layout.positionX = findOutPosition.x;
         newWidget.layout.positionY = findOutPosition.y;
 
@@ -164,7 +136,7 @@ export class ApplicationContextSvelte {
     exportJsonBlob(): Blob {
         const object: StorageState = {
             widgets: this.widgets,
-            settings: this.settings
+            settings: this.settings,
         };
         const jsonString = JSON.stringify(object, null, 2);
         return new Blob([jsonString], { type: "application/json" });
@@ -199,25 +171,6 @@ export class ApplicationContextSvelte {
 
         this.settings.themes.active = active === light ? dark : light;
     }
-
-    // reorganizeWidgets(): void {
-        // const cols = this.settings.layout.numberOfColumns;
-        // let organizedWidgets = gridHelp.adjust(this.libraryFormatWidgets, cols);
-        //
-        // let normalizedWidgets = gridHelp.normalize(this.libraryFormatWidgets, cols);
-        // let organizedAndNormalized = gridHelp.normalize(organizedWidgets, cols);
-        //
-        // let x = [];
-        // for (let i = 0; i < organizedWidgets.length; i++) {
-        //     x.push({
-        //         "normalized": normalizedWidgets[i][cols],
-        //         "organized": organizedWidgets[i][cols],
-        //         "normalizedAndNormalized": organizedAndNormalized[i][cols],
-        //     })
-        // }
-        //
-        // this.libraryFormatWidgets = organizedAndNormalized;
-    // }
 }
 
 export const APPLICATION_KEY = Symbol("mookbark");

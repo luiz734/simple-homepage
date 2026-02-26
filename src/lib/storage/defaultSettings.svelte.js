@@ -1,5 +1,3 @@
-import gridHelp from "svelte-grid/src/utils/helper.js";
-
 export const defaultConfig = {
     settings: {
         themes: {
@@ -13,7 +11,7 @@ export const defaultConfig = {
             gapY: 6,
             widgetsBorder: {
                 useFromTheme: true,
-                valuePx: 8.
+                valuePx: 8,
             },
         },
     },

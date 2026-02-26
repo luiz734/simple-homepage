@@ -9,7 +9,7 @@
     }
 
     // Internal sorting only (does not affect props)
-    let sortedWidgets = $derived([...widgets].sort());
+
 </script>
 
 <dialog bind:this={dialog} class="modal">
@@ -38,7 +38,7 @@
         </form>
     </div>
 
-    <form method="dialog" class="modal-backdrop">
+    <form class="modal-backdrop" method="dialog">
         <button>close</button>
     </form>
 </dialog>

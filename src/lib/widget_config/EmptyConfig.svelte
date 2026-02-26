@@ -6,8 +6,12 @@
 </script>
 
 <WidgetConfig {onCancel} {onDelete} {onSubmit} {widgetData}>
-    <div class="text-base-content justify-center flex-1 flex flex-col items-center">
-        <div class="flex flex-row gap-x-2"> <FileIcon/> This widget has no configuration. </div>
+    <div
+        class="text-base-content flex flex-1 flex-col items-center justify-center"
+    >
+        <div class="flex flex-row gap-x-2">
+            <FileIcon /> This widget has no configuration.
+        </div>
     </div>
 </WidgetConfig>
 

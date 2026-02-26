@@ -38,7 +38,7 @@
             class="flex grow flex-col justify-between gap-y-2 overflow-hidden"
             onsubmit={sendForm}
         >
-            <div class="prop-content grow overflow-y-auto flex mayberemoveflex">
+            <div class="prop-content mayberemoveflex flex grow overflow-y-auto">
                 {@render children()}
             </div>
 

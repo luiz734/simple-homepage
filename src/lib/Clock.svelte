@@ -11,27 +11,35 @@
         return () => clearInterval(interval);
     });
 
-    let formattedTime = $derived(currentTime.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    }));
+    let formattedTime = $derived(
+        currentTime.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+        }),
+    );
 
-    let formattedDate = $derived(currentTime.toLocaleDateString([], {
-        weekday: 'short',
-        month: 'long',
-        day: 'numeric'
-    }));
+    let formattedDate = $derived(
+        currentTime.toLocaleDateString([], {
+            weekday: "short",
+            month: "long",
+            day: "numeric",
+        }),
+    );
 </script>
 
-<div class="flex flex-col items-center justify-center w-full h-full select-none">
-
-    <span class="text-4xl font-bold tracking-wide tabular-nums text-base-content">
+<div
+    class="flex h-full w-full flex-col items-center justify-center select-none"
+>
+    <span
+        class="text-base-content text-4xl font-bold tracking-wide tabular-nums"
+    >
         {formattedTime}
     </span>
 
-    <span class="text-xs font-semibold uppercase tracking-wider text-base-content/60 mt-1">
+    <span
+        class="text-base-content/60 mt-1 text-xs font-semibold tracking-wider uppercase"
+    >
         {formattedDate}
     </span>
-
 </div>

@@ -59,25 +59,25 @@
     </div>
 
     <div class="grid grid-cols-4 gap-1 flex-1">
-        <button onclick={clear} class="btn btn-outline btn-error col-span-3 h-full text-lg font-bold">C</button>
-        <button onclick={() => setOperator("/")} class="btn btn-ghost text-primary bg-primary/10 h-full text-xl font-bold">÷</button>
+        <button class="btn btn-outline btn-error col-span-3 h-full text-lg font-bold" onclick={clear}>C</button>
+        <button class="btn btn-ghost text-primary bg-primary/10 h-full text-xl font-bold" onclick={() => setOperator("/")}>÷</button>
 
-        <button onclick={() => appendNumber(7)} class="btn btn-outline text-base-content border-base-content/50 h-full text-lg  font-normal hover:bg-base-content/10">7</button>
-        <button onclick={() => appendNumber(8)} class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10">8</button>
-        <button onclick={() => appendNumber(9)} class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10">9</button>
-        <button onclick={() => setOperator("*")} class="btn btn-ghost text-primary bg-primary/10 h-full text-xl font-bold">×</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 h-full text-lg  font-normal hover:bg-base-content/10" onclick={() => appendNumber(7)}>7</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10" onclick={() => appendNumber(8)}>8</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10" onclick={() => appendNumber(9)}>9</button>
+        <button class="btn btn-ghost text-primary bg-primary/10 h-full text-xl font-bold" onclick={() => setOperator("*")}>×</button>
 
-        <button onclick={() => appendNumber(4)} class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10">4</button>
-        <button onclick={() => appendNumber(5)} class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10">5</button>
-        <button onclick={() => appendNumber(6)} class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10">6</button>
-        <button onclick={() => setOperator("-")} class="btn btn-ghost text-primary bg-primary/10 h-full text-xl font-bold">-</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10" onclick={() => appendNumber(4)}>4</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10" onclick={() => appendNumber(5)}>5</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10" onclick={() => appendNumber(6)}>6</button>
+        <button class="btn btn-ghost text-primary bg-primary/10 h-full text-xl font-bold" onclick={() => setOperator("-")}>-</button>
 
-        <button onclick={() => appendNumber(1)} class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10">1</button>
-        <button onclick={() => appendNumber(2)} class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10">2</button>
-        <button onclick={() => appendNumber(3)} class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10">3</button>
-        <button onclick={() => setOperator("+")} class="btn btn-ghost text-primary bg-primary/10 h-full text-xl font-bold">+</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10" onclick={() => appendNumber(1)}>1</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10" onclick={() => appendNumber(2)}>2</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 h-full text-lg font-normal hover:bg-base-content/10" onclick={() => appendNumber(3)}>3</button>
+        <button class="btn btn-ghost text-primary bg-primary/10 h-full text-xl font-bold" onclick={() => setOperator("+")}>+</button>
 
-        <button onclick={() => appendNumber(0)} class="btn btn-outline text-base-content border-base-content/50 col-span-2 h-full text-lg font-normal hover:bg-base-content/10">0</button>
-        <button onclick={performCalculation} class="btn btn-primary col-span-2 h-full text-xl font-bold">=</button>
+        <button class="btn btn-outline text-base-content border-base-content/50 col-span-2 h-full text-lg font-normal hover:bg-base-content/10" onclick={() => appendNumber(0)}>0</button>
+        <button class="btn btn-primary col-span-2 h-full text-xl font-bold" onclick={performCalculation}>=</button>
     </div>
 </div>

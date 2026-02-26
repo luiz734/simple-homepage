@@ -1,5 +1,5 @@
 <script>
-    import { Pencil, Check, Plus, Trash } from "lucide-svelte"; // Added Plus icon
+    import { Pencil, Check, Plus } from "lucide-svelte"; // Added Plus icon
     import { tick } from "svelte";
     import { slide } from "svelte/transition";
     import WidgetConfig from "../templates/WidgetConfig.svelte";
@@ -37,7 +37,7 @@
     function addRow() {
         if (links.length > 0) {
             const last = links[links.length - 1];
-            if (links.length > 0 && last.name === "" || last.url === "") {
+            if ((links.length > 0 && last.name === "") || last.url === "") {
                 return;
             }
         }
@@ -54,7 +54,7 @@
         tick().then(() => {
             bottomRef?.scrollIntoView({ behavior: "smooth", block: "end" });
         });
-    }
+    };
 
     const sendForm = (event) => {
         event.preventDefault();
@@ -80,17 +80,20 @@
     }}
 >
     <div class="flex flex-col">
-
         <div class="text-base-content flex justify-start pb-4">
             {#if isEditingTitle}
                 <input
                     bind:this={titleInput}
                     bind:value={title}
-                    class="w-full text-xl font-bold outline-0 focus:bg-base-300"
+                    class="focus:bg-base-300 w-full text-xl font-bold outline-0"
                     onkeydown={handleTitleKeydown}
                     onblur={saveTitle}
                 />
-                <button type="button" class="btn btn-ghost" onmousedown={saveTitle}>
+                <button
+                    type="button"
+                    class="btn btn-ghost"
+                    onmousedown={saveTitle}
+                >
                     <Check size="18px" />
                 </button>
             {:else}
@@ -100,8 +103,8 @@
                 >
                     {title}
                     <span class="text-base-content/50">
-                    <Pencil size={18} />
-                </span>
+                        <Pencil size={18} />
+                    </span>
                 </button>
             {/if}
         </div>
@@ -114,8 +117,10 @@
 
         <div class="mt-4 flex flex-col">
             {#each links as row, i (row)}
-                <div class="grid grid-cols-[1fr_2fr_auto] gap-x-4 items-center box p-1 " transition:slide|local>
-
+                <div
+                    class="box grid grid-cols-[1fr_2fr_auto] items-center gap-x-4 p-1"
+                    transition:slide|local
+                >
                     <label class="label mt-2">
                         <input
                             type="text"
@@ -144,19 +149,18 @@
                     >
                         Delete
                     </button>
-
                 </div>
             {/each}
         </div>
 
-        <button bind:this={bottomRef} class="btn btn-link text-base-content mt-4 flex justify-start" onclick={addRow} type="button">
+        <button
+            bind:this={bottomRef}
+            class="btn btn-link text-base-content mt-4 flex justify-start"
+            onclick={addRow}
+            type="button"
+        >
             <Plus size={16} />
             Add Shortcut
         </button>
     </div>
-
-
-
-
-
 </WidgetConfig>

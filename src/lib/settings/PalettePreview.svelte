@@ -1,5 +1,4 @@
 <script>
-    // Receive 'name' to group radios, and 'bind:group' if state tracking is needed
     let { theme, name, group = $bindable() } = $props();
 </script>
 

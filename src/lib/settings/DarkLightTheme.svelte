@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onDestroy } from "svelte";
+    import { getContext } from "svelte";
     import { APPLICATION_KEY } from "../storage/applicationContext.svelte.ts";
     import PalettePreview from "./PalettePreview.svelte";
 
@@ -46,9 +46,6 @@
     let context = getContext(APPLICATION_KEY);
 
     // Snapshot state
-    const initialActive = context.settings.themes.active;
-    const wasDark = darkThemes.includes(initialActive);
-
     let lightTheme = $state(context.settings.themes.light);
     let darkTheme = $state(context.settings.themes.dark);
 
@@ -73,8 +70,7 @@
     });
 </script>
 
-<div class="flex flex-col gap-4 w-full h-full">
-
+<div class="flex h-full w-full flex-col gap-4">
     <span class="text-base-content font-bold"> Light Theme </span>
     <div class="prevent-select flex grow flex-wrap gap-4 align-top">
         {#each lightThemes as theme}
@@ -98,5 +94,4 @@
             />
         {/each}
     </div>
-
 </div>

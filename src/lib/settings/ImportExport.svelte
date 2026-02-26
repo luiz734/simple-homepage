@@ -42,7 +42,7 @@
 </script>
 
 <div class="flex flex-row gap-x-4">
-    <fieldset class="fieldset grow flex-1 ">
+    <fieldset class="fieldset flex-1 grow">
         <legend class="fieldset-legend">Import Configuration</legend>
         <input
             accept="application/json"
@@ -55,9 +55,7 @@
         <label class="label" for="importFile"></label>
     </fieldset>
 
-<!--    <div class="grow flex-1"></div>-->
-
-    <fieldset class="fieldset grow flex-1">
+    <fieldset class="fieldset flex-1 grow">
         <legend class="fieldset-legend">Export Configuration</legend>
         <button
             class="btn btn-success"

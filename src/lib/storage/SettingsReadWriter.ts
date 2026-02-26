@@ -5,8 +5,7 @@ import { InternalWidgetArraySchema } from "../types/widget.types";
 class SettingsReadWriter {
     #saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
-    private constructor() {
-    }
+    private constructor() {}
 
     private static instance: SettingsReadWriter;
 
@@ -19,11 +18,10 @@ class SettingsReadWriter {
 
     private validateData(
         settingsData: unknown,
-        widgetsData: unknown
+        widgetsData: unknown,
     ): { settings: Settings; widgets: InternalWidget[] } {
         const settingsResult = SettingsSchema.safeParse(settingsData);
-        // console.log(settingsData);
-        // console.log(widgetsData);
+
         if (!settingsResult.success) {
             console.warn("Invalid configuration format:", settingsResult.error);
             throw new Error("Settings validation failed.");
@@ -37,30 +35,40 @@ class SettingsReadWriter {
 
         return {
             settings: settingsResult.data,
-            widgets: widgetsResult.data
+            widgets: widgetsResult.data,
         };
     }
 
-    async loadFromStorage(): Promise<{ settings: Settings; widgets: InternalWidget[] }> {
+    async loadFromStorage(): Promise<{
+        settings: Settings;
+        widgets: InternalWidget[];
+    }> {
         const settingsData = await storage.get(["settings"]);
         const widgetsData = await storage.get(["widgets"]);
 
         if (settingsData && widgetsData) {
-            return this.validateData(settingsData["settings"], widgetsData["widgets"]);
+            return this.validateData(
+                settingsData["settings"],
+                widgetsData["widgets"],
+            );
+        } else {
+            throw new Error(
+                "Unable to load from storage. Creating new one using default storage",
+            );
         }
-        else {
-            throw new Error("Unable to load from storage. Creating new one using default storage");
-        }
-
-
     }
 
-    async loadFromRawJson(jsonString: string): Promise<{ settings: Settings; widgets: InternalWidget[] }> {
+    async loadFromRawJson(
+        jsonString: string,
+    ): Promise<{ settings: Settings; widgets: InternalWidget[] }> {
         const parsedData = JSON.parse(jsonString);
         return this.validateData(parsedData.settings, parsedData.widgets);
     }
 
-    writeDebounced(currentSettings: Settings, currentWidgets: InternalWidget[]): void {
+    writeDebounced(
+        currentSettings: Settings,
+        currentWidgets: InternalWidget[],
+    ): void {
         if (this.#saveTimeout) {
             clearTimeout(this.#saveTimeout);
         }
@@ -69,14 +77,14 @@ class SettingsReadWriter {
         }, 1000);
     }
 
-    async read(): Promise<Settings> {
-        // Implementation
-        let settings: Settings = {} as Settings;
-        return settings;
-    }
-
-    async write(currentSettings: Settings, currentWidgets: InternalWidget[]): Promise<void> {
-        await storage.set({ widgets: currentWidgets, settings: currentSettings });
+    async write(
+        currentSettings: Settings,
+        currentWidgets: InternalWidget[],
+    ): Promise<void> {
+        await storage.set({
+            widgets: currentWidgets,
+            settings: currentSettings,
+        });
     }
 }
 

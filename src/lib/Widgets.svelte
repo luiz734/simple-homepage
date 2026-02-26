@@ -1,7 +1,7 @@
 <script>
     import Grid from "svelte-grid";
     import Shortcuts from "./Shortcuts.svelte";
-    import { GripHorizontalIcon, GripVertical, MoveHorizontal, Settings2 } from "lucide-svelte";
+    import { GripHorizontalIcon, GripVertical, Settings2 } from "lucide-svelte";
     import MoveDiagonal_2 from "lucide-svelte/icons/move-diagonal-2";
     import { slide } from "svelte/transition";
     import ShortcutsConfig from "./widget_config/ShortcutsConfig.svelte";
@@ -23,15 +23,11 @@
         }
     })
 
-    // console.log($state.snapshot(items));
-
     let selectedId = $state(null);
     let selectedWidget = $derived(
         selectedId ? items.find((i) => i.id === selectedId) : null,
     );
-    let configOpen = $state(false);
     let selector = $state();
-    let widgetConfigDialog = $state();
 
     const cols = $derived([[1100, context.settings.layout.numberOfColumns]]);
 
@@ -148,15 +144,14 @@
                 !editLocked && "border-accent border-dashed shadow-sm",
                 editLocked && "border-base-300",
             ]}
-            use:shrinkEffect={!editLocked}
             style:border-radius={context.settings.layout.widgetsBorder.useFromTheme ? null : `${context.settings.layout.widgetsBorder.valuePx}px`}
+            use:shrinkEffect={!editLocked}
         >
             {#if !editLocked}
                 {@render widget_buttons(
                     movePointerDown,
                     () => {
                         selectedId = dataItem.id;
-                        configOpen = true;
                     },
                     resizePointerDown,
                 )}
@@ -253,10 +248,8 @@
     {#if widgetDef?.config}
         {@const ConfigComponent = widgetDef.config}
         <ConfigComponent
-            bind:this={widgetConfigDialog}
             widgetData={selectedWidget.data}
             onCancel={() => {
-                configOpen = false;
                 selectedId = null;
             }}
             onSubmit={(newData) => {
@@ -267,7 +260,6 @@
                     updatedItems[index].data = newData;
                     items = updatedItems;
                 }
-                configOpen = false;
                 selectedId = null;
             }}
             onDelete={() => {
@@ -278,7 +270,6 @@
                     updatedItems.splice(index, 1);
                     items = updatedItems;
                 }
-                configOpen = false;
                 selectedId = null;
             }}
         />
