@@ -2,10 +2,7 @@ import gridHelp from "svelte-grid/src/utils/helper.js";
 import { defaultConfig } from "./defaultSettings.svelte.js";
 import { InternalWidget, Settings } from "../types";
 import { settingsManager } from "./SettingsReadWriter";
-import {
-    fromInternalToWidgetToLib,
-    fromLibToInternalWidget,
-} from "../types/widget.types";
+import { WidgetsManager } from "./widgetsManager";
 
 class StorageState {
     widgets: InternalWidget[];
@@ -15,29 +12,20 @@ class StorageState {
 const createId = (): string => "_" + Math.random().toString(36).substr(2, 9);
 
 export class ApplicationContextSvelte {
-    // State initialization
-    widgets = $state<InternalWidget[]>([]);
+    widgetsManager = new WidgetsManager([]);
     settings = $state<Settings>();
 
-    get libraryFormatWidgets() {
+    get libraryFormatWidgets(): any {
         const columns = this.settings.layout.numberOfColumns;
-        return this.widgets.map((widget: InternalWidget) =>
-            fromInternalToWidgetToLib(columns, widget),
-        );
+        return this.widgetsManager.getLibraryFormat(columns);
     }
+
     set libraryFormatWidgets(updatedLibraryWidgets: any[]) {
         const columns = this.settings.layout.numberOfColumns;
-        this.widgets = updatedLibraryWidgets.map((libWidget) => {
-            // Find the original widget to preserve data properties not managed by the grid
-            const originalWidget = this.widgets.find(
-                (w) => w.id === libWidget.id,
-            );
-            return fromLibToInternalWidget(columns, libWidget, originalWidget);
-        });
+        this.widgetsManager.setLibraryFormat(updatedLibraryWidgets, columns);
     }
 
     // Undo/Redo state
-    previousWidgets = $state<InternalWidget[] | null>(null);
     previousSettings = $state<Settings | null>(null);
 
     isLoaded = $state<boolean>(false);
@@ -47,11 +35,12 @@ export class ApplicationContextSvelte {
             if (!this.isLoaded) return;
 
             // Trigger the effect by reading signals
-            $state.snapshot(this.widgets);
+            $state.snapshot(this.widgetsManager.widgets);
             $state.snapshot(this.settings);
 
             const currentSettings = $state.snapshot(this.settings);
-            const currentWidgets = $state.snapshot(this.widgets);
+            const currentWidgets = $state.snapshot(this.widgetsManager.widgets);
+
             settingsManager.writeDebounced(currentSettings, currentWidgets);
         });
     }
@@ -60,72 +49,30 @@ export class ApplicationContextSvelte {
         try {
             const data = await settingsManager.loadFromStorage();
             this.settings = data.settings;
-            this.widgets = data.widgets;
+            this.widgetsManager.widgets = data.widgets;
         } catch (error) {
             console.warn("Using default settings values");
             this.settings = defaultConfig.settings;
-            this.widgets = defaultConfig.widgets;
+            this.widgetsManager.widgets = defaultConfig.widgets;
         } finally {
             this.isLoaded = true;
         }
     }
 
-    addWidget(type: string): void {
-        const id = createId();
-        const columns = this.settings.layout.numberOfColumns;
-
-        let newWidget: InternalWidget = {
-            id: id,
-            type: type,
-            layout: {
-                positionX: 0,
-                positionY: 0,
-                width: 1,
-                height: 8,
-                minHeight: 1,
-                minWidth: 1,
-                customResizer: true,
-                customDragger: true,
-                fixed: false,
-                resizable: true,
-                draggable: true,
-            },
-            data: {
-                title: "Widget " + id,
-                color: "#1d4ed8",
-                links: [],
-            },
-        };
-
-        let newWidgetLibFormat = fromInternalToWidgetToLib(columns, newWidget);
-
-        // gridHelp.findSpace is untyped, returns layout object
-        let findOutPosition = gridHelp.findSpace(
-            newWidgetLibFormat,
-            this.libraryFormatWidgets,
-            columns,
-        );
-
-        newWidget.layout.positionX = findOutPosition.x;
-        newWidget.layout.positionY = findOutPosition.y;
-
-        this.widgets.push(newWidget);
-    }
-
-    updateWidgets(widgets: InternalWidget[]): void {
-        this.widgets = widgets;
+    setWidgetsLock(isLocked: boolean): void {
+        this.widgetsManager.setLockState(isLocked);
     }
 
     async importStateFromJsonString(jsonString: string): Promise<void> {
         try {
             const data = await settingsManager.loadFromRawJson(jsonString);
             this.settings = data.settings;
-            this.widgets = data.widgets;
+            this.widgetsManager.widgets = data.widgets;
         } catch (error) {
             console.error(error);
             console.warn("Using default settings values");
             this.settings = defaultConfig.settings;
-            this.widgets = defaultConfig.widgets;
+            this.widgetsManager.widgets = defaultConfig.widgets;
         } finally {
             this.isLoaded = true;
         }
@@ -135,7 +82,7 @@ export class ApplicationContextSvelte {
 
     exportJsonBlob(): Blob {
         const object: StorageState = {
-            widgets: this.widgets,
+            widgets: this.widgetsManager.widgets,
             settings: this.settings,
         };
         const jsonString = JSON.stringify(object, null, 2);
@@ -143,22 +90,21 @@ export class ApplicationContextSvelte {
     }
 
     saveSnapshot(): void {
-        this.previousWidgets = $state.snapshot(this.widgets);
+        this.widgetsManager.state.saveSnapshot();
         this.previousSettings = $state.snapshot(this.settings);
     }
 
     restoreSnapshot(): void {
-        if (this.previousWidgets === null || this.previousSettings === null) {
+        if (this.previousSettings === null) {
             console.error("Can't restore invalid snapshot");
             return;
         }
-
-        this.widgets = $state.snapshot(this.previousWidgets);
+        this.widgetsManager.state.restoreSnapshot();
         this.settings = $state.snapshot(this.previousSettings);
     }
 
     clearSnapshot(): void {
-        this.previousWidgets = null;
+        this.widgetsManager.state.clearSnapshot();
         this.previousSettings = null;
     }
 
@@ -170,6 +116,11 @@ export class ApplicationContextSvelte {
         const active = this.settings.themes.active;
 
         this.settings.themes.active = active === light ? dark : light;
+    }
+
+    addWidget(widgetType: string): void {
+        const columns = this.settings.layout.numberOfColumns;
+        this.widgetsManager.addWidget(widgetType, columns);
     }
 }
 

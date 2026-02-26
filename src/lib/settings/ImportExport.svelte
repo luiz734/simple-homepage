@@ -18,7 +18,7 @@
             try {
                 const content = e.target.result;
                 await context.importStateFromJsonString(content.toString());
-                console.log("Imported Settings:", content);
+                // console.log("Imported Settings:", content);
             } catch (error) {
                 console.error("Error parsing JSON:", error);
             }

@@ -23,8 +23,6 @@
     let locked = $state(true);
 
     const toggleLayoutLock = () => {
-        if (!context.widgets) return;
-
         if (locked) {
             context.saveSnapshot();
         } else {
@@ -32,19 +30,7 @@
         }
         console.log($state.snapshot(context.settings));
         locked = !locked;
-        context.updateWidgets(
-            context.widgets.map((widget) => {
-                return {
-                    ...widget,
-                    layout: {
-                        ...widget.layout,
-                        fixed: locked,
-                        resizable: !locked,
-                        draggable: !locked,
-                    },
-                };
-            }),
-        );
+        context.setWidgetsLock(locked);
     };
 </script>
 
