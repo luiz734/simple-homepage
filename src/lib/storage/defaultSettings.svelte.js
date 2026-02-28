@@ -13,6 +13,7 @@ export const defaultConfig = {
                 useFromTheme: true,
                 valuePx: 8,
             },
+            rowHeight: 25,
         },
     },
     widgets: [

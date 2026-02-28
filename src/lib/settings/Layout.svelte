@@ -117,4 +117,16 @@
             </div>
         </div>
     </fieldset>
+
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">Widget Height Step</legend>
+        <input
+            bind:value={context.settings.layout.rowHeight}
+            class="input"
+            min="1"
+            placeholder="default 6"
+            type="number"
+        />
+        <p class="label">Widget step resizing vertically</p>
+    </fieldset>
 </div>

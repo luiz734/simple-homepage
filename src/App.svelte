@@ -37,7 +37,7 @@
 {#if context.isLoaded}
     <div class="app" data-theme={context.settings.themes.active}>
         <Sidebar {locked} onToggle={toggleLayoutLock}>
-            {#key context.settings.layout.numberOfColumns}
+            {#key context.settings.layout.numberOfColumns + context.settings.layout.rowHeight}
                 <Widgets
                     bind:items={context.libraryFormatWidgets}
                     {locked}

@@ -19,6 +19,7 @@ export const LayoutSettingsSchema = z.object({
     gapX: z.number(),
     gapY: z.number(),
     widgetsBorder: WidgetBorderSettingsSchema,
+    rowHeight: z.number(),
 });
 
 export type LayoutSettings = z.infer<typeof LayoutSettingsSchema>;
