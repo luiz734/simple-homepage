@@ -1,5 +1,5 @@
 <script>
-    let { backgroundColor, onSizeChanged, editLocked, data } = $props();
+    let { backgroundColor, editLocked, data } = $props();
 
     let links = $derived(data.links);
     let title = $derived(data.title);

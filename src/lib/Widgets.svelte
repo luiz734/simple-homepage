@@ -31,17 +31,6 @@
 
     const cols = $derived([[1100, context.settings.layout.numberOfColumns]]);
 
-    const onSizeChanged = (id, size) => {
-        console.log(size);
-        const pixelHeight = size;
-        const rowHeight = context.settings.layout.rowHeight;
-        const margin = 10; // Default svelte-grid margin is usually 10px
-        const newH = Math.ceil((pixelHeight + margin) / (rowHeight + margin));
-        const index = items.findIndex((i) => i.id === id);
-        items[index].h = newH;
-        items = [...items]; // Trigger reactivity
-    };
-
     const addWidget = () => {
         selector.show();
     };
@@ -163,7 +152,6 @@
                 <WidgetComponent
                     backgroundColor={dataItem.data.color}
                     {editLocked}
-                    onSizeChanged={(size) => onSizeChanged(item.id, size)}
                     data={dataItem.data}
                 />
             {:else}
