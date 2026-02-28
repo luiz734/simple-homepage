@@ -9,7 +9,7 @@
     <fieldset class="fieldset">
         <legend class="fieldset-legend">Columns</legend>
         <input
-            bind:value={context.settings.layout.numberOfColumns}
+            bind:value={context.settingsManager.settings.layout.numberOfColumns}
             class="input"
             min="1"
             placeholder="default 6"
@@ -25,7 +25,7 @@
             <div class="flex w-full flex-col">
                 <label for="gapX"> Gap X</label>
                 <input
-                    bind:value={context.settings.layout.gapX}
+                    bind:value={context.settingsManager.settings.layout.gapX}
                     class="input"
                     id="gapX"
                     min="0"
@@ -33,7 +33,7 @@
                     step="2"
                     type="number"
                 />
-                {#if context.settings.layout.gapX % 2 !== 0}
+                {#if context.settingsManager.settings.layout.gapX % 2 !== 0}
                     <p class="label text-error">
                         Odd numbers may not align correctly.
                     </p>
@@ -45,7 +45,7 @@
             <div class="flex w-full flex-col">
                 <label for="gapY"> Gap Y</label>
                 <input
-                    bind:value={context.settings.layout.gapY}
+                    bind:value={context.settingsManager.settings.layout.gapY}
                     class="input"
                     id="gapY"
                     min="0"
@@ -53,7 +53,7 @@
                     step="2"
                     type="number"
                 />
-                {#if context.settings.layout.gapY % 2 !== 0}
+                {#if context.settingsManager.settings.layout.gapY % 2 !== 0}
                     <p class="label text-error">
                         Odd numbers may not align correctly.
                     </p>
@@ -75,7 +75,7 @@
                         <input
                             aria-label="From theme"
                             bind:group={
-                                context.settings.layout.widgetsBorder
+                                context.settingsManager.settings.layout.widgetsBorder
                                     .useFromTheme
                             }
                             class="join-item btn flex-1"
@@ -86,7 +86,7 @@
                         <input
                             aria-label="Custom"
                             bind:group={
-                                context.settings.layout.widgetsBorder
+                                context.settingsManager.settings.layout.widgetsBorder
                                     .useFromTheme
                             }
                             class="join-item btn flex-1"
@@ -103,9 +103,9 @@
             <div class="flex w-full flex-col">
                 <label for="borderRadius"> Widget Border Radius </label>
                 <input
-                    bind:value={context.settings.layout.widgetsBorder.valuePx}
+                    bind:value={context.settingsManager.settings.layout.widgetsBorder.valuePx}
                     class="input"
-                    disabled={context.settings.layout.widgetsBorder
+                    disabled={context.settingsManager.settings.layout.widgetsBorder
                         .useFromTheme}
                     id="borderRadius"
                     min="0"
@@ -121,7 +121,7 @@
     <fieldset class="fieldset">
         <legend class="fieldset-legend">Widget Height Step</legend>
         <input
-            bind:value={context.settings.layout.rowHeight}
+            bind:value={context.settingsManager.settings.layout.rowHeight}
             class="input"
             min="1"
             placeholder="default 6"

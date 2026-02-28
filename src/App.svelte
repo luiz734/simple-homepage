@@ -35,9 +35,9 @@
 </script>
 
 {#if context.isLoaded}
-    <div class="app" data-theme={context.settings.themes.active}>
+    <div class="app" data-theme={context.settingsManager.settings.themes.active}>
         <Sidebar {locked} onToggle={toggleLayoutLock}>
-            {#key context.settings.layout.numberOfColumns + context.settings.layout.rowHeight}
+            {#key context.settingsManager.settings.layout.numberOfColumns + context.settingsManager.settings.layout.rowHeight}
                 <Widgets
                     bind:items={context.libraryFormatWidgets}
                     {locked}

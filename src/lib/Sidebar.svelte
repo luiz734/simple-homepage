@@ -9,7 +9,7 @@
 
     const context = getContext(APPLICATION_KEY);
     let ThemeIcon = $derived.by(() => {
-        if (context.settings.themes.active === context.settings.themes.light) {
+        if (context.settingsManager.settings.themes.active === context.settingsManager.settings.themes.light) {
             return Sun;
         } else {
             return Moon;

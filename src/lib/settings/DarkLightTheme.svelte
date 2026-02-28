@@ -46,26 +46,26 @@
     let context = getContext(APPLICATION_KEY);
 
     // Snapshot state
-    let lightTheme = $state(context.settings.themes.light);
-    let darkTheme = $state(context.settings.themes.dark);
+    let lightTheme = $state(context.settingsManager.settings.themes.light);
+    let darkTheme = $state(context.settingsManager.settings.themes.dark);
 
     // Trackers to prevent overriding the active theme immediately on mount
-    let currentLight = context.settings.themes.light;
-    let currentDark = context.settings.themes.dark;
+    let currentLight = context.settingsManager.settings.themes.light;
+    let currentDark = context.settingsManager.settings.themes.dark;
 
     $effect(() => {
         if (lightTheme !== currentLight) {
             currentLight = lightTheme;
-            context.settings.themes.light = lightTheme;
-            context.settings.themes.active = lightTheme;
+            context.settingsManager.settings.themes.light = lightTheme;
+            context.settingsManager.settings.themes.active = lightTheme;
         }
     });
 
     $effect(() => {
         if (darkTheme !== currentDark) {
             currentDark = darkTheme;
-            context.settings.themes.dark = darkTheme;
-            context.settings.themes.active = darkTheme;
+            context.settingsManager.settings.themes.dark = darkTheme;
+            context.settingsManager.settings.themes.active = darkTheme;
         }
     });
 </script>

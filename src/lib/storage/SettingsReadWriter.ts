@@ -88,4 +88,4 @@ class SettingsReadWriter {
     }
 }
 
-export const settingsManager = SettingsReadWriter.getInstance();
+export const settingsReadWrite = SettingsReadWriter.getInstance();

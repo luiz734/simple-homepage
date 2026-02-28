@@ -1,8 +1,9 @@
 import gridHelp from "svelte-grid/src/utils/helper.js";
 import { defaultConfig } from "./defaultSettings.svelte.js";
 import { InternalWidget, Settings } from "../types";
-import { settingsManager } from "./SettingsReadWriter";
+import { settingsReadWrite } from "./SettingsReadWriter";
 import { WidgetsManager } from "./widgetsManager";
+import { SettingsManager } from "./settingsManager";
 
 class StorageState {
     widgets: InternalWidget[];
@@ -13,20 +14,18 @@ const createId = (): string => "_" + Math.random().toString(36).substr(2, 9);
 
 export class ApplicationContextSvelte {
     widgetsManager = new WidgetsManager([]);
-    settings = $state<Settings>();
+    settingsManager = new SettingsManager();
+
 
     get libraryFormatWidgets(): any {
-        const columns = this.settings.layout.numberOfColumns;
+        const columns = this.settingsManager.numberOfColumns();
         return this.widgetsManager.getLibraryFormat(columns);
     }
 
     set libraryFormatWidgets(updatedLibraryWidgets: any[]) {
-        const columns = this.settings.layout.numberOfColumns;
+        const columns = this.settingsManager.numberOfColumns();
         this.widgetsManager.setLibraryFormat(updatedLibraryWidgets, columns);
     }
-
-    // Undo/Redo state
-    previousSettings = $state<Settings | null>(null);
 
     isLoaded = $state<boolean>(false);
 
@@ -36,23 +35,23 @@ export class ApplicationContextSvelte {
 
             // Trigger the effect by reading signals
             $state.snapshot(this.widgetsManager.widgets);
-            $state.snapshot(this.settings);
+            $state.snapshot(this.settingsManager.settings);
 
-            const currentSettings = $state.snapshot(this.settings);
+            const currentSettings = $state.snapshot(this.settingsManager.settings);
             const currentWidgets = $state.snapshot(this.widgetsManager.widgets);
 
-            settingsManager.writeDebounced(currentSettings, currentWidgets);
+            settingsReadWrite.writeDebounced(currentSettings, currentWidgets);
         });
     }
 
     async loadStorageOrDefault(): Promise<void> {
         try {
-            const data = await settingsManager.loadFromStorage();
-            this.settings = data.settings;
+            const data = await settingsReadWrite.loadFromStorage();
+            this.settingsManager.settings = data.settings;
             this.widgetsManager.widgets = data.widgets;
         } catch (error) {
             console.warn("Using default settings values");
-            this.settings = defaultConfig.settings;
+            this.settingsManager.settings = defaultConfig.settings;
             this.widgetsManager.widgets = defaultConfig.widgets;
         } finally {
             this.isLoaded = true;
@@ -65,13 +64,13 @@ export class ApplicationContextSvelte {
 
     async importStateFromJsonString(jsonString: string): Promise<void> {
         try {
-            const data = await settingsManager.loadFromRawJson(jsonString);
-            this.settings = data.settings;
+            const data = await settingsReadWrite.loadFromRawJson(jsonString);
+            this.settingsManager.settings = data.settings;
             this.widgetsManager.widgets = data.widgets;
         } catch (error) {
             console.error(error);
             console.warn("Using default settings values");
-            this.settings = defaultConfig.settings;
+            this.settingsManager.settings = defaultConfig.settings;
             this.widgetsManager.widgets = defaultConfig.widgets;
         } finally {
             this.isLoaded = true;
@@ -83,7 +82,7 @@ export class ApplicationContextSvelte {
     exportJsonBlob(): Blob {
         const object: StorageState = {
             widgets: this.widgetsManager.widgets,
-            settings: this.settings,
+            settings: this.settingsManager.settings,
         };
         const jsonString = JSON.stringify(object, null, 2);
         return new Blob([jsonString], { type: "application/json" });
@@ -91,35 +90,25 @@ export class ApplicationContextSvelte {
 
     saveSnapshot(): void {
         this.widgetsManager.state.saveSnapshot();
-        this.previousSettings = $state.snapshot(this.settings);
+        this.settingsManager.state.saveSnapshot();
     }
 
     restoreSnapshot(): void {
-        if (this.previousSettings === null) {
-            console.error("Can't restore invalid snapshot");
-            return;
-        }
         this.widgetsManager.state.restoreSnapshot();
-        this.settings = $state.snapshot(this.previousSettings);
+        this.settingsManager.state.restoreSnapshot();
     }
 
     clearSnapshot(): void {
         this.widgetsManager.state.clearSnapshot();
-        this.previousSettings = null;
+        this.settingsManager.state.clearSnapshot();
     }
 
     toggleActiveTheme(): void {
-        if (!this.settings) return;
-
-        const light = this.settings.themes.light;
-        const dark = this.settings.themes.dark;
-        const active = this.settings.themes.active;
-
-        this.settings.themes.active = active === light ? dark : light;
+        this.settingsManager.toggleActiveTheme();
     }
 
     addWidget(widgetType: string): void {
-        const columns = this.settings.layout.numberOfColumns;
+        const columns = this.settingsManager.numberOfColumns();
         this.widgetsManager.addWidget(widgetType, columns);
     }
 }

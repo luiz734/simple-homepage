@@ -29,7 +29,7 @@
     );
     let selector = $state();
 
-    const cols = $derived([[1100, context.settings.layout.numberOfColumns]]);
+    const cols = $derived([[1100, context.settingsManager.settings.layout.numberOfColumns]]);
 
     const addWidget = () => {
         selector.show();
@@ -114,18 +114,18 @@
 </script>
 
 <div class="demo-container bg-base-300 text-primary-content min-h-full overflow-x-hidden"
-     style:padding="{context.settings.layout.gapY}px {context.settings.layout.gapX}px"
+     style:padding="{context.settingsManager.settings.layout.gapY}px {context.settingsManager.settings.layout.gapX}px"
 >
     <Grid
         bind:items
         {cols}
         fastStart={true}
-        gap={[context.settings.layout.gapX, context.settings.layout.gapY]}
+        gap={[context.settingsManager.settings.layout.gapX, context.settingsManager.settings.layout.gapY]}
         let:dataItem
         let:item
         let:movePointerDown
         let:resizePointerDown
-        rowHeight={context.settings.layout.rowHeight}
+        rowHeight={context.settingsManager.settings.layout.rowHeight}
     >
         <div
             class={[
@@ -133,7 +133,7 @@
                 !editLocked && "border-accent border-dashed shadow-sm",
                 editLocked && "border-base-300",
             ]}
-            style:border-radius={context.settings.layout.widgetsBorder.useFromTheme ? null : `${context.settings.layout.widgetsBorder.valuePx}px`}
+            style:border-radius={context.settingsManager.settings.layout.widgetsBorder.useFromTheme ? null : `${context.settingsManager.settings.layout.widgetsBorder.valuePx}px`}
             use:shrinkEffect={!editLocked}
         >
             {#if !editLocked}
