@@ -43,14 +43,14 @@
         ></label>
 
         <div
-            class="is-drawer-close:w-16 is-drawer-open:w-64 bg-base-100 text-base-content flex min-h-full flex-col items-start gap-y-4"
+            class="is-drawer-close:w-15 is-drawer-open:w-64 bg-base-100 text-base-content flex min-h-full flex-col items-start gap-y-4"
         >
-            <ul class="menu flex w-full grow flex-col gap-y-3">
+            <ul class="menu flex w-full grow flex-col gap-y-2 py-2 p-1">
                 <li>
                     <label
                         aria-label="open sidebar"
                         class={[
-                            "flex",
+                            "flex py-3",
                             "is-drawer-close:tooltip is-drawer-close:tooltip-right",
                             "is-drawer-close:items-center is-drawer-close:justify-center",
                         ]}
@@ -65,7 +65,7 @@
                 <li>
                     <button
                         class={[
-                            "flex",
+                            "flex py-3",
                             "is-drawer-close:tooltip is-drawer-close:tooltip-right",
                             "is-drawer-close:items-center is-drawer-close:justify-center",
                         ]}
@@ -86,7 +86,7 @@
                 <li>
                     <button
                         class={[
-                            "flex",
+                            "flex py-3",
                             "is-drawer-close:tooltip is-drawer-close:tooltip-right",
                             "is-drawer-close:items-center is-drawer-close:justify-center",
                             !locked && "text-accent-content bg-accent",
@@ -107,7 +107,7 @@
                 <li>
                     <button
                         class={[
-                            "flex",
+                            "flex py-3",
                             "is-drawer-close:tooltip is-drawer-close:tooltip-right",
                             "is-drawer-close:items-center is-drawer-close:justify-center",
                         ]}

@@ -6,7 +6,7 @@
     <span class="text-xm text-base-content/40 w-full text-left">Settings</span>
 </div>
 
-<div class="flex flex-col">
+<div class="flex flex-col gap-y-1">
     {#each sections as section}
         {#if section === "divider"}
             <div class="divider"></div>

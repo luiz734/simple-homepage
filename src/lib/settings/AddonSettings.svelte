@@ -61,7 +61,7 @@
         </div>
 
         <button
-            class="btn btn-circle position-absolute hover:bg-base-200 bg-base-100 top-0 right-0 border-none shadow-none outline-0"
+            class="btn btn-circle position-absolute hover:bg-base-200 bg-base-100 top-0 right-0 border-none shadow-none outline-0 text-base-content/50"
             onclick={() => {dialog.close()}}
         >
             <X />
