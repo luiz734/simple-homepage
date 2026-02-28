@@ -3,6 +3,7 @@
     import ImportExport from "./ImportExport.svelte";
     import SettingsSidebar from "./SettingsSidebar.svelte";
     import Layout from "./Layout.svelte";
+    import { X } from "lucide-svelte";
 
     let { onCancel, onSubmit } = $props();
     let dialog = $state();
@@ -58,5 +59,12 @@
 
             <div class="h-20"></div>
         </div>
+
+        <button
+            class="btn btn-circle position-absolute hover:bg-base-200 bg-base-100 top-0 right-0 border-none shadow-none outline-0"
+            onclick={() => {dialog.close()}}
+        >
+            <X />
+        </button>
     </div>
 </dialog>
