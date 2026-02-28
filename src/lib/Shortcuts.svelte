@@ -11,7 +11,7 @@
 
 <div
     bind:this={container}
-    class="bg-base-100 text-base-content flex h-full w-full flex-col gap-y-1"
+    class="text-base-content flex h-full w-full flex-col gap-y-1"
 >
     <div class="mb-3 font-bold uppercase">
         {title}

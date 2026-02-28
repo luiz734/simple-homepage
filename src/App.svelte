@@ -7,6 +7,7 @@
         ApplicationContextSvelte,
         APPLICATION_KEY,
     } from "./lib/storage/applicationContext.svelte.ts";
+    import wallpaper from "/src/assets/wallpaper.jpg";
 
     const appContext = new ApplicationContextSvelte();
 
@@ -35,7 +36,28 @@
 </script>
 
 {#if context.isLoaded}
-    <div class="app" data-theme={context.settingsManager.settings.themes.active}>
+    <div
+        class="app"
+        data-theme={context.settingsManager.settings.themes.active}
+    >
+        <!-- method 1 -->
+        <img
+            class="absolute inset-0 z-0 h-full w-full object-cover object-center"
+            src={wallpaper}
+            alt="Background"
+        />
+        <div class="absolute inset-0 z-0 bg-black/30 backdrop-blur-sm"></div>
+
+        <!-- method 2 -->
+<!--        <img-->
+<!--            class={[-->
+<!--                "absolute inset-0 z-0 h-full w-full object-cover object-center",-->
+<!--                "scale-105 blur-sm brightness-50",-->
+<!--            ]}-->
+<!--            src={wallpaper}-->
+<!--            alt="Background"-->
+<!--        />-->
+
         <Sidebar {locked} onToggle={toggleLayoutLock}>
             {#key context.settingsManager.settings.layout.numberOfColumns + context.settingsManager.settings.layout.rowHeight}
                 <Widgets
@@ -64,5 +86,8 @@
 
     :global(.svlt-grid-shadow) {
         background: rgb(from var(--color-primary) r g b / 0.3) !important;
+    }
+    :global(.svlt-grid-container) {
+        background: transparent !important;
     }
 </style>

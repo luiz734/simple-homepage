@@ -35,7 +35,10 @@
         {@render children()}
     </div>
 
-    <div class="drawer-side is-drawer-close:overflow-visible">
+    <div class={[
+        "drawer-side is-drawer-close:overflow-visible",
+        "backdrop-blur-md"
+    ]}>
         <label
             aria-label="close sidebar"
             class="drawer-overlay"
@@ -43,7 +46,7 @@
         ></label>
 
         <div
-            class="is-drawer-close:w-15 is-drawer-open:w-64 bg-base-100 text-base-content flex min-h-full flex-col items-start gap-y-4"
+            class="is-drawer-close:w-15 is-drawer-open:w-64 bg-base-100/60 text-base-content flex min-h-full flex-col items-start gap-y-4"
         >
             <ul class="menu flex w-full grow flex-col gap-y-2 py-2 p-1">
                 <li>

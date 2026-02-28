@@ -113,7 +113,7 @@
 
 </script>
 
-<div class="demo-container bg-base-300 text-primary-content min-h-full overflow-x-hidden"
+<div class="demo-container text-primary-content min-h-full overflow-x-hidden"
      style:padding="{context.settingsManager.settings.layout.gapY}px {context.settingsManager.settings.layout.gapX}px"
 >
     <Grid
@@ -129,7 +129,9 @@
     >
         <div
             class={[
-                "card bg-base-100 h-full w-full overflow-auto p-8 transition-all duration-200 ease-out",
+                "card h-full w-full overflow-auto p-8 transition-all duration-200 ease-out",
+                "bg-base-100/60 backdrop-blur-md", // apple liquid glass
+                // "glass", // daisyui glass
                 !editLocked && "border-accent border-dashed shadow-sm",
                 editLocked && "border-base-300",
             ]}
