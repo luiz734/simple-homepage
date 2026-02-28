@@ -61,4 +61,8 @@
         width: 100%;
         height: 100vh;
     }
+
+    :global(.svlt-grid-shadow) {
+        background: rgb(from var(--color-primary) r g b / 0.3) !important;
+    }
 </style>
