@@ -9,7 +9,10 @@
 
     const context = getContext(APPLICATION_KEY);
     let ThemeIcon = $derived.by(() => {
-        if (context.settingsManager.settings.themes.active === context.settingsManager.settings.themes.light) {
+        if (
+            context.settingsManager.settings.themes.active ===
+            context.settingsManager.settings.themes.light
+        ) {
             return Sun;
         } else {
             return Moon;
@@ -40,13 +43,17 @@
         ></label>
 
         <div
-            class="is-drawer-close:w-14 is-drawer-open:w-64 bg-base-100 text-base-content flex min-h-full flex-col items-start gap-y-4"
+            class="is-drawer-close:w-16 is-drawer-open:w-64 bg-base-100 text-base-content flex min-h-full flex-col items-start gap-y-4"
         >
             <ul class="menu flex w-full grow flex-col gap-y-3">
                 <li>
                     <label
                         aria-label="open sidebar"
-                        class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                        class={[
+                            "flex",
+                            "is-drawer-close:tooltip is-drawer-close:tooltip-right",
+                            "is-drawer-close:items-center is-drawer-close:justify-center",
+                        ]}
                         data-tip="Expand menu"
                         for="drawer-toggle"
                     >
@@ -58,7 +65,9 @@
                 <li>
                     <button
                         class={[
+                            "flex",
                             "is-drawer-close:tooltip is-drawer-close:tooltip-right",
+                            "is-drawer-close:items-center is-drawer-close:justify-center",
                         ]}
                         data-tip="Toggle dark mode"
                         onclick={() => {
@@ -77,7 +86,9 @@
                 <li>
                     <button
                         class={[
+                            "flex",
                             "is-drawer-close:tooltip is-drawer-close:tooltip-right",
+                            "is-drawer-close:items-center is-drawer-close:justify-center",
                             !locked && "text-accent-content bg-accent",
                         ]}
                         data-tip="Edit Mode"
@@ -95,7 +106,11 @@
 
                 <li>
                     <button
-                        class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                        class={[
+                            "flex",
+                            "is-drawer-close:tooltip is-drawer-close:tooltip-right",
+                            "is-drawer-close:items-center is-drawer-close:justify-center",
+                        ]}
                         data-tip="Settings"
                         onclick={() => {
                             settingsDialog.show();
