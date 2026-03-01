@@ -53,9 +53,13 @@
                 alt="Background"
                 onerror={onWallpaperMissing}
             />
+            <div class="absolute inset-0 z-0 bg-black/30 backdrop-blur-sm"></div>
+        {:else}
+            <div class="absolute inset-0 z-0 bg-base-300"></div>
         {/if}
 
-        <div class="absolute inset-0 z-0 bg-black/30 backdrop-blur-sm"></div>
+
+
 
         <Sidebar {locked} onToggle={toggleLayoutLock}>
             {#key context.settingsManager.settings.layout.numberOfColumns + context.settingsManager.settings.layout.rowHeight}
