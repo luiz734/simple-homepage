@@ -1,6 +1,8 @@
-import { storageAdapter as storage } from "./storageAdapterAPI.svelte.js";
-import { Settings, InternalWidget, SettingsSchema } from "../types";
+import { blobStorageAdapter, storageAdapter as storage } from "./storageAdapterAPI.svelte";
+import { InternalWidget, Settings, SettingsSchema } from "../types";
 import { InternalWidgetArraySchema } from "../types/widget.types";
+
+const IMAGE_KEY = "mookbark_userWallpaper";
 
 class SettingsReadWriter {
     #saveTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -85,6 +87,29 @@ class SettingsReadWriter {
             widgets: currentWidgets,
             settings: currentSettings,
         });
+    }
+
+
+    async getUserWallpaper(): Promise<String> {
+        const storedBlob = await blobStorageAdapter.get([IMAGE_KEY]);
+        const imageBlob = storedBlob[IMAGE_KEY];
+
+        if (!imageBlob) {
+            throw new Error("No wallpaper image found.");
+        }
+
+        return URL.createObjectURL(imageBlob);
+    }
+
+    async setUserWallpaper(imageBlob: Blob): Promise<void> {
+        try {
+            await blobStorageAdapter.set({
+                [IMAGE_KEY]: imageBlob
+            });
+            console.log("Wallpaper saved successfully.");
+        } catch (error) {
+            console.error("Failed to save wallpaper to IndexedDB:", error);
+        }
     }
 }
 

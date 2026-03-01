@@ -1,15 +1,35 @@
 <script>
     import Widgets from "./lib/Widgets.svelte";
     import Sidebar from "./lib/Sidebar.svelte";
-    import { setContext, getContext } from "svelte";
+    import { setContext, getContext, onMount } from "svelte";
     import "./app.css";
     import {
         ApplicationContextSvelte,
         APPLICATION_KEY,
     } from "./lib/storage/applicationContext.svelte.ts";
-    import wallpaper from "/src/assets/wallpaper.jpg";
+    import { settingsReadWrite } from "./lib/storage/SettingsReadWriter.ts";
 
     const appContext = new ApplicationContextSvelte();
+    const defaultWallpaperPath = "src/assets/wallpaper.jpg"
+
+    let wallpaperUrl = $state("");
+
+    onMount(async () => {
+        try {
+            wallpaperUrl = await settingsReadWrite.getUserWallpaper()
+        } catch (error) {
+            console.error(error);
+
+            try {
+                const response = await fetch(defaultWallpaperPath);
+                const fallbackBlob = await response.blob();
+                wallpaperUrl = URL.createObjectURL(fallbackBlob);
+            } catch (fallbackError) {
+                console.error("Failed to load fallback wallpaper:", fallbackError);
+            }
+
+        }
+    });
 
     $effect(() => {
         // Create a self-executing async function to use await
@@ -41,11 +61,14 @@
         data-theme={context.settingsManager.settings.themes.active}
     >
         <!-- method 1 -->
-        <img
-            class="absolute inset-0 z-0 h-full w-full object-cover object-center"
-            src={wallpaper}
-            alt="Background"
-        />
+        {#if wallpaperUrl !== ""}
+            <img
+                class="absolute inset-0 z-0 h-full w-full object-cover object-center"
+                src={wallpaperUrl}
+                alt="Background"
+            />
+        {/if}
+
         <div class="absolute inset-0 z-0 bg-black/30 backdrop-blur-sm"></div>
 
         <!-- method 2 -->

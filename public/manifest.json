@@ -20,5 +20,5 @@
     "icons": {
         "48": "icons/border-48.svg"
     },
-    "permissions": ["storage"]
+    "permissions": ["storage", "unlimitedStorage"]
 }
