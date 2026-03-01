@@ -27,6 +27,7 @@ export type LayoutSettings = z.infer<typeof LayoutSettingsSchema>;
 export const SettingsSchema = z.object({
     themes: ThemeSettingsSchema,
     layout: LayoutSettingsSchema,
+    wallpaperUrl: z.string(),
 });
 
 export type Settings = z.infer<typeof SettingsSchema>;

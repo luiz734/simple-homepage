@@ -1,5 +1,6 @@
 export const defaultConfig = {
     settings: {
+        wallpaperUrl: "",
         themes: {
             light: "light",
             dark: "dark",

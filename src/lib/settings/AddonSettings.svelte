@@ -4,6 +4,7 @@
     import SettingsSidebar from "./SettingsSidebar.svelte";
     import Layout from "./Layout.svelte";
     import { X } from "lucide-svelte";
+    import Appearance from "./Appearance.svelte";
 
     let { onCancel, onSubmit } = $props();
     let dialog = $state();
@@ -23,6 +24,7 @@
         Themes: DarkLightTheme,
         divider: "divider",
         Layout: Layout,
+        Appearance: Appearance,
     };
     let sections = Object.keys(sectionsMapping);
     let selected = $state(sections[0]);

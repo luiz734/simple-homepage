@@ -10,26 +10,6 @@
     import { settingsReadWrite } from "./lib/storage/SettingsReadWriter.ts";
 
     const appContext = new ApplicationContextSvelte();
-    const defaultWallpaperPath = "src/assets/wallpaper.jpg"
-
-    let wallpaperUrl = $state("");
-
-    onMount(async () => {
-        try {
-            wallpaperUrl = await settingsReadWrite.getUserWallpaper()
-        } catch (error) {
-            console.error(error);
-
-            try {
-                const response = await fetch(defaultWallpaperPath);
-                const fallbackBlob = await response.blob();
-                wallpaperUrl = URL.createObjectURL(fallbackBlob);
-            } catch (fallbackError) {
-                console.error("Failed to load fallback wallpaper:", fallbackError);
-            }
-
-        }
-    });
 
     $effect(() => {
         // Create a self-executing async function to use await
@@ -53,6 +33,11 @@
         locked = !locked;
         context.setWidgetsLock(locked);
     };
+
+    const onWallpaperMissing = () => {
+        console.warn("Wallpaper not found in IndexDB. Upload it again.")
+        context.settingsManager.settings.wallpaperUrl = ""
+    }
 </script>
 
 {#if context.isLoaded}
@@ -61,25 +46,16 @@
         data-theme={context.settingsManager.settings.themes.active}
     >
         <!-- method 1 -->
-        {#if wallpaperUrl !== ""}
+        {#if context.settingsManager.settings.wallpaperUrl !== ""}
             <img
                 class="absolute inset-0 z-0 h-full w-full object-cover object-center"
-                src={wallpaperUrl}
+                src={context.settingsManager.settings.wallpaperUrl}
                 alt="Background"
+                onerror={onWallpaperMissing}
             />
         {/if}
 
         <div class="absolute inset-0 z-0 bg-black/30 backdrop-blur-sm"></div>
-
-        <!-- method 2 -->
-<!--        <img-->
-<!--            class={[-->
-<!--                "absolute inset-0 z-0 h-full w-full object-cover object-center",-->
-<!--                "scale-105 blur-sm brightness-50",-->
-<!--            ]}-->
-<!--            src={wallpaper}-->
-<!--            alt="Background"-->
-<!--        />-->
 
         <Sidebar {locked} onToggle={toggleLayoutLock}>
             {#key context.settingsManager.settings.layout.numberOfColumns + context.settingsManager.settings.layout.rowHeight}
