@@ -21,19 +21,61 @@
         }
     }
 
+    let tintColor = $state("#000000");
+    let opacity = $state(50);
+    let opacityNormalized = $derived(opacity / 100.0);
+
 </script>
 
 <div class="flex flex-col gap-3">
     <fieldset class="fieldset">
         <legend class="fieldset-legend">Wallpaper</legend>
         <input
-            class="file-input"
             accept="image/png, image/jpeg"
+            class="file-input"
             id="importWallpaper"
             name="wallpaper"
             onchange={handleFileSelect}
             type="file"
         />
         <p class="label">Maximum size is 10MB.</p>
+    </fieldset>
+
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">Tint</legend>
+
+        <div class="flex gap-x-4">
+            <div class="flex flex-col flex-1">
+                <div class="flex flex-col">
+                    <label for="tintOpacity"> Opacity ({opacity}%) </label>
+                    <input class="range range-xs" id="tintOpacity" max="100" min="0" step="1" type="range" bind:value={opacity} />
+                    <p class="label">Tint opacity.</p>
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="tintOpacity"> Color </label>
+                    <input bind:value={tintColor} class="h-16 w-16 input cursor-pointer p-1" id="tintColor" type="color" />
+                    <p class="label">Tint color.</p>
+                </div>
+            </div>
+
+            <div class="card flex-1 h-full relative ">
+                <img
+                    alt="Background preview"
+                    class="w-full h-auto block"
+                    onerror={() => {}}
+                    src={context.settingsManager.settings.wallpaperUrl}
+                />
+                <div style:background-color={tintColor}
+                     style:opacity={opacityNormalized}
+                     class="absolute inset-0">
+                </div>
+
+
+
+            </div>
+        </div>
+
+
     </fieldset>
 </div>
