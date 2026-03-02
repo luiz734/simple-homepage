@@ -38,6 +38,8 @@
         console.warn("Wallpaper not found in IndexDB. Upload it again.")
         context.settingsManager.settings.wallpaperUrl = ""
     }
+    let opacityNormalized = $derived(context.settingsManager.settings.appearance.tintOpacity / 100.0);
+
 </script>
 
 {#if context.isLoaded}
@@ -47,15 +49,24 @@
     >
         <!-- method 1 -->
         {#if context.settingsManager.settings.wallpaperUrl !== ""}
-            <img
-                class="absolute inset-0 z-0 h-full w-full object-cover object-center"
-                src={context.settingsManager.settings.wallpaperUrl}
-                alt="Background"
-                onerror={onWallpaperMissing}
-            />
-            <div class="absolute inset-0 z-0 bg-black/30 backdrop-blur-sm"></div>
+<!--            <img-->
+<!--                class="absolute inset-0 z-0 h-full w-full object-cover object-center"-->
+<!--                src={context.settingsManager.settings.wallpaperUrl}-->
+<!--                alt="Background"-->
+<!--                onerror={onWallpaperMissing}-->
+<!--            />-->
+            <div
+                style:background-color={context.settingsManager.settings.appearance.tintColor}
+                style:opacity={opacityNormalized}
+                class="absolute inset-0 w-[50%]">
+            </div>
         {:else}
             <div class="absolute inset-0 z-0 bg-base-300"></div>
+<!--            <div-->
+<!--                style:background-color={context.settingsManager.settings.appearance.tintColor}-->
+<!--                style:opacity={opacityNormalized}-->
+<!--                class="absolute inset-0">-->
+<!--            </div>-->
         {/if}
 
 

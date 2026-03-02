@@ -24,9 +24,16 @@ export const LayoutSettingsSchema = z.object({
 
 export type LayoutSettings = z.infer<typeof LayoutSettingsSchema>;
 
+export const AppearanceSettingsSchema = z.object({
+    tintColor: z.string(),
+    tintOpacity: z.number(),
+})
+export type AppearanceSettings = z.infer<typeof AppearanceSettingsSchema>;
+
 export const SettingsSchema = z.object({
     themes: ThemeSettingsSchema,
     layout: LayoutSettingsSchema,
+    appearance: AppearanceSettingsSchema,
     wallpaperUrl: z.string(),
 });
 

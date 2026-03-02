@@ -1,6 +1,10 @@
 export const defaultConfig = {
     settings: {
         wallpaperUrl: "",
+        appearance: {
+            tintColor: "#000000",
+            tintOpacity: 0,
+        },
         themes: {
             light: "light",
             dark: "dark",
