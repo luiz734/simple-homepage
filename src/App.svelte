@@ -61,12 +61,12 @@
                 class="absolute inset-0 w-full">
             </div>
         {:else}
-<!--            <div class="absolute inset-0 z-0 bg-white"></div>-->
-            <div
-                style:background-color={context.settingsManager.settings.appearance.tintColor}
-                style:opacity={opacityNormalized}
-                class="absolute inset-0">
-            </div>
+            <div class="absolute inset-0 bg-base-300"></div>
+<!--            <div-->
+<!--                style:background-color="background-color: var(&#45;&#45;color-base-300)"-->
+<!--                style:opacity={opacityNormalized}-->
+<!--                class="absolute inset-0">-->
+<!--            </div>-->
         {/if}
 
 

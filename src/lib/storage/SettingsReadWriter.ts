@@ -111,6 +111,15 @@ class SettingsReadWriter {
             console.error("Failed to save wallpaper to IndexedDB:", error);
         }
     }
+
+    async removeUserWallpaper(): Promise<void> {
+        try {
+            await blobStorageAdapter.remove([IMAGE_KEY]);
+            console.log("Wallpaper removed successfully.");
+        } catch (error) {
+            console.error("Failed to remove wallpaper:", error);
+        }
+    }
 }
 
 export const settingsReadWrite = SettingsReadWriter.getInstance();
