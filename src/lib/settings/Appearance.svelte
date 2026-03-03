@@ -70,6 +70,14 @@
                      style:opacity={opacityNormalized}
                      class="absolute inset-0">
                 </div>
+
+                <div
+                    style:background-color={`color-mix(in oklab, var(--color-base-100) ${context.settingsManager.settings.appearance.widgetOpacity}%, transparent)`}
+                    style:backdrop-filter="blur({context.settingsManager.settings.appearance.widgetBlurPx}px)"
+                    class="card flex bg-base-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 justify-center">
+
+                    <p class="block w-full text-center text-base-content text-xl"> Widget</p>
+                </div>
             </div>
         </div>
     </fieldset>
