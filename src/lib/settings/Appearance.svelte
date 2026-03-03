@@ -171,10 +171,10 @@
             ></div>
 
             <div
-                class="card bg-base-content absolute top-1/2 left-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 justify-center"
-                style:backdrop-filter="blur({context.settingsManager.settings
-                    .appearance.widgetBlurPx}px)"
+                class="card bg-base-content absolute top-1/2 left-1/2 flex min-h-24 min-w-24 h-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 justify-center"
+                style:backdrop-filter="blur({context.settingsManager.settings.appearance.widgetBlurPx}px)"
                 style:background-color={`color-mix(in oklab, var(--color-base-100) ${context.settingsManager.settings.appearance.widgetOpacity}%, transparent)`}
+                style:border-radius={context.settingsManager.settings.layout.widgetsBorder.useFromTheme ? null : `${context.settingsManager.settings.layout.widgetsBorder.valuePx}px`}
             >
                 <p class="text-base-content block w-full text-center text-xl">
                     Widget
