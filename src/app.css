@@ -27,3 +27,46 @@ body, html {
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+
+.overlay-panel {
+  grid-column-start: 1;
+  grid-row-start: 1;
+  width: 83.333333%; /* w-5/6 */
+  height: 83.333333%; /* h-5/6 */
+  max-width: none;
+  max-height: 100vh;
+  background-color: var(--color-base-100);
+  padding: 0;
+  transition: translate 0.3s ease-out, scale 0.3s ease-out, opacity 0.2s ease-out 0.05s, box-shadow 0.3s ease-out;
+  border-radius: var(--radius-box);
+  scale: 95%;
+  opacity: 0;
+  box-shadow: oklch(0% 0 0 / 0.25) 0px 25px 50px -12px;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+
+/*Order matters!*/
+/*This one should come first*/
+@media (width < 64rem) {
+  .overlay-panel {
+    width:   91.666666%; /* w-11/12 */
+    height:  91.666666%; /* h-11/12 */
+    border-radius: 0;
+  }
+}
+/*And this one after*/
+@media (width < 48rem) {
+  .overlay-panel {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+}
+
+/* Modal open state for DaisyUI compatibility */
+.modal[open] .overlay-panel {
+  scale: 100%;
+  opacity: 1;
+}
