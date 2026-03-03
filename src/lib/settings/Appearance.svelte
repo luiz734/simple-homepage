@@ -2,6 +2,7 @@
     import { getContext } from "svelte";
     import { APPLICATION_KEY } from "../storage/applicationContext.svelte.ts";
     import { settingsReadWrite } from "../storage/SettingsReadWriter.ts";
+    import { Copy } from "lucide-svelte";
 
     const context = getContext(APPLICATION_KEY);
 
@@ -48,15 +49,29 @@
             <div class="flex flex-col flex-1">
                 <div class="flex flex-col">
                     <label for="tintOpacity"> Opacity ({context.settingsManager.settings.appearance.tintOpacity}%) </label>
-                    <input class="range range-xs" id="tintOpacity" max="100" min="0" step="1" type="range" bind:value={context.settingsManager.settings.appearance.tintOpacity} />
+                    <input bind:value={context.settingsManager.settings.appearance.tintOpacity} class="range range-xs" id="tintOpacity" max="100" min="0" step="1" type="range" />
                     <p class="label">Tint opacity.</p>
                 </div>
 
+
                 <div class="flex flex-col">
-                    <label for="tintOpacity"> Color </label>
-                    <input bind:value={context.settingsManager.settings.appearance.tintColor} class="h-16 w-16 input cursor-pointer p-1" id="tintColor" type="color" />
+                    <label for="tintColor"> Color </label>
+                    <div class="flex join">
+                        <input bind:value={context.settingsManager.settings.appearance.tintColor}
+                               class="w-32 join-item input cursor-pointer" id="tintColor" type="color" />
+
+                        <input bind:value={context.settingsManager.settings.appearance.tintColor} class="input input-md join-item sm"
+                               placeholder="#ffffff" />
+
+                        <button class="btn btn-outline border-base-content/20 join-item rounded-r-full"
+                        onclick={() => {
+                            navigator.clipboard.writeText(context.settingsManager.settings.appearance.tintColor);
+                        }}
+                        > <Copy size={15}/> </button>
+                    </div>
                     <p class="label">Tint color.</p>
                 </div>
+
             </div>
 
             <div class="card flex-1 h-full relative ">
@@ -66,15 +81,15 @@
                     onerror={() => {}}
                     src={context.settingsManager.settings.wallpaperUrl}
                 />
-                <div style:background-color={context.settingsManager.settings.appearance.tintColor}
-                     style:opacity={opacityNormalized}
-                     class="absolute inset-0">
+                <div class="absolute inset-0"
+                     style:background-color={context.settingsManager.settings.appearance.tintColor}
+                     style:opacity={opacityNormalized}>
                 </div>
 
                 <div
-                    style:background-color={`color-mix(in oklab, var(--color-base-100) ${context.settingsManager.settings.appearance.widgetOpacity}%, transparent)`}
+                    class="card flex bg-base-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 justify-center"
                     style:backdrop-filter="blur({context.settingsManager.settings.appearance.widgetBlurPx}px)"
-                    class="card flex bg-base-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 justify-center">
+                    style:background-color={`color-mix(in oklab, var(--color-base-100) ${context.settingsManager.settings.appearance.widgetOpacity}%, transparent)`}>
 
                     <p class="block w-full text-center text-base-content text-xl"> Widget</p>
                 </div>
@@ -90,7 +105,7 @@
             <div class="flex flex-col flex-1">
                 <div class="flex flex-col">
                     <label for="blurAmount"> Amount ({context.settingsManager.settings.appearance.widgetBlurPx}px) </label>
-                    <input class="range range-xs" id="blurAmount" max="24" min="0" step="1" type="range" bind:value={context.settingsManager.settings.appearance.widgetBlurPx} />
+                    <input bind:value={context.settingsManager.settings.appearance.widgetBlurPx} class="range range-xs" id="blurAmount" max="24" min="0" step="1" type="range" />
                     <p class="label">Amount of blur in pixels.</p>
                 </div>
             </div>
@@ -98,7 +113,7 @@
             <div class="card flex flex-1">
                 <div class="flex flex-col">
                     <label for="widgetOpacity"> Widget Opacity ({context.settingsManager.settings.appearance.widgetOpacity}%) </label>
-                    <input class="range range-xs" id="widgetOpacity" max="100" min="0" step="1" type="range" bind:value={context.settingsManager.settings.appearance.widgetOpacity} />
+                    <input bind:value={context.settingsManager.settings.appearance.widgetOpacity} class="range range-xs" id="widgetOpacity" max="100" min="0" step="1" type="range" />
                     <p class="label">Opacity of the widget.</p>
                 </div>
             </div>
