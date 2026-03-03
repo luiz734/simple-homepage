@@ -49,24 +49,24 @@
     >
         <!-- method 1 -->
         {#if context.settingsManager.settings.wallpaperUrl !== ""}
-<!--            <img-->
-<!--                class="absolute inset-0 z-0 h-full w-full object-cover object-center"-->
-<!--                src={context.settingsManager.settings.wallpaperUrl}-->
-<!--                alt="Background"-->
-<!--                onerror={onWallpaperMissing}-->
-<!--            />-->
+            <img
+                class="absolute inset-0 z-0 h-full w-full object-cover object-center"
+                src={context.settingsManager.settings.wallpaperUrl}
+                alt="Background"
+                onerror={onWallpaperMissing}
+            />
             <div
                 style:background-color={context.settingsManager.settings.appearance.tintColor}
                 style:opacity={opacityNormalized}
-                class="absolute inset-0 w-[50%]">
+                class="absolute inset-0 w-full">
             </div>
         {:else}
-            <div class="absolute inset-0 z-0 bg-base-300"></div>
-<!--            <div-->
-<!--                style:background-color={context.settingsManager.settings.appearance.tintColor}-->
-<!--                style:opacity={opacityNormalized}-->
-<!--                class="absolute inset-0">-->
-<!--            </div>-->
+<!--            <div class="absolute inset-0 z-0 bg-white"></div>-->
+            <div
+                style:background-color={context.settingsManager.settings.appearance.tintColor}
+                style:opacity={opacityNormalized}
+                class="absolute inset-0">
+            </div>
         {/if}
 
 

@@ -27,6 +27,8 @@ export type LayoutSettings = z.infer<typeof LayoutSettingsSchema>;
 export const AppearanceSettingsSchema = z.object({
     tintColor: z.string(),
     tintOpacity: z.number(),
+    widgetBlurPx: z.number(),
+    widgetOpacity: z.number(),
 })
 export type AppearanceSettings = z.infer<typeof AppearanceSettingsSchema>;
 

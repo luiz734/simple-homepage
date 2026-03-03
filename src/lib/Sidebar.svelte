@@ -35,10 +35,10 @@
         {@render children()}
     </div>
 
-    <div class={[
-        "drawer-side is-drawer-close:overflow-visible",
-        "backdrop-blur-md"
-    ]}>
+    <div
+            class="drawer-side is-drawer-close:overflow-visible backdrop-blur-xl"
+            style:backdrop-filter="blur({context.settingsManager.settings.appearance.widgetBlurPx}px)"
+    >
         <label
             aria-label="close sidebar"
             class="drawer-overlay"
@@ -46,7 +46,8 @@
         ></label>
 
         <div
-            class="is-drawer-close:w-15 is-drawer-open:w-64 bg-base-100/60 text-base-content flex min-h-full flex-col items-start gap-y-4"
+            class="is-drawer-close:w-15 is-drawer-open:w-64 text-base-content flex min-h-full flex-col items-start gap-y-4"
+            style:background-color={`color-mix(in oklab, var(--color-base-100) ${context.settingsManager.settings.appearance.widgetOpacity}%, transparent)`}
         >
             <ul class="menu flex w-full grow flex-col gap-y-2 py-2 p-1">
                 <li>

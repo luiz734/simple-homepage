@@ -4,6 +4,8 @@ export const defaultConfig = {
         appearance: {
             tintColor: "#000000",
             tintOpacity: 0,
+            widgetBlurPx: 0,
+            widgetOpacity: 100
         },
         themes: {
             light: "light",

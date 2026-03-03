@@ -70,10 +70,33 @@
                      style:opacity={opacityNormalized}
                      class="absolute inset-0">
                 </div>
+            </div>
+        </div>
+    </fieldset>
 
+
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">Blur</legend>
+
+        <div class="flex-col gap-x-4">
+            <div class="flex flex-col flex-1">
+                <div class="flex flex-col">
+                    <label for="blurAmount"> Amount ({context.settingsManager.settings.appearance.widgetBlurPx}px) </label>
+                    <input class="range range-xs" id="blurAmount" max="24" min="0" step="1" type="range" bind:value={context.settingsManager.settings.appearance.widgetBlurPx} />
+                    <p class="label">Amount of blur in pixels.</p>
+                </div>
+            </div>
+
+            <div class="card flex flex-1">
+                <div class="flex flex-col">
+                    <label for="widgetOpacity"> Widget Opacity ({context.settingsManager.settings.appearance.widgetOpacity}%) </label>
+                    <input class="range range-xs" id="widgetOpacity" max="100" min="0" step="1" type="range" bind:value={context.settingsManager.settings.appearance.widgetOpacity} />
+                    <p class="label">Opacity of the widget.</p>
+                </div>
             </div>
         </div>
 
 
     </fieldset>
+
 </div>

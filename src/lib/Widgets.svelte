@@ -130,11 +130,11 @@
         <div
             class={[
                 "card h-full w-full overflow-auto p-8 transition-all duration-200 ease-out",
-                "bg-base-100/60 backdrop-blur-md", // apple liquid glass
-                // "glass", // daisyui glass
-                !editLocked && "border-accent border-dashed shadow-sm",
+                !editLocked && "border-accent border-dashed shadow-sm backdrop-blur-lg",
                 editLocked && "border-base-300",
             ]}
+            style:background-color={`color-mix(in oklab, var(--color-base-100) ${context.settingsManager.settings.appearance.widgetOpacity}%, transparent)`}
+            style:backdrop-filter="blur({context.settingsManager.settings.appearance.widgetBlurPx}px)"
             style:border-radius={context.settingsManager.settings.layout.widgetsBorder.useFromTheme ? null : `${context.settingsManager.settings.layout.widgetsBorder.valuePx}px`}
             use:shrinkEffect={!editLocked}
         >
