@@ -71,6 +71,7 @@
 </script>
 
 <div class="flex h-full w-full flex-col gap-4">
+<!--    <div class="divider"></div>-->
     <span class="text-base-content font-bold"> Light Theme </span>
     <div class="prevent-select flex grow flex-wrap gap-4 align-top">
         {#each lightThemes as theme}
@@ -83,7 +84,6 @@
     </div>
 
     <div class="divider"></div>
-
     <span class="text-base-content font-bold"> Dark Theme </span>
     <div class="prevent-select flex grow flex-wrap gap-4 align-top">
         {#each darkThemes as theme}

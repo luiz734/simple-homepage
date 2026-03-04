@@ -42,34 +42,37 @@
     }}
 >
     <div
-        class="overlay-panel  bg-base-100 prevent-select h-5/6 w-5/8 flex gap-6 overflow-hidden p-0"
+        class="overlay-panel bg-base-100 prevent-select flex h-5/6 w-5/7 gap-6 overflow-hidden"
     >
-
         <div
             class="bg-base-300 flex h-full min-h-0 w-64 shrink-0 flex-col overflow-auto p-6"
         >
             <SettingsSidebar bind:group={selected} {sections} />
         </div>
 
-        <div
-            class="bg-base-100 flex min-h-0 grow-2 flex-col overflow-auto py-6 md:px-8 lg:px-16 xl:px-32
-                    md:bg-red-500 lg:bg-blue-500 xl:bg-green-500
-"
-        >
-            <div class="h-20 pb-10 text-xl font-bold">{selected}</div>
+        <div class="flex flex-col flex-1 items-end grow-2 bg-base-100 ">
+            <button
+                class="btn btn-circle hover:bg-base-200 bg-base-100 text-base-content/50 border-none shadow-none outline-0"
+                onclick={() => {
+                    dialog.close();
+                }}
+            >
+                <X />
+            </button>
 
-            <div class="grow">
-                <SelectedComponent></SelectedComponent>
+            <div
+                class="flex flex-1 min-h-0 flex-col w-full overflow-auto py-6 md:px-8 lg:px-16 xl:px-40"
+            >
+                <div class="h-20 pb-10 text-xl font-bold">{selected}</div>
+
+                <div class="">
+                    <SelectedComponent></SelectedComponent>
+                </div>
+
+                <div class="h-20"></div>
             </div>
 
-            <div class="h-20"></div>
-        </div>
 
-        <button
-            class="btn btn-circle position-absolute hover:bg-base-200 bg-base-100 top-0 right-0 border-none shadow-none outline-0 text-base-content/50"
-            onclick={() => {dialog.close()}}
-        >
-            <X />
-        </button>
+        </div>
     </div>
 </dialog>
