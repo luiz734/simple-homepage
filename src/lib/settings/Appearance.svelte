@@ -30,6 +30,8 @@
                 userWallpaper;
         } catch (error) {
             console.error("Error loading image:", error);
+        } finally {
+            event.target.value = "";
         }
     }
 
