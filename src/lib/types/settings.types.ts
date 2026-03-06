@@ -25,18 +25,32 @@ export const LayoutSettingsSchema = z.object({
 export type LayoutSettings = z.infer<typeof LayoutSettingsSchema>;
 
 export const AppearanceSettingsSchema = z.object({
-    tintColor: z.string(),
-    tintOpacity: z.number(),
     widgetBlurPx: z.number(),
     widgetOpacity: z.number(),
 })
 export type AppearanceSettings = z.infer<typeof AppearanceSettingsSchema>;
 
+
+export const WallpaperSettingsVariantSchema = z.object({
+    url: z.string(),
+    color: z.string(),
+    opacity: z.number(),
+});
+export type WallpaperSettingsVariant = z.infer<typeof WallpaperSettingsVariantSchema>;
+
+export const WallpaperSettingsSchema = z.object({
+    light: WallpaperSettingsVariantSchema,
+    dark: WallpaperSettingsVariantSchema,
+});
+
+export type WallpaperSettings = z.infer<typeof WallpaperSettingsSchema>;
+
+
 export const SettingsSchema = z.object({
     themes: ThemeSettingsSchema,
     layout: LayoutSettingsSchema,
     appearance: AppearanceSettingsSchema,
-    wallpaperUrl: z.string(),
+    wallpaper: WallpaperSettingsSchema,
 });
 
 export type Settings = z.infer<typeof SettingsSchema>;

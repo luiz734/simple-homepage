@@ -1,11 +1,20 @@
 export const defaultConfig = {
     settings: {
-        wallpaperUrl: "",
+        wallpaper: {
+            dark: {
+                url: "",
+                color: "#000000",
+                opacity: 0
+            },
+            light: {
+                url: "",
+                color: "#000000",
+                opacity: 0
+            }
+        },
         appearance: {
-            tintColor: "#000000",
-            tintOpacity: 0,
             widgetBlurPx: 0,
-            widgetOpacity: 100
+            widgetOpacity: 100,
         },
         themes: {
             light: "light",

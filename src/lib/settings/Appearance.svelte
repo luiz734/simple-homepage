@@ -2,17 +2,19 @@
     import { getContext } from "svelte";
     import { APPLICATION_KEY } from "../storage/applicationContext.svelte.ts";
     import { settingsReadWrite } from "../storage/SettingsReadWriter.ts";
-    import { Copy, Delete, Trash } from "lucide-svelte";
 
     const context = getContext(APPLICATION_KEY);
 
-    let lightWallpaper = $derived(
-        context.settingsManager.settings.wallpaperUrl,
+    let darkWallpaper = $derived(
+        context.settingsManager.settings.wallpaper.dark.url,
     );
-    let darkWallpaper = $derived(context.settingsManager.settings.wallpaperUrl);
-    let wallpaper = $derived(context.settingsManager.settings.wallpaperUrl);
+    let lightWallpaper = $derived(
+        context.settingsManager.settings.wallpaper.light.url,
+    );
 
-    async function handleFileSelect(event) {
+    $inspect(darkWallpaper, lightWallpaper);
+
+    async function handleFileSelect(event, darkOrLight) {
         const files = event.target.files;
         if (!files || files.length === 0) {
             console.log("No files uploaded");
@@ -21,9 +23,11 @@
 
         const file = files[0];
         try {
-            await settingsReadWrite.setUserWallpaper(file);
-            context.settingsManager.settings.wallpaperUrl =
-                await settingsReadWrite.getUserWallpaper();
+            await settingsReadWrite.setUserWallpaper(file, darkOrLight);
+            const userWallpaper =
+                await settingsReadWrite.getUserWallpaper(darkOrLight);
+            context.settingsManager.settings.wallpaper[darkOrLight].url =
+                userWallpaper;
         } catch (error) {
             console.error("Error loading image:", error);
         }
@@ -41,8 +45,8 @@
     <span class="text-base-content font-bold"> Wallpaper </span>
 
     <div class="flex flex-wrap justify-between gap-16">
-        {@render wallpaper_fieldset("Light", lightWallpaper)}
-        {@render wallpaper_fieldset("Dark", darkWallpaper)}
+        {@render wallpaper_fieldset("light", lightWallpaper)}
+        {@render wallpaper_fieldset("dark", darkWallpaper)}
     </div>
 
     <div class="divider"></div>
@@ -99,7 +103,7 @@
                         alt="Background preview"
                         class="block h-auto w-full rounded-2xl"
                         onerror={() => {}}
-                        src={context.settingsManager.settings.wallpaperUrl}
+                        src={wallpaper}
                     />
                 {/if}
                 <div
@@ -138,7 +142,9 @@
                         class="hidden"
                         id="importWallpaper"
                         name="wallpaper"
-                        onchange={handleFileSelect}
+                        onchange={(event) => {
+                            handleFileSelect(event, theme);
+                        }}
                         type="file"
                     />
                 </label>
@@ -147,8 +153,11 @@
                     class="btn flex-1"
                     disabled={!wallpaper}
                     onclick={async () => {
-                        await settingsReadWrite.removeUserWallpaper();
-                        context.settingsManager.settings.wallpaperUrl = "";
+                        await settingsReadWrite.removeUserWallpaper(
+                            theme
+                        );
+                        context.settingsManager.settings.wallpaper[theme].url =
+                            "";
                     }}
                 >
                     Remove
@@ -163,16 +172,16 @@
                 <label
                     class="btn relative flex-1 cursor-pointer"
                     style:background-color={context.settingsManager.settings
-                        .appearance.tintColor}
+                        .wallpaper[theme].color}
                 >
                     <span
-                        >{context.settingsManager.settings.appearance
-                            .tintColor}</span
+                        >{context.settingsManager.settings.wallpaper[theme]
+                            .color}</span
                     >
                     <input
                         bind:value={
-                            context.settingsManager.settings.appearance
-                                .tintColor
+                            context.settingsManager.settings.wallpaper[theme]
+                                .color
                         }
                         class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                         id="tintColor"
@@ -185,12 +194,12 @@
 
         <fieldset class="fieldset flex-1">
             <legend class="fieldset-legend">
-                Opacity ({context.settingsManager.settings.appearance
-                    .tintOpacity}%)
+                Opacity ({context.settingsManager.settings.wallpaper[theme]
+                    .opacity}%)
             </legend>
             <input
                 bind:value={
-                    context.settingsManager.settings.appearance.tintOpacity
+                    context.settingsManager.settings.wallpaper[theme].opacity
                 }
                 class="range range-md range-primary"
                 id="tintOpacity"

@@ -20,6 +20,11 @@
 
     setContext(APPLICATION_KEY, appContext);
     const context = getContext(APPLICATION_KEY);
+    const activeTheme = $derived(context.settingsManager.settings.themes.active);
+    const activeWallpaperUrl = $derived(context.settingsManager.settings.wallpaper[activeTheme].url);
+    const overlayColor = $derived(context.settingsManager.settings.wallpaper[activeTheme].color);
+    // const overlayOpacity = $derived(context.settingsManager.settings.wallpaper[activeTheme].opacity);
+    const opacityNormalized = $derived(context.settingsManager.settings.wallpaper[activeTheme].opacity / 100.0);
 
     let locked = $state(true);
 
@@ -36,27 +41,28 @@
 
     const onWallpaperMissing = () => {
         console.warn("Wallpaper not found in IndexDB. Upload it again.")
-        context.settingsManager.settings.wallpaperUrl = ""
+        context.settingsManager.settings.wallpaper[activeTheme].url = "";
+
     }
-    let opacityNormalized = $derived(context.settingsManager.settings.appearance.tintOpacity / 100.0);
+
 
 </script>
 
 {#if context.isLoaded}
     <div
         class="app"
-        data-theme={context.settingsManager.settings.themes.active}
+        data-theme={activeTheme}
     >
         <!-- method 1 -->
-        {#if context.settingsManager.settings.wallpaperUrl !== ""}
+        {#if activeWallpaperUrl !== ""}
             <img
                 class="absolute inset-0 z-0 h-full w-full object-cover object-center"
-                src={context.settingsManager.settings.wallpaperUrl}
+                src={activeWallpaperUrl}
                 alt="Background"
                 onerror={onWallpaperMissing}
             />
             <div
-                style:background-color={context.settingsManager.settings.appearance.tintColor}
+                style:background-color={overlayColor}
                 style:opacity={opacityNormalized}
                 class="absolute inset-0 w-full">
             </div>

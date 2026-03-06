@@ -90,9 +90,10 @@ class SettingsReadWriter {
     }
 
 
-    async getUserWallpaper(): Promise<String> {
-        const storedBlob = await blobStorageAdapter.get([IMAGE_KEY]);
-        const imageBlob = storedBlob[IMAGE_KEY];
+    async getUserWallpaper(darkOrLight: string): Promise<String> {
+        const key = `${IMAGE_KEY}_${darkOrLight}`;
+        const storedBlob = await blobStorageAdapter.get([key]);
+        const imageBlob = storedBlob[key];
 
         if (!imageBlob) {
             throw new Error("No wallpaper image found.");
@@ -101,10 +102,11 @@ class SettingsReadWriter {
         return URL.createObjectURL(imageBlob);
     }
 
-    async setUserWallpaper(imageBlob: Blob): Promise<void> {
+    async setUserWallpaper(imageBlob: Blob, darkOrLight: string): Promise<void> {
+        const key = `${IMAGE_KEY}_${darkOrLight}`;
         try {
             await blobStorageAdapter.set({
-                [IMAGE_KEY]: imageBlob
+                [key]: imageBlob
             });
             console.log("Wallpaper saved successfully.");
         } catch (error) {
@@ -112,9 +114,10 @@ class SettingsReadWriter {
         }
     }
 
-    async removeUserWallpaper(): Promise<void> {
+    async removeUserWallpaper(darkOrLight: string): Promise<void> {
+        const key = `${IMAGE_KEY}_${darkOrLight}`;
         try {
-            await blobStorageAdapter.remove([IMAGE_KEY]);
+            await blobStorageAdapter.remove([key]);
             console.log("Wallpaper removed successfully.");
         } catch (error) {
             console.error("Failed to remove wallpaper:", error);
