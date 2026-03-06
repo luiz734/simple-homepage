@@ -12,7 +12,7 @@
         context.settingsManager.settings.wallpaper.light.url,
     );
 
-    $inspect(darkWallpaper, lightWallpaper);
+    // $inspect(darkWallpaper, lightWallpaper);
 
     async function handleFileSelect(event, darkOrLight) {
         const files = event.target.files;
@@ -34,12 +34,6 @@
             event.target.value = "";
         }
     }
-
-    // let tintColor = $state("#000000");
-    // let opacity = $state(50);
-    let opacityNormalized = $derived(
-        context.settingsManager.settings.appearance.tintOpacity / 100.0,
-    );
 </script>
 
 <div class="flex flex-col gap-3">
@@ -96,7 +90,7 @@
 {#snippet wallpaper_fieldset(theme, wallpaper)}
     <div class="flex flex-1 flex-col">
         <fieldset class="fieldset">
-            <legend class="fieldset-legend"> {theme} </legend>
+            <legend class="fieldset-legend capitalize"> {theme} </legend>
             <div
                 class="card border-base-content relative aspect-video flex-1 rounded-2xl border-2"
             >
@@ -107,12 +101,13 @@
                         onerror={() => {}}
                         src={wallpaper}
                     />
+                {:else}
+                    <p class="flex-1 text-center pt-2 h-full block z-10" > No wallpaper set </p>
                 {/if}
                 <div
                     class="absolute inset-0 h-auto w-full rounded-2xl"
-                    style:background-color={context.settingsManager.settings
-                        .appearance.tintColor}
-                    style:opacity={opacityNormalized}
+                    style:background-color={context.settingsManager.settings.wallpaper[theme].color}
+                    style:opacity={context.settingsManager.settings.wallpaper[theme].opacity / 100.0}
                 ></div>
 
                 <div
@@ -138,7 +133,7 @@
             <legend class="fieldset-legend">Wallpaper</legend>
             <div class="flex gap-3">
                 <label class="btn btn-primary flex-1 cursor-pointer">
-                    <span>Upload new</span>
+                    <span> Change </span>
                     <input
                         accept="image/png, image/jpeg"
                         class="hidden"
