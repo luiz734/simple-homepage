@@ -92,17 +92,17 @@
         <fieldset class="fieldset">
             <legend class="fieldset-legend capitalize"> {theme} </legend>
             <div
-                class="card border-base-content relative aspect-video flex-1 rounded-2xl border-2"
+                class="card border-base-content relative aspect-video flex-1 rounded-2xl border-2 overflow-hidden"
             >
                 {#if wallpaper}
                     <img
                         alt="Background preview"
-                        class="block h-auto w-full rounded-2xl"
+                        class="block h-auto w-full"
                         onerror={() => {}}
                         src={wallpaper}
                     />
                 {:else}
-                    <p class="flex-1 text-center pt-2 h-full block z-10" > No wallpaper set </p>
+                    <p class="flex-1 text-center h-full flex items-center justify-center z-10"> No wallpaper set </p>
                 {/if}
                 <div
                     class="absolute inset-0 h-auto w-full rounded-2xl"
@@ -112,6 +112,7 @@
 
                 <div
                     class="card bg-base-content absolute top-1/2 left-1/2 flex aspect-square h-1/2 min-h-24 min-w-24 -translate-x-1/2 -translate-y-1/2 justify-center"
+                    style:opacity={wallpaper ? "1.0" : "0.0"}
                     style:backdrop-filter="blur({context.settingsManager
                         .settings.appearance.widgetBlurPx}px)"
                     style:background-color={`color-mix(in oklab, var(--color-base-100) ${context.settingsManager.settings.appearance.widgetOpacity}%, transparent)`}
@@ -168,6 +169,7 @@
             <div class="flex w-full items-center gap-3">
                 <label
                     class="btn relative flex-1 cursor-pointer"
+                    style:opacity={wallpaper ? "1.0" : "0.5"}
                     style:background-color={context.settingsManager.settings
                         .wallpaper[theme].color}
                 >
@@ -180,6 +182,7 @@
                             context.settingsManager.settings.wallpaper[theme]
                                 .color
                         }
+                        disabled={!wallpaper}
                         class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                         id="tintColor"
                         type="color"
@@ -198,6 +201,7 @@
                 bind:value={
                     context.settingsManager.settings.wallpaper[theme].opacity
                 }
+                disabled={!wallpaper}
                 class="range range-md range-primary"
                 id="tintOpacity"
                 max="100"
