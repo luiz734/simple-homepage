@@ -34,6 +34,20 @@
             event.target.value = "";
         }
     }
+
+    let debounceTimer;
+    let localBlurPx = context.settingsManager.settings.appearance.widgetBlurPx;
+    let localOpacity = context.settingsManager.settings.appearance.widgetOpacity;
+
+    function debounceUpdate() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            context.settingsManager.settings.appearance.widgetBlurPx = localBlurPx;
+            context.settingsManager.settings.appearance.widgetOpacity = localOpacity;
+        }, 250);
+    }
+
+
 </script>
 
 <div class="flex flex-col gap-3">
@@ -54,9 +68,8 @@
                 .widgetBlurPx}px)
         </legend>
         <input
-            bind:value={
-                context.settingsManager.settings.appearance.widgetBlurPx
-            }
+            bind:value={localBlurPx}
+            oninput={debounceUpdate}
             class="range range-primary"
             id="blurAmount"
             max="24"
@@ -73,9 +86,8 @@
                 .widgetOpacity}%)
         </legend>
         <input
-            bind:value={
-                context.settingsManager.settings.appearance.widgetOpacity
-            }
+            bind:value={localOpacity}
+            oninput={debounceUpdate}
             class="range range-primary"
             id="widgetOpacity"
             max="100"
