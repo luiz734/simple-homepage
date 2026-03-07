@@ -47,6 +47,15 @@
         }, 250);
     }
 
+    function getContrastColor(hexColor) {
+        const hex = hexColor.replace("#", "");
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+        return yiq >= 128 ? "#000000" : "#ffffff";
+    }
+
 
 </script>
 
@@ -54,7 +63,7 @@
     <!--    <div class="divider"></div>-->
     <span class="text-base-content font-bold"> Wallpaper </span>
 
-    <div class="flex flex-wrap justify-between gap-16">
+    <div class="flex justify-between gap-16 sm:flex-wrap">
         {@render wallpaper_fieldset("light", lightWallpaper)}
         {@render wallpaper_fieldset("dark", darkWallpaper)}
     </div>
@@ -184,6 +193,7 @@
                     style:opacity={wallpaper ? "1.0" : "0.5"}
                     style:background-color={context.settingsManager.settings
                         .wallpaper[theme].color}
+                    style:color={getContrastColor(context.settingsManager.settings.wallpaper[theme].color)}
                 >
                     <span
                         >{context.settingsManager.settings.wallpaper[theme]

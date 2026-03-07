@@ -18,7 +18,7 @@
     </div>
 
     {#each links as link}
-        <div class="hover:bg-base-300 rounded-2xl overflow-clip">
+        <div class="hover:bg-accent hover:text-accent-content rounded-2xl overflow-clip">
             <a class="block w-full px-2 py-1.5" href={link.url}> {link.name}</a>
         </div>
     {/each}
