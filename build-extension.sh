@@ -63,3 +63,5 @@ git archive HEAD | tar -x -C "$BUILD_PATH/source"
 
 (cd "$BUILD_PATH/source" && zip -qr "$BUILD_PATH/source.zip" .) && echo "Source code zipped successfully"
 (cd "$BUILD_PATH/extension" && zip -qr "$BUILD_PATH/extension.zip" .) && echo "Extension zipped successfully"
+
+echo "$BUILD_PATH"

@@ -74,6 +74,10 @@
             label: "Toggle Dock",
             onClick: () => {
                 context.toggleDockMode();
+                // This makes the hover area visible
+                // when the user change to dock mode
+                // with the sidebar expanded
+                isDrawerChecked = false;
             },
             activeFunc: () => dockMode
         },
