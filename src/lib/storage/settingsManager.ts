@@ -24,6 +24,10 @@ export class SettingsManager {
         this.settings.themes.active = active === light ? dark : light;
     }
 
+    toggleDockMode(): void {
+        this.settings.general.dockModeEnabled = !this.settings.general.dockModeEnabled;
+    }
+
     numberOfColumns(): number {
         return this.settings.layout.numberOfColumns;
     }

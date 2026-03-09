@@ -1,5 +1,8 @@
 export const defaultConfig = {
     settings: {
+        general: {
+            dockModeEnabled: false,
+        },
         wallpaper: {
             dark: {
                 url: "",

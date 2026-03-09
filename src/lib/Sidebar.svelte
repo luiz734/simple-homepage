@@ -6,7 +6,7 @@
         Sun,
         Settings,
         Unlock,
-        type Icon as IconType,
+        type Icon as IconType, PanelLeft,
     } from "lucide-svelte";
     import AddonSettings from "./settings/AddonSettings.svelte";
     import { getContext, type Snippet } from "svelte";
@@ -34,8 +34,9 @@
 
     let settingsDialog: AddonSettings | undefined = $state();
     let isHoveringEdge: boolean = $state(false);
-    let dockMode: boolean = $state(false);
+
     let isDrawerChecked: boolean = $state(false);
+
 
     const context = getContext<ApplicationContextSvelte>(APPLICATION_KEY);
 
@@ -45,6 +46,7 @@
     let opacityValue: number = $derived(
         context.settingsManager.settings.appearance.widgetOpacity,
     );
+    let dockMode: boolean = $derived(context.settingsManager.settings.general.dockModeEnabled);
 
     let ThemeIcon = $derived.by(() => {
         if (
@@ -65,6 +67,15 @@
                 context.toggleActiveTheme();
             },
             activeFunc: () => false
+        },
+        {
+            icon: PanelLeft,
+            tooltip: "Toggle Dock",
+            label: "Toggle Dock",
+            onClick: () => {
+                context.toggleDockMode();
+            },
+            activeFunc: () => dockMode
         },
         {
             icon: null,

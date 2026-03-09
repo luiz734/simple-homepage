@@ -45,12 +45,19 @@ export const WallpaperSettingsSchema = z.object({
 
 export type WallpaperSettings = z.infer<typeof WallpaperSettingsSchema>;
 
+export const GeneralSettingsSchema = z.object({
+    dockModeEnabled: z.boolean(),
+});
+
+export type GeneralSettings = z.infer<typeof GeneralSettingsSchema>;
+
 
 export const SettingsSchema = z.object({
     themes: ThemeSettingsSchema,
     layout: LayoutSettingsSchema,
     appearance: AppearanceSettingsSchema,
     wallpaper: WallpaperSettingsSchema,
+    general: GeneralSettingsSchema,
 });
 
 export type Settings = z.infer<typeof SettingsSchema>;

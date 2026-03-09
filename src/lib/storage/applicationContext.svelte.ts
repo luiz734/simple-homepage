@@ -107,6 +107,10 @@ export class ApplicationContextSvelte {
         this.settingsManager.toggleActiveTheme();
     }
 
+    toggleDockMode(): void {
+        this.settingsManager.toggleDockMode();
+    }
+
     addWidget(widgetType: string): void {
         const columns = this.settingsManager.numberOfColumns();
         this.widgetsManager.addWidget(widgetType, columns);
